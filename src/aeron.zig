@@ -24,6 +24,10 @@ pub fn versionFull() [*c]const u8 {
     return aeronC.aeron_version_full();
 }
 
+pub fn versionText() [*c]const u8 {
+    return aeronC.aeron_version_text();
+}
+
 pub fn errMsg() [*:0]const u8 {
     return aeronC.aeron_errmsg();
 }

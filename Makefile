@@ -1,4 +1,4 @@
-AERON_VERSION := 1.46.0
+AERON_VERSION := 1.46.6
 
 AERON_SOURCE  := aeron-$(AERON_VERSION)
 AERON_INCLUDE := $(AERON_SOURCE)/aeron-client/src/main/c

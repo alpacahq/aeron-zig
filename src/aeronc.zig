@@ -577,6 +577,7 @@ pub const aeron_log_buffer_t = struct_aeron_log_buffer_stct;
 pub const aeron_async_add_exclusive_publication_t = struct_aeron_client_registering_resource_stct;
 pub const aeron_async_add_counter_t = struct_aeron_client_registering_resource_stct;
 pub const aeron_async_destination_t = struct_aeron_client_registering_resource_stct;
+pub const aeron_async_destination_by_id_t = struct_aeron_client_registering_resource_stct;
 pub const struct_aeron_image_fragment_assembler_stct = opaque {};
 pub const aeron_image_fragment_assembler_t = struct_aeron_image_fragment_assembler_stct;
 pub const struct_aeron_image_controlled_fragment_assembler_stct = opaque {};
@@ -647,6 +648,7 @@ pub extern fn aeron_async_add_subscription_poll(subscription: [*c]?*aeron_subscr
 pub extern fn aeron_counters_reader(client: ?*aeron_t) ?*aeron_counters_reader_t;
 pub extern fn aeron_async_add_counter(@"async": [*c]?*aeron_async_add_counter_t, client: ?*aeron_t, type_id: i32, key_buffer: [*c]const u8, key_buffer_length: usize, label_buffer: [*c]const u8, label_buffer_length: usize) c_int;
 pub extern fn aeron_async_add_counter_poll(counter: [*c]?*aeron_counter_t, @"async": ?*aeron_async_add_counter_t) c_int;
+pub extern fn aeron_async_add_static_counter(@"async": [*c]?*aeron_async_add_counter_t, client: ?*aeron_t, type_id: i32, key_buffer: [*c]const u8, key_buffer_length: usize, label_buffer: [*c]const u8, label_buffer_length: usize, registration_id: i64) c_int;
 pub const struct_aeron_on_available_counter_pair_stct = extern struct {
     handler: aeron_on_available_counter_t = @import("std").mem.zeroes(aeron_on_available_counter_t),
     clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
@@ -695,6 +697,7 @@ pub const aeron_counters_reader_buffers_t = struct_aeron_counters_reader_buffers
 pub extern fn aeron_counters_reader_get_buffers(reader: ?*aeron_counters_reader_t, buffers: [*c]aeron_counters_reader_buffers_t) c_int;
 pub const aeron_counters_reader_foreach_counter_func_t = ?*const fn (i64, i32, i32, [*c]const u8, usize, [*c]const u8, usize, ?*anyopaque) callconv(.C) void;
 pub extern fn aeron_counters_reader_foreach_counter(counters_reader: ?*aeron_counters_reader_t, func: aeron_counters_reader_foreach_counter_func_t, clientd: ?*anyopaque) void;
+pub extern fn aeron_counters_reader_find_by_type_id_and_registration_id(counters_reader: ?*aeron_counters_reader_t, type_id: i32, registration_id: i64) i32;
 pub extern fn aeron_counters_reader_max_counter_id(reader: ?*aeron_counters_reader_t) i32;
 pub extern fn aeron_counters_reader_addr(counters_reader: ?*aeron_counters_reader_t, counter_id: i32) [*c]i64;
 pub extern fn aeron_counters_reader_counter_registration_id(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, registration_id: [*c]i64) c_int;
@@ -739,9 +742,11 @@ pub extern fn aeron_publication_position(publication: ?*aeron_publication_t) i64
 pub extern fn aeron_publication_position_limit(publication: ?*aeron_publication_t) i64;
 pub extern fn aeron_publication_async_add_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_publication_t, uri: [*c]const u8) c_int;
 pub extern fn aeron_publication_async_remove_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_publication_t, uri: [*c]const u8) c_int;
+pub extern fn aeron_publication_async_remove_destination_by_id(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_publication_t, destination_registration_id: i64) c_int;
 pub extern fn aeron_publication_async_destination_poll(@"async": ?*aeron_async_destination_t) c_int;
 pub extern fn aeron_exclusive_publication_async_add_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_exclusive_publication_t, uri: [*c]const u8) c_int;
 pub extern fn aeron_exclusive_publication_async_remove_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_exclusive_publication_t, uri: [*c]const u8) c_int;
+pub extern fn aeron_exclusive_publication_async_remove_destination_by_id(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_exclusive_publication_t, destination_registration_id: i64) c_int;
 pub extern fn aeron_exclusive_publication_async_destination_poll(@"async": ?*aeron_async_destination_t) c_int;
 pub extern fn aeron_publication_close(publication: ?*aeron_publication_t, on_close_complete: aeron_notification_t, on_close_complete_clientd: ?*anyopaque) c_int;
 pub extern fn aeron_publication_channel(publication: ?*aeron_publication_t) [*c]const u8;
@@ -774,6 +779,7 @@ pub extern fn aeron_header_values(header: ?*aeron_header_t, values: [*c]aeron_he
 pub extern fn aeron_header_position(header: ?*aeron_header_t) i64;
 pub extern fn aeron_header_position_bits_to_shift(header: ?*aeron_header_t) usize;
 pub extern fn aeron_header_next_term_offset(header: ?*aeron_header_t) i32;
+pub extern fn aeron_header_context(header: ?*aeron_header_t) ?*anyopaque;
 pub const struct_aeron_subscription_constants_stct = extern struct {
     channel: [*c]const u8 = @import("std").mem.zeroes([*c]const u8),
     on_available_image: aeron_on_available_image_t = @import("std").mem.zeroes(aeron_on_available_image_t),
@@ -1163,16 +1169,26 @@ pub const aeron_mutex_t = pthread_mutex_t;
 pub const aeron_thread_t = pthread_t;
 pub const aeron_thread_attr_t = pthread_attr_t;
 pub const aeron_cond_t = pthread_cond_t;
-pub extern fn proc_yield() void; // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:71:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:68:13: warning: unable to translate function, demoted to extern
-pub extern fn aeron_cas_int64(arg_dst: [*c]volatile i64, arg_expected: i64, arg_desired: i64) callconv(.C) bool; // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:82:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:79:13: warning: unable to translate function, demoted to extern
-pub extern fn aeron_cas_uint64(arg_dst: [*c]volatile u64, arg_expected: u64, arg_desired: u64) callconv(.C) bool; // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:93:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:90:13: warning: unable to translate function, demoted to extern
-pub extern fn aeron_cas_int32(arg_dst: [*c]volatile i32, arg_expected: i32, arg_desired: i32) callconv(.C) bool; // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:104:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:101:13: warning: unable to translate function, demoted to extern
-pub extern fn aeron_acquire() callconv(.C) void; // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:111:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:107:13: warning: unable to translate function, demoted to extern
+pub extern fn proc_yield() void;
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:71:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:68:13: warning: unable to translate function, demoted to extern
+pub extern fn aeron_cas_int64(arg_dst: [*c]volatile i64, arg_expected: i64, arg_desired: i64) callconv(.C) bool;
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:82:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:79:13: warning: unable to translate function, demoted to extern
+pub extern fn aeron_cas_uint64(arg_dst: [*c]volatile u64, arg_expected: u64, arg_desired: u64) callconv(.C) bool;
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:93:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:90:13: warning: unable to translate function, demoted to extern
+pub extern fn aeron_cas_int32(arg_dst: [*c]volatile i32, arg_expected: i32, arg_desired: i32) callconv(.C) bool;
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:104:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:101:13: warning: unable to translate function, demoted to extern
+pub extern fn aeron_acquire() callconv(.C) void;
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:111:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:107:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_release() callconv(.C) void;
 pub const aeron_idle_strategy_init_func_t = ?*const fn ([*c]?*anyopaque, [*c]const u8, [*c]const u8) callconv(.C) c_int;
 pub extern fn aeron_semantic_version_compose(major: u8, minor: u8, patch: u8) i32;
@@ -1216,8 +1232,10 @@ pub fn aeron_agent_do_work(arg_runner: [*c]aeron_agent_runner_t) callconv(.C) c_
     var runner = arg_runner;
     _ = &runner;
     return runner.*.do_work.?(runner.*.agent_state);
-} // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/aeron_agent.h:105:13: warning: unable to translate function, demoted to extern
+}
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/aeron_agent.h:105:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_agent_is_running(arg_runner: [*c]aeron_agent_runner_t) callconv(.C) bool;
 pub fn aeron_agent_idle(arg_runner: [*c]aeron_agent_runner_t, arg_work_count: c_int) callconv(.C) void {
     var runner = arg_runner;
@@ -1262,7 +1280,7 @@ pub extern fn strerror(__errnum: c_int) [*c]u8;
 pub extern fn strerror_r(__errnum: c_int, __buf: [*c]u8, __buflen: usize) c_int;
 pub extern fn strerror_l(__errnum: c_int, __l: locale_t) [*c]u8;
 pub extern fn bcmp(__s1: ?*const anyopaque, __s2: ?*const anyopaque, __n: c_ulong) c_int;
-pub extern fn bcopy(__src: ?*const anyopaque, __dest: ?*anyopaque, __n: usize) void;
+pub extern fn bcopy(__src: ?*const anyopaque, __dest: ?*anyopaque, __n: c_ulong) void;
 pub extern fn bzero(__s: ?*anyopaque, __n: c_ulong) void;
 pub extern fn index(__s: [*c]const u8, __c: c_int) [*c]u8;
 pub extern fn rindex(__s: [*c]const u8, __c: c_int) [*c]u8;
@@ -1340,15 +1358,6 @@ pub const struct_aeron_rttm_header_stct = extern struct {
     receiver_id: i64 = @import("std").mem.zeroes(i64),
 };
 pub const aeron_rttm_header_t = struct_aeron_rttm_header_stct;
-pub const struct_aeron_unconnected_stream_header_stct = extern struct {
-    frame_header: aeron_frame_header_t = @import("std").mem.zeroes(aeron_frame_header_t),
-    term_offset: i32 = @import("std").mem.zeroes(i32),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    term_id: i32 = @import("std").mem.zeroes(i32),
-    reserved_value: i64 = @import("std").mem.zeroes(i64),
-};
-pub const aeron_unconnected_stream_header_t = struct_aeron_unconnected_stream_header_stct;
 pub const struct_aeron_resolution_header_stct = extern struct {
     res_type: i8 = @import("std").mem.zeroes(i8),
     res_flags: u8 = @import("std").mem.zeroes(u8),
@@ -1413,8 +1422,10 @@ pub fn aeron_number_of_trailing_zeroes(arg_value: i32) callconv(.C) c_int {
         return 32;
     }
     return __builtin_ctz(@as(c_uint, @bitCast(value)));
-} // aeron-1.44.1/aeron-client/src/main/c/util/aeron_bitutil.h:103:12: warning: TODO implement function '__builtin_ctzll' in std.zig.c_builtins
-// aeron-1.44.1/aeron-client/src/main/c/util/aeron_bitutil.h:95:12: warning: unable to translate function, demoted to extern
+}
+// aeron-1.46.6/aeron-client/src/main/c/util/aeron_bitutil.h:103:12: warning: TODO implement function '__builtin_ctzll' in std.zig.c_builtins
+
+// aeron-1.46.6/aeron-client/src/main/c/util/aeron_bitutil.h:95:12: warning: unable to translate function, demoted to extern
 pub extern fn aeron_number_of_trailing_zeroes_u64(arg_value: u64) callconv(.C) c_int;
 pub fn aeron_number_of_leading_zeroes(arg_value: i32) callconv(.C) c_int {
     var value = arg_value;
@@ -1595,8 +1606,10 @@ pub fn aeron_logbuffer_cas_raw_tail(arg_log_meta_data: [*c]aeron_logbuffer_metad
     var update_raw_tail = arg_update_raw_tail;
     _ = &update_raw_tail;
     return aeron_cas_int64(&log_meta_data.*.term_tail_counters[partition_index], expected_raw_tail, update_raw_tail);
-} // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:148:16: warning: unable to translate function, demoted to extern
+}
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:148:16: warning: unable to translate function, demoted to extern
 pub extern fn aeron_logbuffer_active_term_count(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t) callconv(.C) i32;
 pub fn aeron_logbuffer_cas_active_term_count(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t, arg_expected_term_count: i32, arg_update_term_count: i32) callconv(.C) bool {
     var log_meta_data = arg_log_meta_data;
@@ -1606,8 +1619,10 @@ pub fn aeron_logbuffer_cas_active_term_count(arg_log_meta_data: [*c]aeron_logbuf
     var update_term_count = arg_update_term_count;
     _ = &update_term_count;
     return aeron_cas_int32(&log_meta_data.*.active_term_count, expected_term_count, update_term_count);
-} // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:163:13: warning: unable to translate function, demoted to extern
+}
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:163:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_logbuffer_rotate_log(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t, arg_current_term_count: i32, arg_current_term_id: i32) callconv(.C) bool;
 pub fn aeron_logbuffer_fill_default_header(arg_log_meta_data_buffer: [*c]u8, arg_session_id: i32, arg_stream_id: i32, arg_initial_term_id: i32) callconv(.C) void {
     var log_meta_data_buffer = arg_log_meta_data_buffer;
@@ -1664,6 +1679,7 @@ pub const struct_aeron_mapped_buffer_stct = extern struct {
 pub const aeron_mapped_buffer_t = struct_aeron_mapped_buffer_stct;
 pub extern fn aeron_is_directory(path: [*c]const u8) c_int;
 pub extern fn aeron_delete_directory(directory: [*c]const u8) c_int;
+pub extern fn aeron_mkdir_recursive(pathname: [*c]const u8, permission: c_int) c_int;
 pub extern fn aeron_map_new_file(mapped_file: [*c]aeron_mapped_file_t, path: [*c]const u8, fill_with_zeroes: bool) c_int;
 pub extern fn aeron_map_existing_file(mapped_file: [*c]aeron_mapped_file_t, path: [*c]const u8) c_int;
 pub extern fn aeron_unmap(mapped_file: [*c]aeron_mapped_file_t) c_int;
@@ -2118,132 +2134,29 @@ pub const enum_aeron_queue_offer_result_stct = c_int;
 pub const aeron_queue_offer_result_t = enum_aeron_queue_offer_result_stct;
 pub const aeron_queue_drain_func_t = ?*const fn (?*anyopaque, ?*anyopaque) callconv(.C) void;
 pub extern fn aeron_mpsc_concurrent_array_queue_init(queue: [*c]aeron_mpsc_concurrent_array_queue_t, length: usize) c_int;
-pub extern fn aeron_mpsc_concurrent_array_queue_close(queue: [*c]aeron_mpsc_concurrent_array_queue_t) c_int; // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:52:35: warning: unable to translate function, demoted to extern
-pub extern fn aeron_mpsc_concurrent_array_queue_offer(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_element: ?*anyopaque) callconv(.C) aeron_queue_offer_result_t; // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:89:15: warning: unable to translate function, demoted to extern
-pub extern fn aeron_mpsc_concurrent_array_queue_drain(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque, arg_limit: usize) callconv(.C) usize; // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:116:15: warning: unable to translate function, demoted to extern
-pub extern fn aeron_mpsc_concurrent_array_queue_drain_all(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque) callconv(.C) usize; // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-// aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:126:15: warning: unable to translate function, demoted to extern
+pub extern fn aeron_mpsc_concurrent_array_queue_close(queue: [*c]aeron_mpsc_concurrent_array_queue_t) c_int;
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:52:35: warning: unable to translate function, demoted to extern
+pub extern fn aeron_mpsc_concurrent_array_queue_offer(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_element: ?*anyopaque) callconv(.C) aeron_queue_offer_result_t;
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:89:15: warning: unable to translate function, demoted to extern
+pub extern fn aeron_mpsc_concurrent_array_queue_drain(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque, arg_limit: usize) callconv(.C) usize;
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:116:15: warning: unable to translate function, demoted to extern
+pub extern fn aeron_mpsc_concurrent_array_queue_drain_all(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque) callconv(.C) usize;
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:126:15: warning: unable to translate function, demoted to extern
 pub extern fn aeron_mpsc_concurrent_array_queue_size(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t) callconv(.C) usize;
-pub const __INTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`"); // (no file):90:9
-pub const __UINTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`"); // (no file):96:9
-pub const __INT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`"); // (no file):193:9
-pub const __UINT32_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `U`"); // (no file):215:9
-pub const __UINT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`"); // (no file):223:9
-pub const __seg_gs = @compileError("unable to translate macro: undefined identifier `address_space`"); // (no file):354:9
-pub const __seg_fs = @compileError("unable to translate macro: undefined identifier `address_space`"); // (no file):355:9
-pub const __GLIBC_USE = @compileError("unable to translate macro: undefined identifier `__GLIBC_USE_`"); // /usr/include/features.h:186:9
-pub const __glibc_has_attribute = @compileError("unable to translate macro: undefined identifier `__has_attribute`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:45:10
-pub const __glibc_has_extension = @compileError("unable to translate macro: undefined identifier `__has_extension`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:55:10
-pub const __THROW = @compileError("unable to translate macro: undefined identifier `__nothrow__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:11
-pub const __THROWNL = @compileError("unable to translate macro: undefined identifier `__nothrow__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:80:11
-pub const __NTH = @compileError("unable to translate macro: undefined identifier `__nothrow__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:81:11
-pub const __NTHNL = @compileError("unable to translate macro: undefined identifier `__nothrow__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:82:11
-pub const __CONCAT = @compileError("unable to translate C expr: unexpected token '##'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:124:9
-pub const __STRING = @compileError("unable to translate C expr: unexpected token '#'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:125:9
-pub const __warnattr = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:209:10
-pub const __errordecl = @compileError("unable to translate C expr: unexpected token 'extern'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:210:10
-pub const __flexarr = @compileError("unable to translate C expr: unexpected token '['"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:218:10
-pub const __REDIRECT = @compileError("unable to translate C expr: unexpected token '__asm__'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:249:10
-pub const __REDIRECT_NTH = @compileError("unable to translate C expr: unexpected token '__asm__'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:256:11
-pub const __REDIRECT_NTHNL = @compileError("unable to translate C expr: unexpected token '__asm__'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:258:11
-pub const __ASMNAME = @compileError("unable to translate C expr: unexpected token ','"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:261:10
-pub const __attribute_malloc__ = @compileError("unable to translate macro: undefined identifier `__malloc__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:283:10
-pub const __attribute_alloc_size__ = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:294:10
-pub const __attribute_alloc_align__ = @compileError("unable to translate macro: undefined identifier `__alloc_align__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:300:10
-pub const __attribute_pure__ = @compileError("unable to translate macro: undefined identifier `__pure__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:310:10
-pub const __attribute_const__ = @compileError("unable to translate C expr: unexpected token '__attribute__'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:317:10
-pub const __attribute_maybe_unused__ = @compileError("unable to translate macro: undefined identifier `__unused__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:323:10
-pub const __attribute_used__ = @compileError("unable to translate macro: undefined identifier `__used__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:332:10
-pub const __attribute_noinline__ = @compileError("unable to translate macro: undefined identifier `__noinline__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:333:10
-pub const __attribute_deprecated__ = @compileError("unable to translate macro: undefined identifier `__deprecated__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:341:10
-pub const __attribute_deprecated_msg__ = @compileError("unable to translate macro: undefined identifier `__deprecated__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:351:10
-pub const __attribute_format_arg__ = @compileError("unable to translate macro: undefined identifier `__format_arg__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:364:10
-pub const __attribute_format_strfmon__ = @compileError("unable to translate macro: undefined identifier `__format__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:374:10
-pub const __attribute_nonnull__ = @compileError("unable to translate macro: undefined identifier `__nonnull__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:386:11
-pub const __returns_nonnull = @compileError("unable to translate macro: undefined identifier `__returns_nonnull__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:399:10
-pub const __attribute_warn_unused_result__ = @compileError("unable to translate macro: undefined identifier `__warn_unused_result__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:408:10
-pub const __always_inline = @compileError("unable to translate macro: undefined identifier `__always_inline__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:426:10
-pub const __attribute_artificial__ = @compileError("unable to translate macro: undefined identifier `__artificial__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:435:10
-pub const __extern_inline = @compileError("unable to translate macro: undefined identifier `__gnu_inline__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:453:11
-pub const __extern_always_inline = @compileError("unable to translate macro: undefined identifier `__gnu_inline__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:454:11
-pub const __restrict_arr = @compileError("unable to translate C expr: unexpected token '__restrict'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:497:10
-pub const __attribute_copy__ = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:546:10
-pub const __LDBL_REDIR2_DECL = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:622:10
-pub const __LDBL_REDIR_DECL = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:623:10
-pub const __glibc_macro_warning1 = @compileError("unable to translate macro: undefined identifier `_Pragma`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:637:10
-pub const __glibc_macro_warning = @compileError("unable to translate macro: undefined identifier `GCC`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:638:10
-pub const __fortified_attr_access = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:683:11
-pub const __attr_access = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:684:11
-pub const __attr_access_none = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:685:11
-pub const __attr_dealloc = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:695:10
-pub const __attribute_returns_twice__ = @compileError("unable to translate macro: undefined identifier `__returns_twice__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:702:10
-pub const __STD_TYPE = @compileError("unable to translate C expr: unexpected token 'typedef'"); // /usr/include/x86_64-linux-gnu/bits/types.h:137:10
-pub const __FSID_T_TYPE = @compileError("unable to translate macro: undefined identifier `__val`"); // /usr/include/x86_64-linux-gnu/bits/typesizes.h:73:9
-pub const __CFLOAT32 = @compileError("unable to translate: TODO _Complex"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:149:12
-pub const __CFLOAT64 = @compileError("unable to translate: TODO _Complex"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:160:13
-pub const __CFLOAT32X = @compileError("unable to translate: TODO _Complex"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:169:12
-pub const __CFLOAT64X = @compileError("unable to translate: TODO _Complex"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:178:13
-pub const __builtin_nansf32 = @compileError("unable to translate macro: undefined identifier `__builtin_nansf`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:221:12
-pub const __builtin_huge_valf64 = @compileError("unable to translate macro: undefined identifier `__builtin_huge_val`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:255:13
-pub const __builtin_inff64 = @compileError("unable to translate macro: undefined identifier `__builtin_inf`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:256:13
-pub const __builtin_nanf64 = @compileError("unable to translate macro: undefined identifier `__builtin_nan`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:257:13
-pub const __builtin_nansf64 = @compileError("unable to translate macro: undefined identifier `__builtin_nans`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:258:13
-pub const __builtin_huge_valf32x = @compileError("unable to translate macro: undefined identifier `__builtin_huge_val`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:272:12
-pub const __builtin_inff32x = @compileError("unable to translate macro: undefined identifier `__builtin_inf`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:273:12
-pub const __builtin_nanf32x = @compileError("unable to translate macro: undefined identifier `__builtin_nan`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:274:12
-pub const __builtin_nansf32x = @compileError("unable to translate macro: undefined identifier `__builtin_nans`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:275:12
-pub const __builtin_huge_valf64x = @compileError("unable to translate macro: undefined identifier `__builtin_huge_vall`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:289:13
-pub const __builtin_inff64x = @compileError("unable to translate macro: undefined identifier `__builtin_infl`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:290:13
-pub const __builtin_nanf64x = @compileError("unable to translate macro: undefined identifier `__builtin_nanl`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:291:13
-pub const __builtin_nansf64x = @compileError("unable to translate macro: undefined identifier `__builtin_nansl`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:292:13
-pub const __FD_ZERO = @compileError("unable to translate macro: undefined identifier `__i`"); // /usr/include/x86_64-linux-gnu/bits/select.h:25:9
-pub const __FD_SET = @compileError("unable to translate C expr: expected ')' instead got '|='"); // /usr/include/x86_64-linux-gnu/bits/select.h:32:9
-pub const __FD_CLR = @compileError("unable to translate C expr: expected ')' instead got '&='"); // /usr/include/x86_64-linux-gnu/bits/select.h:34:9
-pub const __PTHREAD_MUTEX_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:56:10
-pub const __PTHREAD_RWLOCK_ELISION_EXTRA = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:40:11
-pub const __ONCE_FLAG_INIT = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:113:9
-pub const AERON_COUNTER_REGISTRATION_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `registration_id`"); // aeron-1.44.1/aeron-client/src/main/c/aeronc.h:622:9
-pub const AERON_COUNTER_TYPE_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `type_id`"); // aeron-1.44.1/aeron-client/src/main/c/aeronc.h:625:9
-pub const AERON_COUNTER_FREE_FOR_REUSE_DEADLINE_OFFSET = @compileError("unable to translate macro: undefined identifier `free_for_reuse_deadline_ms`"); // aeron-1.44.1/aeron-client/src/main/c/aeronc.h:626:9
-pub const AERON_COUNTER_KEY_OFFSET = @compileError("unable to translate macro: undefined identifier `key`"); // aeron-1.44.1/aeron-client/src/main/c/aeronc.h:627:9
-pub const AERON_COUNTER_LABEL_LENGTH_OFFSET = @compileError("unable to translate macro: undefined identifier `label`"); // aeron-1.44.1/aeron-client/src/main/c/aeronc.h:628:9
-pub const AERON_COUNTER_MAX_LABEL_LENGTH = @compileError("unable to translate C expr: unexpected token '('"); // aeron-1.44.1/aeron-client/src/main/c/aeronc.h:630:9
-pub const AERON_COUNTER_MAX_KEY_LENGTH = @compileError("unable to translate C expr: unexpected token '('"); // aeron-1.44.1/aeron-client/src/main/c/aeronc.h:631:9
-pub const offsetof = @compileError("unable to translate C expr: unexpected token 'an identifier'"); // /home/leki/zig-linux-x86_64-0.12.0/lib/include/stddef.h:116:9
-pub const __CPU_ZERO_S = @compileError("unable to translate C expr: unexpected token 'do'"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:46:10
-pub const __CPU_SET_S = @compileError("unable to translate macro: undefined identifier `__cpu`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:58:9
-pub const __CPU_CLR_S = @compileError("unable to translate macro: undefined identifier `__cpu`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:65:9
-pub const __CPU_ISSET_S = @compileError("unable to translate macro: undefined identifier `__cpu`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:72:9
-pub const __CPU_EQUAL_S = @compileError("unable to translate macro: undefined identifier `__builtin_memcmp`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:84:10
-pub const __CPU_OP_S = @compileError("unable to translate macro: undefined identifier `__dest`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:99:9
-pub const __sched_priority = @compileError("unable to translate macro: undefined identifier `sched_priority`"); // /usr/include/sched.h:48:9
-pub const PTHREAD_MUTEX_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/pthread.h:90:9
-pub const PTHREAD_RWLOCK_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/pthread.h:114:10
-pub const PTHREAD_COND_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/pthread.h:155:9
-pub const pthread_cleanup_push = @compileError("unable to translate macro: undefined identifier `__cancel_buf`"); // /usr/include/pthread.h:681:10
-pub const pthread_cleanup_pop = @compileError("unable to translate macro: undefined identifier `__cancel_buf`"); // /usr/include/pthread.h:702:10
-pub const AERON_GET_VOLATILE = @compileError("unable to translate C expr: unexpected token 'do'"); // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:23:9
-pub const AERON_PUT_ORDERED = @compileError("unable to translate C expr: unexpected token 'do'"); // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:31:9
-pub const AERON_PUT_VOLATILE = @compileError("unable to translate C expr: unexpected token 'do'"); // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:39:9
-pub const AERON_GET_AND_ADD_INT64 = @compileError("unable to translate C expr: unexpected token 'do'"); // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:48:9
-pub const AERON_GET_AND_ADD_INT32 = @compileError("unable to translate C expr: unexpected token 'do'"); // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:58:9
-pub const AERON_DECL_ALIGNED = @compileError("unable to translate macro: undefined identifier `aligned`"); // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:121:9
-pub const __ASSERT_VOID_CAST = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/assert.h:40:10
-pub const assert = @compileError("unable to translate macro: undefined identifier `__FILE__`"); // /usr/include/assert.h:107:11
-pub const __ASSERT_FUNCTION = @compileError("unable to translate C expr: unexpected token '__extension__'"); // /usr/include/assert.h:129:12
-pub const static_assert = @compileError("unable to translate C expr: unexpected token '_Static_assert'"); // /usr/include/assert.h:143:10
-pub const AERON_LOGBUFFER_RAWTAIL_VOLATILE = @compileError("unable to translate macro: undefined identifier `active_term_count`"); // aeron-1.44.1/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:63:9
-pub const AERON_FILEUTIL_ERROR_ENOSPC = @compileError("unable to translate macro: undefined identifier `ENOSPC`"); // aeron-1.44.1/aeron-client/src/main/c/util/aeron_fileutil.h:52:9
-pub const aeron_mkdir = @compileError("unable to translate macro: undefined identifier `mkdir`"); // aeron-1.44.1/aeron-client/src/main/c/util/aeron_fileutil.h:54:9
 pub const __llvm__ = @as(c_int, 1);
 pub const __clang__ = @as(c_int, 1);
-pub const __clang_major__ = @as(c_int, 17);
-pub const __clang_minor__ = @as(c_int, 0);
+pub const __clang_major__ = @as(c_int, 18);
+pub const __clang_minor__ = @as(c_int, 1);
 pub const __clang_patchlevel__ = @as(c_int, 6);
-pub const __clang_version__ = "17.0.6 (https://github.com/ziglang/zig-bootstrap 4c78aa1bba84dbd324e178932cd52221417f63da)";
+pub const __clang_version__ = "18.1.6 (https://github.com/ziglang/zig-bootstrap 98bc6bf4fc4009888d33941daf6b600d20a42a56)";
 pub const __GNUC__ = @as(c_int, 4);
 pub const __GNUC_MINOR__ = @as(c_int, 2);
 pub const __GNUC_PATCHLEVEL__ = @as(c_int, 1);
@@ -2254,6 +2167,11 @@ pub const __ATOMIC_ACQUIRE = @as(c_int, 2);
 pub const __ATOMIC_RELEASE = @as(c_int, 3);
 pub const __ATOMIC_ACQ_REL = @as(c_int, 4);
 pub const __ATOMIC_SEQ_CST = @as(c_int, 5);
+pub const __MEMORY_SCOPE_SYSTEM = @as(c_int, 0);
+pub const __MEMORY_SCOPE_DEVICE = @as(c_int, 1);
+pub const __MEMORY_SCOPE_WRKGRP = @as(c_int, 2);
+pub const __MEMORY_SCOPE_WVFRNT = @as(c_int, 3);
+pub const __MEMORY_SCOPE_SINGLE = @as(c_int, 4);
 pub const __OPENCL_MEMORY_SCOPE_WORK_ITEM = @as(c_int, 0);
 pub const __OPENCL_MEMORY_SCOPE_WORK_GROUP = @as(c_int, 1);
 pub const __OPENCL_MEMORY_SCOPE_DEVICE = @as(c_int, 2);
@@ -2270,7 +2188,7 @@ pub const __FPCLASS_POSSUBNORMAL = @as(c_int, 0x0080);
 pub const __FPCLASS_POSNORMAL = @as(c_int, 0x0100);
 pub const __FPCLASS_POSINF = @as(c_int, 0x0200);
 pub const __PRAGMA_REDEFINE_EXTNAME = @as(c_int, 1);
-pub const __VERSION__ = "Clang 17.0.6 (https://github.com/ziglang/zig-bootstrap 4c78aa1bba84dbd324e178932cd52221417f63da)";
+pub const __VERSION__ = "Clang 18.1.6 (https://github.com/ziglang/zig-bootstrap 98bc6bf4fc4009888d33941daf6b600d20a42a56)";
 pub const __OBJC_BOOL_IS_BOOL = @as(c_int, 0);
 pub const __CONSTANT_CFSTRINGS__ = @as(c_int, 1);
 pub const __clang_literal_encoding__ = "UTF-8";
@@ -2326,11 +2244,15 @@ pub const __SIZEOF_INT128__ = @as(c_int, 16);
 pub const __INTMAX_TYPE__ = c_long;
 pub const __INTMAX_FMTd__ = "ld";
 pub const __INTMAX_FMTi__ = "li";
+pub const __INTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`");
+// (no file):95:9
 pub const __UINTMAX_TYPE__ = c_ulong;
 pub const __UINTMAX_FMTo__ = "lo";
 pub const __UINTMAX_FMTu__ = "lu";
 pub const __UINTMAX_FMTx__ = "lx";
 pub const __UINTMAX_FMTX__ = "lX";
+pub const __UINTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`");
+// (no file):101:9
 pub const __PTRDIFF_TYPE__ = c_long;
 pub const __PTRDIFF_FMTd__ = "ld";
 pub const __PTRDIFF_FMTi__ = "li";
@@ -2427,6 +2349,8 @@ pub const __INT32_C_SUFFIX__ = "";
 pub const __INT64_TYPE__ = c_long;
 pub const __INT64_FMTd__ = "ld";
 pub const __INT64_FMTi__ = "li";
+pub const __INT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`");
+// (no file):198:9
 pub const __UINT8_TYPE__ = u8;
 pub const __UINT8_FMTo__ = "hho";
 pub const __UINT8_FMTu__ = "hhu";
@@ -2448,6 +2372,8 @@ pub const __UINT32_FMTo__ = "o";
 pub const __UINT32_FMTu__ = "u";
 pub const __UINT32_FMTx__ = "x";
 pub const __UINT32_FMTX__ = "X";
+pub const __UINT32_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `U`");
+// (no file):220:9
 pub const __UINT32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 4294967295, .decimal);
 pub const __INT32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
 pub const __UINT64_TYPE__ = c_ulong;
@@ -2455,6 +2381,8 @@ pub const __UINT64_FMTo__ = "lo";
 pub const __UINT64_FMTu__ = "lu";
 pub const __UINT64_FMTx__ = "lx";
 pub const __UINT64_FMTX__ = "lX";
+pub const __UINT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`");
+// (no file):228:9
 pub const __UINT64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
 pub const __INT64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
 pub const __INT_LEAST8_TYPE__ = i8;
@@ -2585,6 +2513,10 @@ pub const __x86_64 = @as(c_int, 1);
 pub const __x86_64__ = @as(c_int, 1);
 pub const __SEG_GS = @as(c_int, 1);
 pub const __SEG_FS = @as(c_int, 1);
+pub const __seg_gs = @compileError("unable to translate macro: undefined identifier `address_space`");
+// (no file):359:9
+pub const __seg_fs = @compileError("unable to translate macro: undefined identifier `address_space`");
+// (no file):360:9
 pub const __corei7 = @as(c_int, 1);
 pub const __corei7__ = @as(c_int, 1);
 pub const __tune_corei7__ = @as(c_int, 1);
@@ -2647,6 +2579,8 @@ pub inline fn __glibc_clang_prereq(maj: anytype, min: anytype) @TypeOf(((__clang
     _ = &min;
     return ((__clang_major__ << @as(c_int, 16)) + __clang_minor__) >= ((maj << @as(c_int, 16)) + min);
 }
+pub const __GLIBC_USE = @compileError("unable to translate macro: undefined identifier `__GLIBC_USE_`");
+// /usr/include/features.h:186:9
 pub const _DEFAULT_SOURCE = @as(c_int, 1);
 pub const __GLIBC_USE_ISOC2X = @as(c_int, 0);
 pub const __USE_ISOC11 = @as(c_int, 1);
@@ -2686,12 +2620,24 @@ pub inline fn __GLIBC_PREREQ(maj: anytype, min: anytype) @TypeOf(((__GLIBC__ << 
     return ((__GLIBC__ << @as(c_int, 16)) + __GLIBC_MINOR__) >= ((maj << @as(c_int, 16)) + min);
 }
 pub const _SYS_CDEFS_H = @as(c_int, 1);
+pub const __glibc_has_attribute = @compileError("unable to translate macro: undefined identifier `__has_attribute`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:45:10
 pub inline fn __glibc_has_builtin(name: anytype) @TypeOf(__has_builtin(name)) {
     _ = &name;
     return __has_builtin(name);
 }
+pub const __glibc_has_extension = @compileError("unable to translate macro: undefined identifier `__has_extension`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:55:10
 pub const __LEAF = "";
 pub const __LEAF_ATTR = "";
+pub const __THROW = @compileError("unable to translate macro: undefined identifier `__nothrow__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:11
+pub const __THROWNL = @compileError("unable to translate macro: undefined identifier `__nothrow__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:80:11
+pub const __NTH = @compileError("unable to translate macro: undefined identifier `__nothrow__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:81:11
+pub const __NTHNL = @compileError("unable to translate macro: undefined identifier `__nothrow__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:82:11
 pub inline fn __P(args: anytype) @TypeOf(args) {
     _ = &args;
     return args;
@@ -2700,6 +2646,10 @@ pub inline fn __PMT(args: anytype) @TypeOf(args) {
     _ = &args;
     return args;
 }
+pub const __CONCAT = @compileError("unable to translate C expr: unexpected token '##'");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:124:9
+pub const __STRING = @compileError("unable to translate C expr: unexpected token '#'");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:125:9
 pub const __ptr_t = ?*anyopaque;
 pub const __BEGIN_DECLS = "";
 pub const __END_DECLS = "";
@@ -2719,18 +2669,72 @@ pub inline fn __glibc_objsize(__o: anytype) @TypeOf(__bos(__o)) {
     _ = &__o;
     return __bos(__o);
 }
+pub const __warnattr = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:209:10
+pub const __errordecl = @compileError("unable to translate C expr: unexpected token 'extern'");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:210:10
+pub const __flexarr = @compileError("unable to translate C expr: unexpected token '['");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:218:10
 pub const __glibc_c99_flexarr_available = @as(c_int, 1);
+pub const __REDIRECT = @compileError("unable to translate C expr: unexpected token '__asm__'");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:249:10
+pub const __REDIRECT_NTH = @compileError("unable to translate C expr: unexpected token '__asm__'");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:256:11
+pub const __REDIRECT_NTHNL = @compileError("unable to translate C expr: unexpected token '__asm__'");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:258:11
+pub const __ASMNAME = @compileError("unable to translate C expr: unexpected token ','");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:261:10
 pub inline fn __ASMNAME2(prefix: anytype, cname: anytype) @TypeOf(__STRING(prefix) ++ cname) {
     _ = &prefix;
     _ = &cname;
     return __STRING(prefix) ++ cname;
 }
+pub const __attribute_malloc__ = @compileError("unable to translate macro: undefined identifier `__malloc__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:283:10
+pub const __attribute_alloc_size__ = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:294:10
+pub const __attribute_alloc_align__ = @compileError("unable to translate macro: undefined identifier `__alloc_align__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:300:10
+pub const __attribute_pure__ = @compileError("unable to translate macro: undefined identifier `__pure__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:310:10
+pub const __attribute_const__ = @compileError("unable to translate C expr: unexpected token '__attribute__'");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:317:10
+pub const __attribute_maybe_unused__ = @compileError("unable to translate macro: undefined identifier `__unused__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:323:10
+pub const __attribute_used__ = @compileError("unable to translate macro: undefined identifier `__used__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:332:10
+pub const __attribute_noinline__ = @compileError("unable to translate macro: undefined identifier `__noinline__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:333:10
+pub const __attribute_deprecated__ = @compileError("unable to translate macro: undefined identifier `__deprecated__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:341:10
+pub const __attribute_deprecated_msg__ = @compileError("unable to translate macro: undefined identifier `__deprecated__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:351:10
+pub const __attribute_format_arg__ = @compileError("unable to translate macro: undefined identifier `__format_arg__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:364:10
+pub const __attribute_format_strfmon__ = @compileError("unable to translate macro: undefined identifier `__format__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:374:10
+pub const __attribute_nonnull__ = @compileError("unable to translate macro: undefined identifier `__nonnull__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:386:11
 pub inline fn __nonnull(params: anytype) @TypeOf(__attribute_nonnull__(params)) {
     _ = &params;
     return __attribute_nonnull__(params);
 }
+pub const __returns_nonnull = @compileError("unable to translate macro: undefined identifier `__returns_nonnull__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:399:10
+pub const __attribute_warn_unused_result__ = @compileError("unable to translate macro: undefined identifier `__warn_unused_result__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:408:10
 pub const __wur = "";
+pub const __always_inline = @compileError("unable to translate macro: undefined identifier `__always_inline__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:426:10
+pub const __attribute_artificial__ = @compileError("unable to translate macro: undefined identifier `__artificial__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:435:10
+pub const __extern_inline = @compileError("unable to translate macro: undefined identifier `__gnu_inline__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:453:11
+pub const __extern_always_inline = @compileError("unable to translate macro: undefined identifier `__gnu_inline__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:454:11
 pub const __fortify_function = __extern_always_inline ++ __attribute_artificial__;
+pub const __restrict_arr = @compileError("unable to translate C expr: unexpected token '__restrict'");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:497:10
 pub inline fn __glibc_unlikely(cond: anytype) @TypeOf(__builtin_expect(cond, @as(c_int, 0))) {
     _ = &cond;
     return __builtin_expect(cond, @as(c_int, 0));
@@ -2740,6 +2744,8 @@ pub inline fn __glibc_likely(cond: anytype) @TypeOf(__builtin_expect(cond, @as(c
     return __builtin_expect(cond, @as(c_int, 1));
 }
 pub const __attribute_nonstring__ = "";
+pub const __attribute_copy__ = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:546:10
 pub const __LDOUBLE_REDIRECTS_TO_FLOAT128_ABI = @as(c_int, 0);
 pub inline fn __LDBL_REDIR1(name: anytype, proto: anytype, alias: anytype) @TypeOf(name ++ proto) {
     _ = &name;
@@ -2763,6 +2769,10 @@ pub inline fn __LDBL_REDIR_NTH(name: anytype, proto: anytype) @TypeOf(name ++ pr
     _ = &proto;
     return name ++ proto ++ __THROW;
 }
+pub const __LDBL_REDIR2_DECL = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:622:10
+pub const __LDBL_REDIR_DECL = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:623:10
 pub inline fn __REDIRECT_LDBL(name: anytype, proto: anytype, alias: anytype) @TypeOf(__REDIRECT(name, proto, alias)) {
     _ = &name;
     _ = &proto;
@@ -2775,8 +2785,22 @@ pub inline fn __REDIRECT_NTH_LDBL(name: anytype, proto: anytype, alias: anytype)
     _ = &alias;
     return __REDIRECT_NTH(name, proto, alias);
 }
+pub const __glibc_macro_warning1 = @compileError("unable to translate macro: undefined identifier `_Pragma`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:637:10
+pub const __glibc_macro_warning = @compileError("unable to translate macro: undefined identifier `GCC`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:638:10
 pub const __HAVE_GENERIC_SELECTION = @as(c_int, 1);
+pub const __fortified_attr_access = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:683:11
+pub const __attr_access = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:684:11
+pub const __attr_access_none = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:685:11
+pub const __attr_dealloc = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:695:10
 pub const __attr_dealloc_free = "";
+pub const __attribute_returns_twice__ = @compileError("unable to translate macro: undefined identifier `__returns_twice__`");
+// /usr/include/x86_64-linux-gnu/sys/cdefs.h:702:10
 pub const __stub___compat_bdflush = "";
 pub const __stub_chflags = "";
 pub const __stub_fchflags = "";
@@ -2807,6 +2831,8 @@ pub const __SLONG32_TYPE = c_int;
 pub const __ULONG32_TYPE = c_uint;
 pub const __S64_TYPE = c_long;
 pub const __U64_TYPE = c_ulong;
+pub const __STD_TYPE = @compileError("unable to translate C expr: unexpected token 'typedef'");
+// /usr/include/x86_64-linux-gnu/bits/types.h:137:10
 pub const _BITS_TYPESIZES_H = @as(c_int, 1);
 pub const __SYSCALL_SLONG_TYPE = __SLONGWORD_TYPE;
 pub const __SYSCALL_ULONG_TYPE = __ULONGWORD_TYPE;
@@ -2840,6 +2866,8 @@ pub const __KEY_T_TYPE = __S32_TYPE;
 pub const __CLOCKID_T_TYPE = __S32_TYPE;
 pub const __TIMER_T_TYPE = ?*anyopaque;
 pub const __BLKSIZE_T_TYPE = __SYSCALL_SLONG_TYPE;
+pub const __FSID_T_TYPE = @compileError("unable to translate macro: undefined identifier `__val`");
+// /usr/include/x86_64-linux-gnu/bits/typesizes.h:73:9
 pub const __SSIZE_T_TYPE = __SWORD_TYPE;
 pub const __CPU_MASK_TYPE = __SYSCALL_ULONG_TYPE;
 pub const __OFF_T_MATCHES_OFF64_T = @as(c_int, 1);
@@ -3050,6 +3078,14 @@ pub inline fn __f32x(x: anytype) @TypeOf(x) {
     return x;
 }
 pub const __f64x = @import("std").zig.c_translation.Macros.L_SUFFIX;
+pub const __CFLOAT32 = @compileError("unable to translate: TODO _Complex");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:149:12
+pub const __CFLOAT64 = @compileError("unable to translate: TODO _Complex");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:160:13
+pub const __CFLOAT32X = @compileError("unable to translate: TODO _Complex");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:169:12
+pub const __CFLOAT64X = @compileError("unable to translate: TODO _Complex");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:178:13
 pub inline fn __builtin_huge_valf32() @TypeOf(__builtin_huge_valf()) {
     return __builtin_huge_valf();
 }
@@ -3060,6 +3096,32 @@ pub inline fn __builtin_nanf32(x: anytype) @TypeOf(__builtin_nanf(x)) {
     _ = &x;
     return __builtin_nanf(x);
 }
+pub const __builtin_nansf32 = @compileError("unable to translate macro: undefined identifier `__builtin_nansf`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:221:12
+pub const __builtin_huge_valf64 = @compileError("unable to translate macro: undefined identifier `__builtin_huge_val`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:255:13
+pub const __builtin_inff64 = @compileError("unable to translate macro: undefined identifier `__builtin_inf`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:256:13
+pub const __builtin_nanf64 = @compileError("unable to translate macro: undefined identifier `__builtin_nan`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:257:13
+pub const __builtin_nansf64 = @compileError("unable to translate macro: undefined identifier `__builtin_nans`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:258:13
+pub const __builtin_huge_valf32x = @compileError("unable to translate macro: undefined identifier `__builtin_huge_val`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:272:12
+pub const __builtin_inff32x = @compileError("unable to translate macro: undefined identifier `__builtin_inf`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:273:12
+pub const __builtin_nanf32x = @compileError("unable to translate macro: undefined identifier `__builtin_nan`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:274:12
+pub const __builtin_nansf32x = @compileError("unable to translate macro: undefined identifier `__builtin_nans`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:275:12
+pub const __builtin_huge_valf64x = @compileError("unable to translate macro: undefined identifier `__builtin_huge_vall`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:289:13
+pub const __builtin_inff64x = @compileError("unable to translate macro: undefined identifier `__builtin_infl`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:290:13
+pub const __builtin_nanf64x = @compileError("unable to translate macro: undefined identifier `__builtin_nanl`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:291:13
+pub const __builtin_nansf64x = @compileError("unable to translate macro: undefined identifier `__builtin_nansl`");
+// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:292:13
 pub const __ldiv_t_defined = @as(c_int, 1);
 pub const __lldiv_t_defined = @as(c_int, 1);
 pub const RAND_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
@@ -3168,6 +3230,12 @@ pub inline fn le64toh(x: anytype) @TypeOf(__uint64_identity(x)) {
     return __uint64_identity(x);
 }
 pub const _SYS_SELECT_H = @as(c_int, 1);
+pub const __FD_ZERO = @compileError("unable to translate macro: undefined identifier `__i`");
+// /usr/include/x86_64-linux-gnu/bits/select.h:25:9
+pub const __FD_SET = @compileError("unable to translate C expr: expected ')' instead got '|='");
+// /usr/include/x86_64-linux-gnu/bits/select.h:32:9
+pub const __FD_CLR = @compileError("unable to translate C expr: expected ')' instead got '&='");
+// /usr/include/x86_64-linux-gnu/bits/select.h:34:9
 pub inline fn __FD_ISSET(d: anytype, s: anytype) @TypeOf((__FDS_BITS(s)[@as(usize, @intCast(__FD_ELT(d)))] & __FD_MASK(d)) != @as(c_int, 0)) {
     _ = &d;
     _ = &s;
@@ -3234,7 +3302,11 @@ pub const __ONCE_ALIGNMENT = "";
 pub const _BITS_ATOMIC_WIDE_COUNTER_H = "";
 pub const _THREAD_MUTEX_INTERNAL_H = @as(c_int, 1);
 pub const __PTHREAD_MUTEX_HAVE_PREV = @as(c_int, 1);
+pub const __PTHREAD_MUTEX_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'");
+// /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:56:10
 pub const _RWLOCK_INTERNAL_H = "";
+pub const __PTHREAD_RWLOCK_ELISION_EXTRA = @compileError("unable to translate C expr: unexpected token '{'");
+// /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:40:11
 pub inline fn __PTHREAD_RWLOCK_INITIALIZER(__flags: anytype) @TypeOf(__flags) {
     _ = &__flags;
     return blk: {
@@ -3251,6 +3323,8 @@ pub inline fn __PTHREAD_RWLOCK_INITIALIZER(__flags: anytype) @TypeOf(__flags) {
         break :blk __flags;
     };
 }
+pub const __ONCE_FLAG_INIT = @compileError("unable to translate C expr: unexpected token '{'");
+// /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:113:9
 pub const __have_pthread_attr_t = @as(c_int, 1);
 pub const _ALLOCA_H = @as(c_int, 1);
 pub const __COMPAR_FN_T = "";
@@ -3269,7 +3343,22 @@ pub const AERON_CLIENT_NAME_ENV_VAR = "AERON_CLIENT_NAME";
 pub const AERON_AGENT_ON_START_FUNCTION_ENV_VAR = "AERON_AGENT_ON_START_FUNCTION";
 pub const AERON_COUNTER_CACHE_LINE_LENGTH = @as(c_uint, 64);
 pub const AERON_COUNTER_VALUE_LENGTH = @import("std").zig.c_translation.sizeof(aeron_counter_value_descriptor_t);
+pub const AERON_COUNTER_REGISTRATION_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `registration_id`");
+// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:648:9
 pub const AERON_COUNTER_METADATA_LENGTH = @import("std").zig.c_translation.sizeof(aeron_counter_metadata_descriptor_t);
+pub const AERON_COUNTER_TYPE_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `type_id`");
+// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:651:9
+pub const AERON_COUNTER_FREE_FOR_REUSE_DEADLINE_OFFSET = @compileError("unable to translate macro: undefined identifier `free_for_reuse_deadline_ms`");
+// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:652:9
+pub const AERON_COUNTER_KEY_OFFSET = @compileError("unable to translate macro: undefined identifier `key`");
+// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:653:9
+pub const AERON_COUNTER_LABEL_LENGTH_OFFSET = @compileError("unable to translate macro: undefined identifier `label`");
+// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:654:9
+pub const AERON_COUNTER_MAX_LABEL_LENGTH = @compileError("unable to translate C expr: unexpected token '('");
+// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:656:9
+pub const AERON_COUNTER_MAX_KEY_LENGTH = @compileError("unable to translate C expr: unexpected token '('");
+// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:657:9
+pub const AERON_COUNTER_MAX_CLIENT_NAME_LENGTH = @as(c_int, 100);
 pub const AERON_COUNTER_RECORD_UNUSED = @as(c_int, 0);
 pub const AERON_COUNTER_RECORD_ALLOCATED = @as(c_int, 1);
 pub const AERON_COUNTER_RECORD_RECLAIMED = -@as(c_int, 1);
@@ -3296,9 +3385,12 @@ pub const AERON_AGENT_H = "";
 pub const AERON_THREAD_H = "";
 pub const __STDDEF_H = "";
 pub const __need_ptrdiff_t = "";
-pub const __need_STDDEF_H_misc = "";
+pub const __need_max_align_t = "";
+pub const __need_offsetof = "";
 pub const _PTRDIFF_T = "";
 pub const __CLANG_MAX_ALIGN_T_DEFINED = "";
+pub const offsetof = @compileError("unable to translate C expr: unexpected token 'an identifier'");
+// /home/leki/zig-linux-x86_64-0.13.0/lib/include/__stddef_offsetof.h:16:9
 pub const AERON_DRIVER_PLATFORM_H = "";
 pub const AERON_COMPILER_GCC = @as(c_int, 1);
 pub const AERON_COMPILER_LLVM = @as(c_int, 1);
@@ -3321,11 +3413,23 @@ pub inline fn __CPUMASK(cpu: anytype) @TypeOf(@import("std").zig.c_translation.c
     _ = &cpu;
     return @import("std").zig.c_translation.cast(__cpu_mask, @as(c_int, 1)) << @import("std").zig.c_translation.MacroArithmetic.rem(cpu, __NCPUBITS);
 }
+pub const __CPU_ZERO_S = @compileError("unable to translate C expr: unexpected token 'do'");
+// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:46:10
+pub const __CPU_SET_S = @compileError("unable to translate macro: undefined identifier `__cpu`");
+// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:58:9
+pub const __CPU_CLR_S = @compileError("unable to translate macro: undefined identifier `__cpu`");
+// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:65:9
+pub const __CPU_ISSET_S = @compileError("unable to translate macro: undefined identifier `__cpu`");
+// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:72:9
 pub inline fn __CPU_COUNT_S(setsize: anytype, cpusetp: anytype) @TypeOf(__sched_cpucount(setsize, cpusetp)) {
     _ = &setsize;
     _ = &cpusetp;
     return __sched_cpucount(setsize, cpusetp);
 }
+pub const __CPU_EQUAL_S = @compileError("unable to translate macro: undefined identifier `__builtin_memcmp`");
+// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:84:10
+pub const __CPU_OP_S = @compileError("unable to translate macro: undefined identifier `__dest`");
+// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:99:9
 pub inline fn __CPU_ALLOC_SIZE(count: anytype) @TypeOf(@import("std").zig.c_translation.MacroArithmetic.div((count + __NCPUBITS) - @as(c_int, 1), __NCPUBITS) * @import("std").zig.c_translation.sizeof(__cpu_mask)) {
     _ = &count;
     return @import("std").zig.c_translation.MacroArithmetic.div((count + __NCPUBITS) - @as(c_int, 1), __NCPUBITS) * @import("std").zig.c_translation.sizeof(__cpu_mask);
@@ -3338,6 +3442,8 @@ pub inline fn __CPU_FREE(cpuset: anytype) @TypeOf(__sched_cpufree(cpuset)) {
     _ = &cpuset;
     return __sched_cpufree(cpuset);
 }
+pub const __sched_priority = @compileError("unable to translate macro: undefined identifier `sched_priority`");
+// /usr/include/sched.h:48:9
 pub const _TIME_H = @as(c_int, 1);
 pub const _BITS_TIME_H = @as(c_int, 1);
 pub const CLOCKS_PER_SEC = @import("std").zig.c_translation.cast(__clock_t, @import("std").zig.c_translation.promoteIntLiteral(c_int, 1000000, .decimal));
@@ -3365,10 +3471,20 @@ pub inline fn __isleap(year: anytype) @TypeOf((@import("std").zig.c_translation.
 pub const _BITS_SETJMP_H = @as(c_int, 1);
 pub const __jmp_buf_tag_defined = @as(c_int, 1);
 pub const PTHREAD_STACK_MIN = @as(c_int, 16384);
+pub const PTHREAD_MUTEX_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'");
+// /usr/include/pthread.h:90:9
+pub const PTHREAD_RWLOCK_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'");
+// /usr/include/pthread.h:114:10
+pub const PTHREAD_COND_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'");
+// /usr/include/pthread.h:155:9
 pub const PTHREAD_CANCELED = @import("std").zig.c_translation.cast(?*anyopaque, -@as(c_int, 1));
 pub const PTHREAD_ONCE_INIT = @as(c_int, 0);
 pub const PTHREAD_BARRIER_SERIAL_THREAD = -@as(c_int, 1);
 pub const __cleanup_fct_attribute = "";
+pub const pthread_cleanup_push = @compileError("unable to translate macro: undefined identifier `__cancel_buf`");
+// /usr/include/pthread.h:681:10
+pub const pthread_cleanup_pop = @compileError("unable to translate macro: undefined identifier `__cancel_buf`");
+// /usr/include/pthread.h:702:10
 pub inline fn __sigsetjmp_cancel(env: anytype, savemask: anytype) @TypeOf(__sigsetjmp(@import("std").zig.c_translation.cast([*c]struct___jmp_buf_tag, @import("std").zig.c_translation.cast(?*anyopaque, env)), savemask)) {
     _ = &env;
     _ = &savemask;
@@ -3394,6 +3510,18 @@ pub const aeron_cond_signal = pthread_cond_signal;
 pub const aeron_cond_wait = pthread_cond_wait;
 pub const AERON_ATOMIC_H = "";
 pub const AERON_ATOMIC64_GCC_X86_64_H = "";
+pub const AERON_GET_VOLATILE = @compileError("unable to translate C expr: unexpected token 'do'");
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:23:9
+pub const AERON_PUT_ORDERED = @compileError("unable to translate C expr: unexpected token 'do'");
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:31:9
+pub const AERON_PUT_VOLATILE = @compileError("unable to translate C expr: unexpected token 'do'");
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:39:9
+pub const AERON_GET_AND_ADD_INT64 = @compileError("unable to translate C expr: unexpected token 'do'");
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:48:9
+pub const AERON_GET_AND_ADD_INT32 = @compileError("unable to translate C expr: unexpected token 'do'");
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:58:9
+pub const AERON_DECL_ALIGNED = @compileError("unable to translate macro: undefined identifier `aligned`");
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:121:9
 pub const AERON_COMMON_H = "";
 pub const AERON_MAX_PATH = @as(c_int, 384);
 pub const AERON_AGENT_STATE_UNUSED = @as(c_int, 0);
@@ -3426,7 +3554,6 @@ pub const AERON_HDR_TYPE_ATS_DATA = INT16_C(@as(c_int, 0x08));
 pub const AERON_HDR_TYPE_ATS_SETUP = INT16_C(@as(c_int, 0x09));
 pub const AERON_HDR_TYPE_ATS_SM = INT16_C(@as(c_int, 0x0A));
 pub const AERON_HDR_TYPE_RSP_SETUP = INT16_C(@as(c_int, 0x0B));
-pub const AERON_HDR_TYPE_UNCONNECTED_STREAM = INT16_C(@as(c_int, 0xC));
 pub const AERON_HDR_TYPE_EXT = INT16_C(-@as(c_int, 1));
 pub const AERON_DATA_HEADER_LENGTH = @import("std").zig.c_translation.sizeof(aeron_data_header_t);
 pub const AERON_DATA_HEADER_BEGIN_FLAG = UINT8_C(@as(c_int, 0x80));
@@ -3437,6 +3564,7 @@ pub const AERON_DATA_HEADER_DEFAULT_RESERVED_VALUE = INT64_C(@as(c_int, 0));
 pub const AERON_STATUS_MESSAGE_HEADER_SEND_SETUP_FLAG = UINT8_C(@as(c_int, 0x80));
 pub const AERON_STATUS_MESSAGE_HEADER_EOS_FLAG = UINT8_C(@as(c_int, 0x40));
 pub const AERON_SETUP_HEADER_SEND_RESPONSE_FLAG = UINT8_C(@as(c_int, 0x80));
+pub const AERON_SETUP_HEADER_GROUP_FLAG = UINT8_C(@as(c_int, 0x40));
 pub const AERON_RTTM_HEADER_REPLY_FLAG = UINT8_C(@as(c_int, 0x80));
 pub const AERON_RES_HEADER_TYPE_NAME_TO_IP4_MD = @as(c_int, 0x01);
 pub const AERON_RES_HEADER_TYPE_NAME_TO_IP6_MD = @as(c_int, 0x02);
@@ -3453,7 +3581,15 @@ pub const AERON_OPT_HDR_TYPE_ATS_GROUP_TAG = UINT16_C(@as(c_int, 0x0007));
 pub const AERON_OPT_HDR_ALIGNMENT = @as(c_uint, 4);
 pub const AERON_BITUTIL_H = "";
 pub const _ASSERT_H = @as(c_int, 1);
+pub const __ASSERT_VOID_CAST = @compileError("unable to translate C expr: unexpected token ''");
+// /usr/include/assert.h:40:10
 pub const _ASSERT_H_DECLS = "";
+pub const assert = @compileError("unable to translate macro: undefined identifier `__FILE__`");
+// /usr/include/assert.h:107:11
+pub const __ASSERT_FUNCTION = @compileError("unable to translate C expr: unexpected token '__extension__'");
+// /usr/include/assert.h:129:12
+pub const static_assert = @compileError("unable to translate C expr: unexpected token '_Static_assert'");
+// /usr/include/assert.h:143:10
 pub const AERON_CACHE_LINE_LENGTH = @as(c_uint, 64);
 pub inline fn AERON_ALIGN(value: anytype, alignment: anytype) @TypeOf((value + (alignment - @as(c_uint, 1))) & ~(alignment - @as(c_uint, 1))) {
     _ = &value;
@@ -3488,6 +3624,8 @@ pub const AERON_LOGBUFFER_DEFAULT_FRAME_HEADER_MAX_LENGTH = AERON_CACHE_LINE_LEN
 pub const AERON_MAX_UDP_PAYLOAD_LENGTH = @import("std").zig.c_translation.promoteIntLiteral(c_int, 65504, .decimal);
 pub const AERON_LOGBUFFER_META_DATA_LENGTH = AERON_ALIGN(@import("std").zig.c_translation.sizeof(aeron_logbuffer_metadata_t) + AERON_LOGBUFFER_DEFAULT_FRAME_HEADER_MAX_LENGTH, AERON_PAGE_MIN_SIZE);
 pub const AERON_LOGBUFFER_FRAME_ALIGNMENT = @as(c_int, 32);
+pub const AERON_LOGBUFFER_RAWTAIL_VOLATILE = @compileError("unable to translate macro: undefined identifier `active_term_count`");
+// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:63:9
 pub const _UNISTD_H = @as(c_int, 1);
 pub const _POSIX_VERSION = @as(c_long, 200809);
 pub const __POSIX2_THIS_VERSION = @as(c_long, 200809);
@@ -3604,6 +3742,10 @@ pub const F_ULOCK = @as(c_int, 0);
 pub const F_LOCK = @as(c_int, 1);
 pub const F_TLOCK = @as(c_int, 2);
 pub const F_TEST = @as(c_int, 3);
+pub const AERON_FILEUTIL_ERROR_ENOSPC = @compileError("unable to translate macro: undefined identifier `ENOSPC`");
+// aeron-1.46.6/aeron-client/src/main/c/util/aeron_fileutil.h:53:9
+pub const aeron_mkdir = @compileError("unable to translate macro: undefined identifier `mkdir`");
+// aeron-1.46.6/aeron-client/src/main/c/util/aeron_fileutil.h:55:9
 pub const AERON_PUBLICATIONS_DIR = "publications";
 pub const AERON_IMAGES_DIR = "images";
 pub const AERON_MPSC_CONCURRENT_ARRAY_QUEUE_H = "";
@@ -3671,7 +3813,6 @@ pub const aeron_nak_header_stct = struct_aeron_nak_header_stct;
 pub const aeron_status_message_header_stct = struct_aeron_status_message_header_stct;
 pub const aeron_status_message_optional_header_stct = struct_aeron_status_message_optional_header_stct;
 pub const aeron_rttm_header_stct = struct_aeron_rttm_header_stct;
-pub const aeron_unconnected_stream_header_stct = struct_aeron_unconnected_stream_header_stct;
 pub const aeron_resolution_header_stct = struct_aeron_resolution_header_stct;
 pub const aeron_resolution_header_ipv4_stct = struct_aeron_resolution_header_ipv4_stct;
 pub const aeron_resolution_header_ipv6_stct = struct_aeron_resolution_header_ipv6_stct;

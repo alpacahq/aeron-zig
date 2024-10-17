@@ -1,6 +1,6 @@
 .{
     .name = "aeron",
-    .version = "1.46.0",
+    .version = "1.46.6",
     .minimum_zig_version = "0.13.0",
     .paths = .{
         "build.zig",

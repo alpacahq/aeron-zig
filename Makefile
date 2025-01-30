@@ -1,4 +1,4 @@
-AERON_VERSION := 1.46.6
+AERON_VERSION := 1.47.1
 
 AERON_SOURCE  := aeron-$(AERON_VERSION)
 AERON_INCLUDE := $(AERON_SOURCE)/aeron-client/src/main/c
@@ -46,4 +46,4 @@ clean:
 	@rm -rf $(AERON_SOURCE) .zig-cache zig-out
 
 dist-clean: clean
-	@rm -rf lib/libaeron_static.a src/aeronc.zig
+	@rm -rf lib/* src/aeronc.zig

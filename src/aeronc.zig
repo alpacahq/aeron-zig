@@ -473,6 +473,22 @@ pub const struct_aeron_counters_reader_stct = opaque {};
 pub const aeron_counters_reader_t = struct_aeron_counters_reader_stct;
 pub const aeron_on_available_counter_t = ?*const fn (?*anyopaque, ?*aeron_counters_reader_t, i64, i32) callconv(.C) void;
 pub const aeron_on_unavailable_counter_t = ?*const fn (?*anyopaque, ?*aeron_counters_reader_t, i64, i32) callconv(.C) void;
+pub const struct_aeron_publication_error_values_stct = extern struct {
+    registration_id: i64 = @import("std").mem.zeroes(i64),
+    destination_registration_id: i64 = @import("std").mem.zeroes(i64),
+    session_id: i32 = @import("std").mem.zeroes(i32),
+    stream_id: i32 = @import("std").mem.zeroes(i32),
+    receiver_id: i64 = @import("std").mem.zeroes(i64),
+    group_tag: i64 = @import("std").mem.zeroes(i64),
+    address_type: i16 = @import("std").mem.zeroes(i16),
+    source_port: u16 = @import("std").mem.zeroes(u16),
+    source_address: [16]u8 = @import("std").mem.zeroes([16]u8),
+    error_code: i32 = @import("std").mem.zeroes(i32),
+    error_message_length: i32 = @import("std").mem.zeroes(i32),
+    error_message: [1]u8 = @import("std").mem.zeroes([1]u8),
+};
+pub const aeron_publication_error_values_t = struct_aeron_publication_error_values_stct;
+pub const aeron_publication_error_frame_handler_t = ?*const fn (?*anyopaque, [*c]aeron_publication_error_values_t) callconv(.C) void;
 pub const aeron_agent_on_start_func_t = ?*const fn (?*anyopaque, [*c]const u8) callconv(.C) void;
 pub const aeron_on_close_client_t = ?*const fn (?*anyopaque) callconv(.C) void;
 pub const aeron_idle_strategy_func_t = ?*const fn (?*anyopaque, c_int) callconv(.C) void;
@@ -502,7 +518,7 @@ pub const struct_aeron_mpsc_concurrent_array_queue_stct = extern struct {
 };
 pub const aeron_mpsc_concurrent_array_queue_t = struct_aeron_mpsc_concurrent_array_queue_stct;
 pub const struct_aeron_context_stct = extern struct {
-    aeron_dir: [*c]u8 = @import("std").mem.zeroes([*c]u8),
+    aeron_dir: [4096]u8 = @import("std").mem.zeroes([4096]u8),
     client_name: [*c]const u8 = @import("std").mem.zeroes([*c]const u8),
     error_handler: aeron_error_handler_t = @import("std").mem.zeroes(aeron_error_handler_t),
     error_handler_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
@@ -520,6 +536,8 @@ pub const struct_aeron_context_stct = extern struct {
     on_available_counter_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
     on_unavailable_counter: aeron_on_unavailable_counter_t = @import("std").mem.zeroes(aeron_on_unavailable_counter_t),
     on_unavailable_counter_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
+    error_frame_handler: aeron_publication_error_frame_handler_t = @import("std").mem.zeroes(aeron_publication_error_frame_handler_t),
+    error_frame_handler_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
     agent_on_start_func: aeron_agent_on_start_func_t = @import("std").mem.zeroes(aeron_agent_on_start_func_t),
     agent_on_start_state: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
     on_close_client: aeron_on_close_client_t = @import("std").mem.zeroes(aeron_on_close_client_t),
@@ -600,10 +618,15 @@ pub extern fn aeron_context_set_pre_touch_mapped_memory(context: [*c]aeron_conte
 pub extern fn aeron_context_get_pre_touch_mapped_memory(context: [*c]aeron_context_t) bool;
 pub extern fn aeron_context_set_client_name(context: [*c]aeron_context_t, value: [*c]const u8) c_int;
 pub extern fn aeron_context_get_client_name(context: [*c]aeron_context_t) [*c]const u8;
+pub extern fn aeron_publication_error_values_copy(dst: [*c][*c]aeron_publication_error_values_t, src: [*c]aeron_publication_error_values_t) c_int;
+pub extern fn aeron_publication_error_values_delete(to_delete: [*c]aeron_publication_error_values_t) void;
 pub const aeron_notification_t = ?*const fn (?*anyopaque) callconv(.C) void;
 pub extern fn aeron_context_set_error_handler(context: [*c]aeron_context_t, handler: aeron_error_handler_t, clientd: ?*anyopaque) c_int;
 pub extern fn aeron_context_get_error_handler(context: [*c]aeron_context_t) aeron_error_handler_t;
 pub extern fn aeron_context_get_error_handler_clientd(context: [*c]aeron_context_t) ?*anyopaque;
+pub extern fn aeron_context_set_publication_error_frame_handler(context: [*c]aeron_context_t, handler: aeron_publication_error_frame_handler_t, clientd: ?*anyopaque) c_int;
+pub extern fn aeron_context_get_publication_error_frame_handler(context: [*c]aeron_context_t) aeron_publication_error_frame_handler_t;
+pub extern fn aeron_context_get_publication_error_frame_handler_clientd(context: [*c]aeron_context_t) ?*anyopaque;
 pub extern fn aeron_context_set_on_new_publication(context: [*c]aeron_context_t, handler: aeron_on_new_publication_t, clientd: ?*anyopaque) c_int;
 pub extern fn aeron_context_get_on_new_publication(context: [*c]aeron_context_t) aeron_on_new_publication_t;
 pub extern fn aeron_context_get_on_new_publication_clientd(context: [*c]aeron_context_t) ?*anyopaque;
@@ -705,6 +728,7 @@ pub extern fn aeron_counters_reader_counter_owner_id(counters_reader: ?*aeron_co
 pub extern fn aeron_counters_reader_counter_reference_id(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, reference_id: [*c]i64) c_int;
 pub extern fn aeron_counters_reader_counter_state(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, state: [*c]i32) c_int;
 pub extern fn aeron_counters_reader_counter_type_id(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, type_id: [*c]i32) c_int;
+pub extern fn aeron_counters_reader_metadata_key(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, key_p: [*c][*c]u8) c_int;
 pub extern fn aeron_counters_reader_counter_label(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, buffer: [*c]u8, buffer_length: usize) c_int;
 pub extern fn aeron_counters_reader_free_for_reuse_deadline_ms(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, deadline_ms: [*c]i64) c_int;
 pub const aeron_reserved_value_supplier_t = ?*const fn (?*anyopaque, [*c]u8, usize) callconv(.C) i64;
@@ -1170,25 +1194,25 @@ pub const aeron_thread_t = pthread_t;
 pub const aeron_thread_attr_t = pthread_attr_t;
 pub const aeron_cond_t = pthread_cond_t;
 pub extern fn proc_yield() void;
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:71:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:62:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:68:13: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:59:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_cas_int64(arg_dst: [*c]volatile i64, arg_expected: i64, arg_desired: i64) callconv(.C) bool;
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:82:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:73:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:79:13: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:70:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_cas_uint64(arg_dst: [*c]volatile u64, arg_expected: u64, arg_desired: u64) callconv(.C) bool;
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:93:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:84:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:90:13: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:81:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_cas_int32(arg_dst: [*c]volatile i32, arg_expected: i32, arg_desired: i32) callconv(.C) bool;
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:104:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:95:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:101:13: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:92:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_acquire() callconv(.C) void;
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:111:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:102:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:107:13: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:98:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_release() callconv(.C) void;
 pub const aeron_idle_strategy_init_func_t = ?*const fn ([*c]?*anyopaque, [*c]const u8, [*c]const u8) callconv(.C) c_int;
 pub extern fn aeron_semantic_version_compose(major: u8, minor: u8, patch: u8) i32;
@@ -1233,9 +1257,9 @@ pub fn aeron_agent_do_work(arg_runner: [*c]aeron_agent_runner_t) callconv(.C) c_
     _ = &runner;
     return runner.*.do_work.?(runner.*.agent_state);
 }
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/aeron_agent.h:105:13: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/aeron_agent.h:105:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_agent_is_running(arg_runner: [*c]aeron_agent_runner_t) callconv(.C) bool;
 pub fn aeron_agent_idle(arg_runner: [*c]aeron_agent_runner_t, arg_work_count: c_int) callconv(.C) void {
     var runner = arg_runner;
@@ -1345,6 +1369,16 @@ pub const struct_aeron_status_message_header_stct = extern struct {
     receiver_id: i64 = @import("std").mem.zeroes(i64),
 };
 pub const aeron_status_message_header_t = struct_aeron_status_message_header_stct;
+pub const struct_aeron_error_stct = extern struct {
+    frame_header: aeron_frame_header_t = @import("std").mem.zeroes(aeron_frame_header_t),
+    session_id: i32 = @import("std").mem.zeroes(i32),
+    stream_id: i32 = @import("std").mem.zeroes(i32),
+    receiver_id: i64 = @import("std").mem.zeroes(i64),
+    group_tag: i64 = @import("std").mem.zeroes(i64),
+    error_code: i32 = @import("std").mem.zeroes(i32),
+    error_length: i32 = @import("std").mem.zeroes(i32),
+};
+pub const aeron_error_t = struct_aeron_error_stct;
 pub const struct_aeron_status_message_optional_header_stct = extern struct {
     group_tag: i64 = @import("std").mem.zeroes(i64),
 };
@@ -1423,9 +1457,9 @@ pub fn aeron_number_of_trailing_zeroes(arg_value: i32) callconv(.C) c_int {
     }
     return __builtin_ctz(@as(c_uint, @bitCast(value)));
 }
-// aeron-1.46.6/aeron-client/src/main/c/util/aeron_bitutil.h:103:12: warning: TODO implement function '__builtin_ctzll' in std.zig.c_builtins
+// aeron-1.47.1/aeron-client/src/main/c/util/aeron_bitutil.h:103:12: warning: TODO implement function '__builtin_ctzll' in std.zig.c_builtins
 
-// aeron-1.46.6/aeron-client/src/main/c/util/aeron_bitutil.h:95:12: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/util/aeron_bitutil.h:95:12: warning: unable to translate function, demoted to extern
 pub extern fn aeron_number_of_trailing_zeroes_u64(arg_value: u64) callconv(.C) c_int;
 pub fn aeron_number_of_leading_zeroes(arg_value: i32) callconv(.C) c_int {
     var value = arg_value;
@@ -1502,7 +1536,29 @@ pub const struct_aeron_logbuffer_metadata_stct = extern struct {
     mtu_length: i32 = @import("std").mem.zeroes(i32),
     term_length: i32 = @import("std").mem.zeroes(i32),
     page_size: i32 = @import("std").mem.zeroes(i32),
-    pad3: [36]u8 = @import("std").mem.zeroes([36]u8),
+    publication_window_length: i32 = @import("std").mem.zeroes(i32),
+    receiver_window_length: i32 = @import("std").mem.zeroes(i32),
+    socket_sndbuf_length: i32 = @import("std").mem.zeroes(i32),
+    os_default_socket_sndbuf_length: i32 = @import("std").mem.zeroes(i32),
+    os_max_socket_sndbuf_length: i32 = @import("std").mem.zeroes(i32),
+    socket_rcvbuf_length: i32 = @import("std").mem.zeroes(i32),
+    os_default_socket_rcvbuf_length: i32 = @import("std").mem.zeroes(i32),
+    os_max_socket_rcvbuf_length: i32 = @import("std").mem.zeroes(i32),
+    max_resend: i32 = @import("std").mem.zeroes(i32),
+    default_header: [128]u8 = @import("std").mem.zeroes([128]u8),
+    entity_tag: i64 = @import("std").mem.zeroes(i64),
+    response_correlation_id: i64 = @import("std").mem.zeroes(i64),
+    linger_timeout_ns: i64 = @import("std").mem.zeroes(i64),
+    untethered_window_limit_timeout_ns: i64 = @import("std").mem.zeroes(i64),
+    untethered_resting_timeout_ns: i64 = @import("std").mem.zeroes(i64),
+    group: u8 = @import("std").mem.zeroes(u8),
+    is_response: u8 = @import("std").mem.zeroes(u8),
+    rejoin: u8 = @import("std").mem.zeroes(u8),
+    reliable: u8 = @import("std").mem.zeroes(u8),
+    sparse: u8 = @import("std").mem.zeroes(u8),
+    signal_eos: u8 = @import("std").mem.zeroes(u8),
+    spies_simulate_connection: u8 = @import("std").mem.zeroes(u8),
+    tether: u8 = @import("std").mem.zeroes(u8),
 };
 pub const aeron_logbuffer_metadata_t = struct_aeron_logbuffer_metadata_stct;
 pub extern fn aeron_logbuffer_check_term_length(term_length: u64) c_int;
@@ -1512,7 +1568,7 @@ pub fn aeron_logbuffer_compute_log_length(arg_term_length: u64, arg_page_size: u
     _ = &term_length;
     var page_size = arg_page_size;
     _ = &page_size;
-    return (((term_length *% @as(u64, @bitCast(@as(c_long, @as(c_int, 3))))) +% (((@sizeOf(aeron_logbuffer_metadata_t) +% @as(c_ulong, @bitCast(@as(c_ulong, @as(c_uint, 64) *% @as(c_uint, @bitCast(@as(c_int, 2))))))) +% @as(c_ulong, @bitCast(@as(c_ulong, @as(c_uint, @bitCast(@as(c_int, 4) * @as(c_int, 1024))) -% @as(c_uint, 1))))) & @as(c_ulong, @bitCast(@as(c_ulong, ~(@as(c_uint, @bitCast(@as(c_int, 4) * @as(c_int, 1024))) -% @as(c_uint, 1))))))) +% (page_size -% @as(u64, @bitCast(@as(c_ulong, @as(c_uint, 1)))))) & ~(page_size -% @as(u64, @bitCast(@as(c_ulong, @as(c_uint, 1)))));
+    return (((term_length *% @as(u64, @bitCast(@as(c_long, @as(c_int, 3))))) +% @as(u64, @bitCast(@as(c_ulong, @as(c_uint, @bitCast(@as(c_int, 4))) *% @as(c_uint, 1024))))) +% (page_size -% @as(u64, @bitCast(@as(c_ulong, @as(c_uint, 1)))))) & ~(page_size -% @as(u64, @bitCast(@as(c_ulong, @as(c_uint, 1)))));
 }
 pub fn aeron_logbuffer_term_offset(arg_raw_tail: i64, arg_term_length: i32) callconv(.C) i32 {
     var raw_tail = arg_raw_tail;
@@ -1607,9 +1663,9 @@ pub fn aeron_logbuffer_cas_raw_tail(arg_log_meta_data: [*c]aeron_logbuffer_metad
     _ = &update_raw_tail;
     return aeron_cas_int64(&log_meta_data.*.term_tail_counters[partition_index], expected_raw_tail, update_raw_tail);
 }
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:148:16: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:172:16: warning: unable to translate function, demoted to extern
 pub extern fn aeron_logbuffer_active_term_count(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t) callconv(.C) i32;
 pub fn aeron_logbuffer_cas_active_term_count(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t, arg_expected_term_count: i32, arg_update_term_count: i32) callconv(.C) bool {
     var log_meta_data = arg_log_meta_data;
@@ -1620,9 +1676,9 @@ pub fn aeron_logbuffer_cas_active_term_count(arg_log_meta_data: [*c]aeron_logbuf
     _ = &update_term_count;
     return aeron_cas_int32(&log_meta_data.*.active_term_count, expected_term_count, update_term_count);
 }
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:163:13: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:187:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_logbuffer_rotate_log(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t, arg_current_term_count: i32, arg_current_term_id: i32) callconv(.C) bool;
 pub fn aeron_logbuffer_fill_default_header(arg_log_meta_data_buffer: [*c]u8, arg_session_id: i32, arg_stream_id: i32, arg_initial_term_id: i32) callconv(.C) void {
     var log_meta_data_buffer = arg_log_meta_data_buffer;
@@ -1635,7 +1691,7 @@ pub fn aeron_logbuffer_fill_default_header(arg_log_meta_data_buffer: [*c]u8, arg
     _ = &initial_term_id;
     var log_meta_data: [*c]aeron_logbuffer_metadata_t = @as([*c]aeron_logbuffer_metadata_t, @ptrCast(@alignCast(log_meta_data_buffer)));
     _ = &log_meta_data;
-    var data_header: [*c]aeron_data_header_t = @as([*c]aeron_data_header_t, @ptrCast(@alignCast(log_meta_data_buffer + @sizeOf(aeron_logbuffer_metadata_t))));
+    var data_header: [*c]aeron_data_header_t = @as([*c]aeron_data_header_t, @ptrCast(@alignCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header))))));
     _ = &data_header;
     log_meta_data.*.default_frame_header_length = @as(i32, @bitCast(@as(c_uint, @truncate(@sizeOf(aeron_data_header_t)))));
     data_header.*.frame_header.frame_length = 0;
@@ -1648,6 +1704,107 @@ pub fn aeron_logbuffer_fill_default_header(arg_log_meta_data_buffer: [*c]u8, arg
     data_header.*.term_offset = 0;
     data_header.*.reserved_value = @as(c_long, 0);
 }
+pub fn aeron_logbuffer_metadata_init(arg_log_meta_data_buffer: [*c]u8, arg_end_of_stream_position: i64, arg_is_connected: i32, arg_active_transport_count: i32, arg_correlation_id: i64, arg_initial_term_id: i32, arg_mtu_length: i32, arg_term_length: i32, arg_page_size: i32, arg_publication_window_length: i32, arg_receiver_window_length: i32, arg_socket_sndbuf_length: i32, arg_os_default_socket_sndbuf_length: i32, arg_os_max_socket_sndbuf_length: i32, arg_socket_rcvbuf_length: i32, arg_os_default_socket_rcvbuf_length: i32, arg_os_max_socket_rcvbuf_length: i32, arg_max_resend: i32, arg_session_id: i32, arg_stream_id: i32, arg_entity_tag: i64, arg_response_correlation_id: i64, arg_linger_timeout_ns: i64, arg_untethered_window_limit_timeout_ns: i64, arg_untethered_resting_timeout_ns: i64, arg_group: u8, arg_is_response: u8, arg_rejoin: u8, arg_reliable: u8, arg_sparse: u8, arg_signal_eos: u8, arg_spies_simulate_connection: u8, arg_tether: u8) callconv(.C) void {
+    var log_meta_data_buffer = arg_log_meta_data_buffer;
+    _ = &log_meta_data_buffer;
+    var end_of_stream_position = arg_end_of_stream_position;
+    _ = &end_of_stream_position;
+    var is_connected = arg_is_connected;
+    _ = &is_connected;
+    var active_transport_count = arg_active_transport_count;
+    _ = &active_transport_count;
+    var correlation_id = arg_correlation_id;
+    _ = &correlation_id;
+    var initial_term_id = arg_initial_term_id;
+    _ = &initial_term_id;
+    var mtu_length = arg_mtu_length;
+    _ = &mtu_length;
+    var term_length = arg_term_length;
+    _ = &term_length;
+    var page_size = arg_page_size;
+    _ = &page_size;
+    var publication_window_length = arg_publication_window_length;
+    _ = &publication_window_length;
+    var receiver_window_length = arg_receiver_window_length;
+    _ = &receiver_window_length;
+    var socket_sndbuf_length = arg_socket_sndbuf_length;
+    _ = &socket_sndbuf_length;
+    var os_default_socket_sndbuf_length = arg_os_default_socket_sndbuf_length;
+    _ = &os_default_socket_sndbuf_length;
+    var os_max_socket_sndbuf_length = arg_os_max_socket_sndbuf_length;
+    _ = &os_max_socket_sndbuf_length;
+    var socket_rcvbuf_length = arg_socket_rcvbuf_length;
+    _ = &socket_rcvbuf_length;
+    var os_default_socket_rcvbuf_length = arg_os_default_socket_rcvbuf_length;
+    _ = &os_default_socket_rcvbuf_length;
+    var os_max_socket_rcvbuf_length = arg_os_max_socket_rcvbuf_length;
+    _ = &os_max_socket_rcvbuf_length;
+    var max_resend = arg_max_resend;
+    _ = &max_resend;
+    var session_id = arg_session_id;
+    _ = &session_id;
+    var stream_id = arg_stream_id;
+    _ = &stream_id;
+    var entity_tag = arg_entity_tag;
+    _ = &entity_tag;
+    var response_correlation_id = arg_response_correlation_id;
+    _ = &response_correlation_id;
+    var linger_timeout_ns = arg_linger_timeout_ns;
+    _ = &linger_timeout_ns;
+    var untethered_window_limit_timeout_ns = arg_untethered_window_limit_timeout_ns;
+    _ = &untethered_window_limit_timeout_ns;
+    var untethered_resting_timeout_ns = arg_untethered_resting_timeout_ns;
+    _ = &untethered_resting_timeout_ns;
+    var group = arg_group;
+    _ = &group;
+    var is_response = arg_is_response;
+    _ = &is_response;
+    var rejoin = arg_rejoin;
+    _ = &rejoin;
+    var reliable = arg_reliable;
+    _ = &reliable;
+    var sparse = arg_sparse;
+    _ = &sparse;
+    var signal_eos = arg_signal_eos;
+    _ = &signal_eos;
+    var spies_simulate_connection = arg_spies_simulate_connection;
+    _ = &spies_simulate_connection;
+    var tether = arg_tether;
+    _ = &tether;
+    var log_meta_data: [*c]aeron_logbuffer_metadata_t = @as([*c]aeron_logbuffer_metadata_t, @ptrCast(@alignCast(log_meta_data_buffer)));
+    _ = &log_meta_data;
+    log_meta_data.*.end_of_stream_position = end_of_stream_position;
+    log_meta_data.*.is_connected = is_connected;
+    log_meta_data.*.active_transport_count = active_transport_count;
+    log_meta_data.*.correlation_id = correlation_id;
+    log_meta_data.*.initial_term_id = initial_term_id;
+    log_meta_data.*.mtu_length = mtu_length;
+    log_meta_data.*.term_length = term_length;
+    log_meta_data.*.page_size = page_size;
+    log_meta_data.*.publication_window_length = publication_window_length;
+    log_meta_data.*.receiver_window_length = receiver_window_length;
+    log_meta_data.*.socket_sndbuf_length = socket_sndbuf_length;
+    log_meta_data.*.os_default_socket_sndbuf_length = os_default_socket_sndbuf_length;
+    log_meta_data.*.os_max_socket_sndbuf_length = os_max_socket_sndbuf_length;
+    log_meta_data.*.socket_rcvbuf_length = socket_rcvbuf_length;
+    log_meta_data.*.os_default_socket_rcvbuf_length = os_default_socket_rcvbuf_length;
+    log_meta_data.*.os_max_socket_rcvbuf_length = os_max_socket_rcvbuf_length;
+    log_meta_data.*.max_resend = max_resend;
+    aeron_logbuffer_fill_default_header(log_meta_data_buffer, session_id, stream_id, initial_term_id);
+    log_meta_data.*.entity_tag = entity_tag;
+    log_meta_data.*.response_correlation_id = response_correlation_id;
+    log_meta_data.*.linger_timeout_ns = linger_timeout_ns;
+    log_meta_data.*.untethered_window_limit_timeout_ns = untethered_window_limit_timeout_ns;
+    log_meta_data.*.untethered_resting_timeout_ns = untethered_resting_timeout_ns;
+    log_meta_data.*.group = group;
+    log_meta_data.*.is_response = is_response;
+    log_meta_data.*.rejoin = rejoin;
+    log_meta_data.*.reliable = reliable;
+    log_meta_data.*.sparse = sparse;
+    log_meta_data.*.signal_eos = signal_eos;
+    log_meta_data.*.spies_simulate_connection = spies_simulate_connection;
+    log_meta_data.*.tether = tether;
+}
 pub fn aeron_logbuffer_apply_default_header(arg_log_meta_data_buffer: [*c]u8, arg_buffer: [*c]u8) callconv(.C) void {
     var log_meta_data_buffer = arg_log_meta_data_buffer;
     _ = &log_meta_data_buffer;
@@ -1655,9 +1812,7 @@ pub fn aeron_logbuffer_apply_default_header(arg_log_meta_data_buffer: [*c]u8, ar
     _ = &buffer;
     var log_meta_data: [*c]aeron_logbuffer_metadata_t = @as([*c]aeron_logbuffer_metadata_t, @ptrCast(@alignCast(log_meta_data_buffer)));
     _ = &log_meta_data;
-    var default_header: [*c]u8 = log_meta_data_buffer + @sizeOf(aeron_logbuffer_metadata_t);
-    _ = &default_header;
-    _ = memcpy(@as(?*anyopaque, @ptrCast(buffer)), @as(?*const anyopaque, @ptrCast(default_header)), @as(usize, @bitCast(@as(c_long, log_meta_data.*.default_frame_header_length))));
+    _ = memcpy(@as(?*anyopaque, @ptrCast(buffer)), @as(?*const anyopaque, @ptrCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header))))), @as(usize, @bitCast(@as(c_long, log_meta_data.*.default_frame_header_length))));
 }
 pub fn aeron_logbuffer_compute_fragmented_length(arg_length: usize, arg_max_payload_length: usize) callconv(.C) usize {
     var length = arg_length;
@@ -2135,21 +2290,21 @@ pub const aeron_queue_offer_result_t = enum_aeron_queue_offer_result_stct;
 pub const aeron_queue_drain_func_t = ?*const fn (?*anyopaque, ?*anyopaque) callconv(.C) void;
 pub extern fn aeron_mpsc_concurrent_array_queue_init(queue: [*c]aeron_mpsc_concurrent_array_queue_t, length: usize) c_int;
 pub extern fn aeron_mpsc_concurrent_array_queue_close(queue: [*c]aeron_mpsc_concurrent_array_queue_t) c_int;
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:52:35: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:52:35: warning: unable to translate function, demoted to extern
 pub extern fn aeron_mpsc_concurrent_array_queue_offer(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_element: ?*anyopaque) callconv(.C) aeron_queue_offer_result_t;
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:89:15: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:89:15: warning: unable to translate function, demoted to extern
 pub extern fn aeron_mpsc_concurrent_array_queue_drain(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque, arg_limit: usize) callconv(.C) usize;
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:116:15: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:116:15: warning: unable to translate function, demoted to extern
 pub extern fn aeron_mpsc_concurrent_array_queue_drain_all(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque) callconv(.C) usize;
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
 
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:126:15: warning: unable to translate function, demoted to extern
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:126:15: warning: unable to translate function, demoted to extern
 pub extern fn aeron_mpsc_concurrent_array_queue_size(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t) callconv(.C) usize;
 pub const __llvm__ = @as(c_int, 1);
 pub const __clang__ = @as(c_int, 1);
@@ -3334,6 +3489,8 @@ pub const AERON_CLIENT_ERROR_CLIENT_TIMEOUT = -@as(c_int, 1001);
 pub const AERON_CLIENT_ERROR_CONDUCTOR_SERVICE_TIMEOUT = -@as(c_int, 1002);
 pub const AERON_CLIENT_ERROR_BUFFER_FULL = -@as(c_int, 1003);
 pub const AERON_CLIENT_MAX_LOCAL_ADDRESS_STR_LEN = @as(c_int, 64);
+pub const AERON_RESPONSE_ADDRESS_TYPE_IPV4 = @as(c_int, 0x1);
+pub const AERON_RESPONSE_ADDRESS_TYPE_IPV6 = @as(c_int, 0x2);
 pub const AERON_DIR_ENV_VAR = "AERON_DIR";
 pub const AERON_DRIVER_TIMEOUT_ENV_VAR = "AERON_DRIVER_TIMEOUT";
 pub const AERON_CLIENT_RESOURCE_LINGER_DURATION_ENV_VAR = "AERON_CLIENT_RESOURCE_LINGER_DURATION";
@@ -3344,20 +3501,20 @@ pub const AERON_AGENT_ON_START_FUNCTION_ENV_VAR = "AERON_AGENT_ON_START_FUNCTION
 pub const AERON_COUNTER_CACHE_LINE_LENGTH = @as(c_uint, 64);
 pub const AERON_COUNTER_VALUE_LENGTH = @import("std").zig.c_translation.sizeof(aeron_counter_value_descriptor_t);
 pub const AERON_COUNTER_REGISTRATION_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `registration_id`");
-// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:648:9
+// aeron-1.47.1/aeron-client/src/main/c/aeronc.h:697:9
 pub const AERON_COUNTER_METADATA_LENGTH = @import("std").zig.c_translation.sizeof(aeron_counter_metadata_descriptor_t);
 pub const AERON_COUNTER_TYPE_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `type_id`");
-// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:651:9
+// aeron-1.47.1/aeron-client/src/main/c/aeronc.h:700:9
 pub const AERON_COUNTER_FREE_FOR_REUSE_DEADLINE_OFFSET = @compileError("unable to translate macro: undefined identifier `free_for_reuse_deadline_ms`");
-// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:652:9
+// aeron-1.47.1/aeron-client/src/main/c/aeronc.h:701:9
 pub const AERON_COUNTER_KEY_OFFSET = @compileError("unable to translate macro: undefined identifier `key`");
-// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:653:9
+// aeron-1.47.1/aeron-client/src/main/c/aeronc.h:702:9
 pub const AERON_COUNTER_LABEL_LENGTH_OFFSET = @compileError("unable to translate macro: undefined identifier `label`");
-// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:654:9
+// aeron-1.47.1/aeron-client/src/main/c/aeronc.h:703:9
 pub const AERON_COUNTER_MAX_LABEL_LENGTH = @compileError("unable to translate C expr: unexpected token '('");
-// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:656:9
+// aeron-1.47.1/aeron-client/src/main/c/aeronc.h:705:9
 pub const AERON_COUNTER_MAX_KEY_LENGTH = @compileError("unable to translate C expr: unexpected token '('");
-// aeron-1.46.6/aeron-client/src/main/c/aeronc.h:657:9
+// aeron-1.47.1/aeron-client/src/main/c/aeronc.h:706:9
 pub const AERON_COUNTER_MAX_CLIENT_NAME_LENGTH = @as(c_int, 100);
 pub const AERON_COUNTER_RECORD_UNUSED = @as(c_int, 0);
 pub const AERON_COUNTER_RECORD_ALLOCATED = @as(c_int, 1);
@@ -3390,7 +3547,7 @@ pub const __need_offsetof = "";
 pub const _PTRDIFF_T = "";
 pub const __CLANG_MAX_ALIGN_T_DEFINED = "";
 pub const offsetof = @compileError("unable to translate C expr: unexpected token 'an identifier'");
-// /home/leki/zig-linux-x86_64-0.13.0/lib/include/__stddef_offsetof.h:16:9
+// /opt/zig-0.13/lib/include/__stddef_offsetof.h:16:9
 pub const AERON_DRIVER_PLATFORM_H = "";
 pub const AERON_COMPILER_GCC = @as(c_int, 1);
 pub const AERON_COMPILER_LLVM = @as(c_int, 1);
@@ -3510,20 +3667,18 @@ pub const aeron_cond_signal = pthread_cond_signal;
 pub const aeron_cond_wait = pthread_cond_wait;
 pub const AERON_ATOMIC_H = "";
 pub const AERON_ATOMIC64_GCC_X86_64_H = "";
-pub const AERON_GET_VOLATILE = @compileError("unable to translate C expr: unexpected token 'do'");
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:23:9
-pub const AERON_PUT_ORDERED = @compileError("unable to translate C expr: unexpected token 'do'");
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:31:9
-pub const AERON_PUT_VOLATILE = @compileError("unable to translate C expr: unexpected token 'do'");
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:39:9
+pub const AERON_GET_ACQUIRE = @compileError("unable to translate C expr: unexpected token 'do'");
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:23:9
+pub const AERON_SET_RELEASE = @compileError("unable to translate C expr: unexpected token 'do'");
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:31:9
 pub const AERON_GET_AND_ADD_INT64 = @compileError("unable to translate C expr: unexpected token 'do'");
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:48:9
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:39:9
 pub const AERON_GET_AND_ADD_INT32 = @compileError("unable to translate C expr: unexpected token 'do'");
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:58:9
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:49:9
 pub const AERON_DECL_ALIGNED = @compileError("unable to translate macro: undefined identifier `aligned`");
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:121:9
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:112:9
 pub const AERON_COMMON_H = "";
-pub const AERON_MAX_PATH = @as(c_int, 384);
+pub const AERON_MAX_PATH = @as(c_int, 4096);
 pub const AERON_AGENT_STATE_UNUSED = @as(c_int, 0);
 pub const AERON_AGENT_STATE_INITED = @as(c_int, 1);
 pub const AERON_AGENT_STATE_STARTED = @as(c_int, 2);
@@ -3559,7 +3714,7 @@ pub const AERON_DATA_HEADER_LENGTH = @import("std").zig.c_translation.sizeof(aer
 pub const AERON_DATA_HEADER_BEGIN_FLAG = UINT8_C(@as(c_int, 0x80));
 pub const AERON_DATA_HEADER_END_FLAG = UINT8_C(@as(c_int, 0x40));
 pub const AERON_DATA_HEADER_EOS_FLAG = UINT8_C(@as(c_int, 0x20));
-pub const AERON_DATA_HEADER_UNFRAGMENTED = UINT8_C(AERON_DATA_HEADER_BEGIN_FLAG | AERON_DATA_HEADER_END_FLAG);
+pub const AERON_DATA_HEADER_UNFRAGMENTED = AERON_DATA_HEADER_BEGIN_FLAG | AERON_DATA_HEADER_END_FLAG;
 pub const AERON_DATA_HEADER_DEFAULT_RESERVED_VALUE = INT64_C(@as(c_int, 0));
 pub const AERON_STATUS_MESSAGE_HEADER_SEND_SETUP_FLAG = UINT8_C(@as(c_int, 0x80));
 pub const AERON_STATUS_MESSAGE_HEADER_EOS_FLAG = UINT8_C(@as(c_int, 0x40));
@@ -3579,6 +3734,9 @@ pub const AERON_OPT_HDR_TYPE_ATS_EC_SIG = UINT16_C(@as(c_int, 0x0005));
 pub const AERON_OPT_HDR_TYPE_ATS_SECRET = UINT16_C(@as(c_int, 0x0006));
 pub const AERON_OPT_HDR_TYPE_ATS_GROUP_TAG = UINT16_C(@as(c_int, 0x0007));
 pub const AERON_OPT_HDR_ALIGNMENT = @as(c_uint, 4);
+pub const AERON_ERROR_MAX_TEXT_LENGTH = @as(c_int, 1023);
+pub const AERON_ERROR_MAX_FRAME_LENGTH = @import("std").zig.c_translation.sizeof(aeron_error_t) + AERON_ERROR_MAX_TEXT_LENGTH;
+pub const AERON_ERROR_HAS_GROUP_TAG_FLAG = @as(c_int, 0x08);
 pub const AERON_BITUTIL_H = "";
 pub const _ASSERT_H = @as(c_int, 1);
 pub const __ASSERT_VOID_CAST = @compileError("unable to translate C expr: unexpected token ''");
@@ -3618,14 +3776,15 @@ pub const AERON_MATH_H = "";
 pub const AERON_LOGBUFFER_PARTITION_COUNT = @as(c_int, 3);
 pub const AERON_LOGBUFFER_TERM_MIN_LENGTH = @as(c_int, 64) * @as(c_int, 1024);
 pub const AERON_LOGBUFFER_TERM_MAX_LENGTH = (@as(c_int, 1024) * @as(c_int, 1024)) * @as(c_int, 1024);
-pub const AERON_PAGE_MIN_SIZE = @as(c_int, 4) * @as(c_int, 1024);
-pub const AERON_PAGE_MAX_SIZE = (@as(c_int, 1024) * @as(c_int, 1024)) * @as(c_int, 1024);
+pub const AERON_PAGE_MIN_SIZE = @as(c_int, 4) * @as(c_uint, 1024);
+pub const AERON_PAGE_MAX_SIZE = (@as(c_int, 1024) * @as(c_int, 1024)) * @as(c_uint, 1024);
+pub const AERON_LOGBUFFER_PADDING_SIZE = @as(c_uint, 64);
 pub const AERON_LOGBUFFER_DEFAULT_FRAME_HEADER_MAX_LENGTH = AERON_CACHE_LINE_LENGTH * @as(c_int, 2);
 pub const AERON_MAX_UDP_PAYLOAD_LENGTH = @import("std").zig.c_translation.promoteIntLiteral(c_int, 65504, .decimal);
-pub const AERON_LOGBUFFER_META_DATA_LENGTH = AERON_ALIGN(@import("std").zig.c_translation.sizeof(aeron_logbuffer_metadata_t) + AERON_LOGBUFFER_DEFAULT_FRAME_HEADER_MAX_LENGTH, AERON_PAGE_MIN_SIZE);
+pub const AERON_LOGBUFFER_META_DATA_LENGTH = AERON_PAGE_MIN_SIZE;
 pub const AERON_LOGBUFFER_FRAME_ALIGNMENT = @as(c_int, 32);
 pub const AERON_LOGBUFFER_RAWTAIL_VOLATILE = @compileError("unable to translate macro: undefined identifier `active_term_count`");
-// aeron-1.46.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:63:9
+// aeron-1.47.1/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:87:9
 pub const _UNISTD_H = @as(c_int, 1);
 pub const _POSIX_VERSION = @as(c_long, 200809);
 pub const __POSIX2_THIS_VERSION = @as(c_long, 200809);
@@ -3743,9 +3902,9 @@ pub const F_LOCK = @as(c_int, 1);
 pub const F_TLOCK = @as(c_int, 2);
 pub const F_TEST = @as(c_int, 3);
 pub const AERON_FILEUTIL_ERROR_ENOSPC = @compileError("unable to translate macro: undefined identifier `ENOSPC`");
-// aeron-1.46.6/aeron-client/src/main/c/util/aeron_fileutil.h:53:9
+// aeron-1.47.1/aeron-client/src/main/c/util/aeron_fileutil.h:53:9
 pub const aeron_mkdir = @compileError("unable to translate macro: undefined identifier `mkdir`");
-// aeron-1.46.6/aeron-client/src/main/c/util/aeron_fileutil.h:55:9
+// aeron-1.47.1/aeron-client/src/main/c/util/aeron_fileutil.h:55:9
 pub const AERON_PUBLICATIONS_DIR = "publications";
 pub const AERON_IMAGES_DIR = "images";
 pub const AERON_MPSC_CONCURRENT_ARRAY_QUEUE_H = "";
@@ -3765,6 +3924,7 @@ pub const aeron_client_registering_resource_stct = struct_aeron_client_registeri
 pub const aeron_subscription_stct = struct_aeron_subscription_stct;
 pub const aeron_image_stct = struct_aeron_image_stct;
 pub const aeron_counters_reader_stct = struct_aeron_counters_reader_stct;
+pub const aeron_publication_error_values_stct = struct_aeron_publication_error_values_stct;
 pub const aeron_mapped_file_stct = struct_aeron_mapped_file_stct;
 pub const aeron_mpsc_concurrent_array_queue_stct = struct_aeron_mpsc_concurrent_array_queue_stct;
 pub const aeron_context_stct = struct_aeron_context_stct;
@@ -3811,6 +3971,7 @@ pub const aeron_setup_header_stct = struct_aeron_setup_header_stct;
 pub const aeron_data_header_stct = struct_aeron_data_header_stct;
 pub const aeron_nak_header_stct = struct_aeron_nak_header_stct;
 pub const aeron_status_message_header_stct = struct_aeron_status_message_header_stct;
+pub const aeron_error_stct = struct_aeron_error_stct;
 pub const aeron_status_message_optional_header_stct = struct_aeron_status_message_optional_header_stct;
 pub const aeron_rttm_header_stct = struct_aeron_rttm_header_stct;
 pub const aeron_resolution_header_stct = struct_aeron_resolution_header_stct;

@@ -43,7 +43,7 @@ else
 endif
 
 clean:
-	@rm -rf $(AERON_SOURCE) .zig-cache zig-out
+	rm -rf $(AERON_SOURCE) .zig-cache zig-out
 
 dist-clean: clean
-	@rm -rf lib/* src/aeronc.zig
+	rm -rf lib/* src/aeronc.zig

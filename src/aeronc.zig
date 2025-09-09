@@ -662,16 +662,16 @@ pub extern fn aeron_print_counters(client: ?*aeron_t, stream_out: ?*const fn ([*
 pub extern fn aeron_context(client: ?*aeron_t) [*c]aeron_context_t;
 pub extern fn aeron_client_id(client: ?*aeron_t) i64;
 pub extern fn aeron_next_correlation_id(client: ?*aeron_t) i64;
-pub extern fn aeron_async_add_publication(@"async": [*c]?*aeron_async_add_publication_t, client: ?*aeron_t, uri: [*c]const u8, stream_id: i32) c_int;
-pub extern fn aeron_async_add_publication_poll(publication: [*c]?*aeron_publication_t, @"async": ?*aeron_async_add_publication_t) c_int;
-pub extern fn aeron_async_add_exclusive_publication(@"async": [*c]?*aeron_async_add_exclusive_publication_t, client: ?*aeron_t, uri: [*c]const u8, stream_id: i32) c_int;
-pub extern fn aeron_async_add_exclusive_publication_poll(publication: [*c]?*aeron_exclusive_publication_t, @"async": ?*aeron_async_add_exclusive_publication_t) c_int;
-pub extern fn aeron_async_add_subscription(@"async": [*c]?*aeron_async_add_subscription_t, client: ?*aeron_t, uri: [*c]const u8, stream_id: i32, on_available_image_handler: aeron_on_available_image_t, on_available_image_clientd: ?*anyopaque, on_unavailable_image_handler: aeron_on_unavailable_image_t, on_unavailable_image_clientd: ?*anyopaque) c_int;
-pub extern fn aeron_async_add_subscription_poll(subscription: [*c]?*aeron_subscription_t, @"async": ?*aeron_async_add_subscription_t) c_int;
+pub extern fn aeron_async_add_publication(async: [*c]?*aeron_async_add_publication_t, client: ?*aeron_t, uri: [*c]const u8, stream_id: i32) c_int;
+pub extern fn aeron_async_add_publication_poll(publication: [*c]?*aeron_publication_t, async: ?*aeron_async_add_publication_t) c_int;
+pub extern fn aeron_async_add_exclusive_publication(async: [*c]?*aeron_async_add_exclusive_publication_t, client: ?*aeron_t, uri: [*c]const u8, stream_id: i32) c_int;
+pub extern fn aeron_async_add_exclusive_publication_poll(publication: [*c]?*aeron_exclusive_publication_t, async: ?*aeron_async_add_exclusive_publication_t) c_int;
+pub extern fn aeron_async_add_subscription(async: [*c]?*aeron_async_add_subscription_t, client: ?*aeron_t, uri: [*c]const u8, stream_id: i32, on_available_image_handler: aeron_on_available_image_t, on_available_image_clientd: ?*anyopaque, on_unavailable_image_handler: aeron_on_unavailable_image_t, on_unavailable_image_clientd: ?*anyopaque) c_int;
+pub extern fn aeron_async_add_subscription_poll(subscription: [*c]?*aeron_subscription_t, async: ?*aeron_async_add_subscription_t) c_int;
 pub extern fn aeron_counters_reader(client: ?*aeron_t) ?*aeron_counters_reader_t;
-pub extern fn aeron_async_add_counter(@"async": [*c]?*aeron_async_add_counter_t, client: ?*aeron_t, type_id: i32, key_buffer: [*c]const u8, key_buffer_length: usize, label_buffer: [*c]const u8, label_buffer_length: usize) c_int;
-pub extern fn aeron_async_add_counter_poll(counter: [*c]?*aeron_counter_t, @"async": ?*aeron_async_add_counter_t) c_int;
-pub extern fn aeron_async_add_static_counter(@"async": [*c]?*aeron_async_add_counter_t, client: ?*aeron_t, type_id: i32, key_buffer: [*c]const u8, key_buffer_length: usize, label_buffer: [*c]const u8, label_buffer_length: usize, registration_id: i64) c_int;
+pub extern fn aeron_async_add_counter(async: [*c]?*aeron_async_add_counter_t, client: ?*aeron_t, type_id: i32, key_buffer: [*c]const u8, key_buffer_length: usize, label_buffer: [*c]const u8, label_buffer_length: usize) c_int;
+pub extern fn aeron_async_add_counter_poll(counter: [*c]?*aeron_counter_t, async: ?*aeron_async_add_counter_t) c_int;
+pub extern fn aeron_async_add_static_counter(async: [*c]?*aeron_async_add_counter_t, client: ?*aeron_t, type_id: i32, key_buffer: [*c]const u8, key_buffer_length: usize, label_buffer: [*c]const u8, label_buffer_length: usize, registration_id: i64) c_int;
 pub const struct_aeron_on_available_counter_pair_stct = extern struct {
     handler: aeron_on_available_counter_t = @import("std").mem.zeroes(aeron_on_available_counter_t),
     clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
@@ -764,14 +764,14 @@ pub extern fn aeron_publication_is_connected(publication: ?*aeron_publication_t)
 pub extern fn aeron_publication_constants(publication: ?*aeron_publication_t, constants: [*c]aeron_publication_constants_t) c_int;
 pub extern fn aeron_publication_position(publication: ?*aeron_publication_t) i64;
 pub extern fn aeron_publication_position_limit(publication: ?*aeron_publication_t) i64;
-pub extern fn aeron_publication_async_add_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_publication_t, uri: [*c]const u8) c_int;
-pub extern fn aeron_publication_async_remove_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_publication_t, uri: [*c]const u8) c_int;
-pub extern fn aeron_publication_async_remove_destination_by_id(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_publication_t, destination_registration_id: i64) c_int;
-pub extern fn aeron_publication_async_destination_poll(@"async": ?*aeron_async_destination_t) c_int;
-pub extern fn aeron_exclusive_publication_async_add_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_exclusive_publication_t, uri: [*c]const u8) c_int;
-pub extern fn aeron_exclusive_publication_async_remove_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_exclusive_publication_t, uri: [*c]const u8) c_int;
-pub extern fn aeron_exclusive_publication_async_remove_destination_by_id(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_exclusive_publication_t, destination_registration_id: i64) c_int;
-pub extern fn aeron_exclusive_publication_async_destination_poll(@"async": ?*aeron_async_destination_t) c_int;
+pub extern fn aeron_publication_async_add_destination(async: [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_publication_t, uri: [*c]const u8) c_int;
+pub extern fn aeron_publication_async_remove_destination(async: [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_publication_t, uri: [*c]const u8) c_int;
+pub extern fn aeron_publication_async_remove_destination_by_id(async: [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_publication_t, destination_registration_id: i64) c_int;
+pub extern fn aeron_publication_async_destination_poll(async: ?*aeron_async_destination_t) c_int;
+pub extern fn aeron_exclusive_publication_async_add_destination(async: [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_exclusive_publication_t, uri: [*c]const u8) c_int;
+pub extern fn aeron_exclusive_publication_async_remove_destination(async: [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_exclusive_publication_t, uri: [*c]const u8) c_int;
+pub extern fn aeron_exclusive_publication_async_remove_destination_by_id(async: [*c]?*aeron_async_destination_t, client: ?*aeron_t, publication: ?*aeron_exclusive_publication_t, destination_registration_id: i64) c_int;
+pub extern fn aeron_exclusive_publication_async_destination_poll(async: ?*aeron_async_destination_t) c_int;
 pub extern fn aeron_publication_close(publication: ?*aeron_publication_t, on_close_complete: aeron_notification_t, on_close_complete_clientd: ?*anyopaque) c_int;
 pub extern fn aeron_publication_channel(publication: ?*aeron_publication_t) [*c]const u8;
 pub extern fn aeron_publication_stream_id(publication: ?*aeron_publication_t) i32;
@@ -826,9 +826,9 @@ pub extern fn aeron_subscription_image_retain(subscription: ?*aeron_subscription
 pub extern fn aeron_subscription_image_release(subscription: ?*aeron_subscription_t, image: ?*aeron_image_t) c_int;
 pub extern fn aeron_subscription_is_closed(subscription: ?*aeron_subscription_t) bool;
 pub extern fn aeron_subscription_channel_status(subscription: ?*aeron_subscription_t) i64;
-pub extern fn aeron_subscription_async_add_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, subscription: ?*aeron_subscription_t, uri: [*c]const u8) c_int;
-pub extern fn aeron_subscription_async_remove_destination(@"async": [*c]?*aeron_async_destination_t, client: ?*aeron_t, subscription: ?*aeron_subscription_t, uri: [*c]const u8) c_int;
-pub extern fn aeron_subscription_async_destination_poll(@"async": ?*aeron_async_destination_t) c_int;
+pub extern fn aeron_subscription_async_add_destination(async: [*c]?*aeron_async_destination_t, client: ?*aeron_t, subscription: ?*aeron_subscription_t, uri: [*c]const u8) c_int;
+pub extern fn aeron_subscription_async_remove_destination(async: [*c]?*aeron_async_destination_t, client: ?*aeron_t, subscription: ?*aeron_subscription_t, uri: [*c]const u8) c_int;
+pub extern fn aeron_subscription_async_destination_poll(async: ?*aeron_async_destination_t) c_int;
 pub extern fn aeron_subscription_close(subscription: ?*aeron_subscription_t, on_close_complete: aeron_notification_t, on_close_complete_clientd: ?*anyopaque) c_int;
 pub extern fn aeron_subscription_local_sockaddrs(subscription: ?*aeron_subscription_t, address_vec: [*c]aeron_iovec_t, address_vec_len: usize) c_int;
 pub extern fn aeron_subscription_resolved_endpoint(subscription: ?*aeron_subscription_t, address: [*c]const u8, address_len: usize) c_int;
@@ -1691,7 +1691,7 @@ pub fn aeron_logbuffer_fill_default_header(arg_log_meta_data_buffer: [*c]u8, arg
     _ = &initial_term_id;
     var log_meta_data: [*c]aeron_logbuffer_metadata_t = @as([*c]aeron_logbuffer_metadata_t, @ptrCast(@alignCast(log_meta_data_buffer)));
     _ = &log_meta_data;
-    var data_header: [*c]aeron_data_header_t = @as([*c]aeron_data_header_t, @ptrCast(@alignCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header))))));
+    var data_header: [*c]aeron_data_header_t = @as([*c]aeron_data_header_t, @ptrCast(@alignCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header[@as(usize, @intCast(0))]))))));
     _ = &data_header;
     log_meta_data.*.default_frame_header_length = @as(i32, @bitCast(@as(c_uint, @truncate(@sizeOf(aeron_data_header_t)))));
     data_header.*.frame_header.frame_length = 0;
@@ -1812,7 +1812,7 @@ pub fn aeron_logbuffer_apply_default_header(arg_log_meta_data_buffer: [*c]u8, ar
     _ = &buffer;
     var log_meta_data: [*c]aeron_logbuffer_metadata_t = @as([*c]aeron_logbuffer_metadata_t, @ptrCast(@alignCast(log_meta_data_buffer)));
     _ = &log_meta_data;
-    _ = memcpy(@as(?*anyopaque, @ptrCast(buffer)), @as(?*const anyopaque, @ptrCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header))))), @as(usize, @bitCast(@as(c_long, log_meta_data.*.default_frame_header_length))));
+    _ = memcpy(@as(?*anyopaque, @ptrCast(buffer)), @as(?*const anyopaque, @ptrCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header[@as(usize, @intCast(0))]))))), @as(usize, @bitCast(@as(c_long, log_meta_data.*.default_frame_header_length))));
 }
 pub fn aeron_logbuffer_compute_fragmented_length(arg_length: usize, arg_max_payload_length: usize) callconv(.c) usize {
     var length = arg_length;
@@ -2308,10 +2308,10 @@ pub extern fn aeron_mpsc_concurrent_array_queue_drain_all(arg_queue: [*c]aeron_m
 pub extern fn aeron_mpsc_concurrent_array_queue_size(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t) callconv(.c) usize;
 pub const __llvm__ = @as(c_int, 1);
 pub const __clang__ = @as(c_int, 1);
-pub const __clang_major__ = @as(c_int, 19);
+pub const __clang_major__ = @as(c_int, 20);
 pub const __clang_minor__ = @as(c_int, 1);
-pub const __clang_patchlevel__ = @as(c_int, 7);
-pub const __clang_version__ = "19.1.7 (https://github.com/ziglang/zig-bootstrap 1c3c59435891bc9caf8cd1d3783773369d191c5f)";
+pub const __clang_patchlevel__ = @as(c_int, 2);
+pub const __clang_version__ = "20.1.2 (https://github.com/ziglang/zig-bootstrap c6bc9398c72c7a63fe9420a9055dcfd1845bc266)";
 pub const __GNUC__ = @as(c_int, 4);
 pub const __GNUC_MINOR__ = @as(c_int, 2);
 pub const __GNUC_PATCHLEVEL__ = @as(c_int, 1);
@@ -2343,7 +2343,7 @@ pub const __FPCLASS_POSSUBNORMAL = @as(c_int, 0x0080);
 pub const __FPCLASS_POSNORMAL = @as(c_int, 0x0100);
 pub const __FPCLASS_POSINF = @as(c_int, 0x0200);
 pub const __PRAGMA_REDEFINE_EXTNAME = @as(c_int, 1);
-pub const __VERSION__ = "Clang 19.1.7 (https://github.com/ziglang/zig-bootstrap 1c3c59435891bc9caf8cd1d3783773369d191c5f)";
+pub const __VERSION__ = "Clang 20.1.2 (https://github.com/ziglang/zig-bootstrap c6bc9398c72c7a63fe9420a9055dcfd1845bc266)";
 pub const __OBJC_BOOL_IS_BOOL = @as(c_int, 0);
 pub const __CONSTANT_CFSTRINGS__ = @as(c_int, 1);
 pub const __clang_literal_encoding__ = "UTF-8";
@@ -2356,7 +2356,7 @@ pub const __LITTLE_ENDIAN__ = @as(c_int, 1);
 pub const _LP64 = @as(c_int, 1);
 pub const __LP64__ = @as(c_int, 1);
 pub const __CHAR_BIT__ = @as(c_int, 8);
-pub const __BOOL_WIDTH__ = @as(c_int, 8);
+pub const __BOOL_WIDTH__ = @as(c_int, 1);
 pub const __SHRT_WIDTH__ = @as(c_int, 16);
 pub const __INT_WIDTH__ = @as(c_int, 32);
 pub const __LONG_WIDTH__ = @as(c_int, 64);
@@ -2401,13 +2401,15 @@ pub const __INTMAX_FMTd__ = "ld";
 pub const __INTMAX_FMTi__ = "li";
 pub const __INTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`");
 // (no file):95:9
+pub const __INTMAX_C = @import("std").zig.c_translation.Macros.L_SUFFIX;
 pub const __UINTMAX_TYPE__ = c_ulong;
 pub const __UINTMAX_FMTo__ = "lo";
 pub const __UINTMAX_FMTu__ = "lu";
 pub const __UINTMAX_FMTx__ = "lx";
 pub const __UINTMAX_FMTX__ = "lX";
 pub const __UINTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`");
-// (no file):101:9
+// (no file):102:9
+pub const __UINTMAX_C = @import("std").zig.c_translation.Macros.UL_SUFFIX;
 pub const __PTRDIFF_TYPE__ = c_long;
 pub const __PTRDIFF_FMTd__ = "ld";
 pub const __PTRDIFF_FMTi__ = "li";
@@ -2497,25 +2499,42 @@ pub const __INT8_TYPE__ = i8;
 pub const __INT8_FMTd__ = "hhd";
 pub const __INT8_FMTi__ = "hhi";
 pub const __INT8_C_SUFFIX__ = "";
+pub inline fn __INT8_C(c: anytype) @TypeOf(c) {
+    _ = &c;
+    return c;
+}
 pub const __INT16_TYPE__ = c_short;
 pub const __INT16_FMTd__ = "hd";
 pub const __INT16_FMTi__ = "hi";
 pub const __INT16_C_SUFFIX__ = "";
+pub inline fn __INT16_C(c: anytype) @TypeOf(c) {
+    _ = &c;
+    return c;
+}
 pub const __INT32_TYPE__ = c_int;
 pub const __INT32_FMTd__ = "d";
 pub const __INT32_FMTi__ = "i";
 pub const __INT32_C_SUFFIX__ = "";
+pub inline fn __INT32_C(c: anytype) @TypeOf(c) {
+    _ = &c;
+    return c;
+}
 pub const __INT64_TYPE__ = c_long;
 pub const __INT64_FMTd__ = "ld";
 pub const __INT64_FMTi__ = "li";
 pub const __INT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`");
-// (no file):202:9
+// (no file):207:9
+pub const __INT64_C = @import("std").zig.c_translation.Macros.L_SUFFIX;
 pub const __UINT8_TYPE__ = u8;
 pub const __UINT8_FMTo__ = "hho";
 pub const __UINT8_FMTu__ = "hhu";
 pub const __UINT8_FMTx__ = "hhx";
 pub const __UINT8_FMTX__ = "hhX";
 pub const __UINT8_C_SUFFIX__ = "";
+pub inline fn __UINT8_C(c: anytype) @TypeOf(c) {
+    _ = &c;
+    return c;
+}
 pub const __UINT8_MAX__ = @as(c_int, 255);
 pub const __INT8_MAX__ = @as(c_int, 127);
 pub const __UINT16_TYPE__ = c_ushort;
@@ -2524,6 +2543,10 @@ pub const __UINT16_FMTu__ = "hu";
 pub const __UINT16_FMTx__ = "hx";
 pub const __UINT16_FMTX__ = "hX";
 pub const __UINT16_C_SUFFIX__ = "";
+pub inline fn __UINT16_C(c: anytype) @TypeOf(c) {
+    _ = &c;
+    return c;
+}
 pub const __UINT16_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 65535, .decimal);
 pub const __INT16_MAX__ = @as(c_int, 32767);
 pub const __UINT32_TYPE__ = c_uint;
@@ -2532,7 +2555,8 @@ pub const __UINT32_FMTu__ = "u";
 pub const __UINT32_FMTx__ = "x";
 pub const __UINT32_FMTX__ = "X";
 pub const __UINT32_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `U`");
-// (no file):224:9
+// (no file):232:9
+pub const __UINT32_C = @import("std").zig.c_translation.Macros.U_SUFFIX;
 pub const __UINT32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 4294967295, .decimal);
 pub const __INT32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
 pub const __UINT64_TYPE__ = c_ulong;
@@ -2541,7 +2565,8 @@ pub const __UINT64_FMTu__ = "lu";
 pub const __UINT64_FMTx__ = "lx";
 pub const __UINT64_FMTX__ = "lX";
 pub const __UINT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`");
-// (no file):232:9
+// (no file):241:9
+pub const __UINT64_C = @import("std").zig.c_translation.Macros.UL_SUFFIX;
 pub const __UINT64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
 pub const __INT64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
 pub const __INT_LEAST8_TYPE__ = i8;
@@ -2671,9 +2696,9 @@ pub const __x86_64__ = @as(c_int, 1);
 pub const __SEG_GS = @as(c_int, 1);
 pub const __SEG_FS = @as(c_int, 1);
 pub const __seg_gs = @compileError("unable to translate macro: undefined identifier `address_space`");
-// (no file):363:9
+// (no file):373:9
 pub const __seg_fs = @compileError("unable to translate macro: undefined identifier `address_space`");
-// (no file):364:9
+// (no file):374:9
 pub const __corei7 = @as(c_int, 1);
 pub const __corei7__ = @as(c_int, 1);
 pub const __tune_corei7__ = @as(c_int, 1);
@@ -2716,7 +2741,6 @@ pub const __STDC_UTF_32__ = @as(c_int, 1);
 pub const __STDC_EMBED_NOT_FOUND__ = @as(c_int, 0);
 pub const __STDC_EMBED_FOUND__ = @as(c_int, 1);
 pub const __STDC_EMBED_EMPTY__ = @as(c_int, 2);
-pub const _DEBUG = @as(c_int, 1);
 pub const __GCC_HAVE_DWARF2_CFI_ASM = @as(c_int, 1);
 pub const AERON_C_CONTEXT_H = "";
 pub const AERON_C_H = "";
@@ -3044,8 +3068,6 @@ pub const __WCHAR_MIN = -__WCHAR_MAX - @as(c_int, 1);
 pub const _BITS_STDINT_INTN_H = @as(c_int, 1);
 pub const _BITS_STDINT_UINTN_H = @as(c_int, 1);
 pub const __intptr_t_defined = "";
-pub const __INT64_C = @import("std").zig.c_translation.Macros.L_SUFFIX;
-pub const __UINT64_C = @import("std").zig.c_translation.Macros.UL_SUFFIX;
 pub const INT8_MIN = -@as(c_int, 128);
 pub const INT16_MIN = -@as(c_int, 32767) - @as(c_int, 1);
 pub const INT32_MIN = -@import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal) - @as(c_int, 1);
@@ -3552,7 +3574,7 @@ pub const __STDDEF_H = "";
 pub const _PTRDIFF_T = "";
 pub const __CLANG_MAX_ALIGN_T_DEFINED = "";
 pub const offsetof = @compileError("unable to translate C expr: unexpected token 'an identifier'");
-// /home/leki/zig-linux-x86_64-0.14.0/lib/include/__stddef_offsetof.h:16:9
+// /home/leki/zig-x86_64-linux-0.15.1/lib/include/__stddef_offsetof.h:16:9
 pub const AERON_DRIVER_PLATFORM_H = "";
 pub const AERON_COMPILER_GCC = @as(c_int, 1);
 pub const AERON_COMPILER_LLVM = @as(c_int, 1);

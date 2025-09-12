@@ -39,7 +39,7 @@ pub fn errMsg() [*:0]const u8 {
     return aeronC.aeron_errmsg();
 }
 
-fn agentStartFunc(state: ?*anyopaque, role_name: [*c]const u8) callconv(.C) void {
+fn agentStartFunc(state: ?*anyopaque, role_name: [*c]const u8) callconv(.c) void {
     if (state != null) {
         const cpu: u8 = @intCast(@intFromPtr(state));
         _ = aeronC.aeron_thread_set_affinity(role_name, cpu);

@@ -64,6 +64,10 @@ pub const Cnc = struct {
         return .{ .cnc = cnc.? };
     }
 
+    pub fn heartbeat(self: *Cnc) i64 {
+        return aeronC.aeron_cnc_to_driver_heartbeat(self.cnc);
+    }
+
     pub fn constants(self: *Cnc) !CncConstants {
         var c: CncConstants = undefined;
         try err(aeronC.aeron_cnc_constants(self.cnc, &c));

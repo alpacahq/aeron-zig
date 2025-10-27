@@ -107,6 +107,10 @@ pub const Context = struct {
         return err(aeronC.aeron_context_set_client_name(self.ctx, client_name));
     }
 
+    pub fn setPreTouchMappedMemory(self: Context, value: bool) !void {
+        return err(aeronC.aeron_context_set_pre_touch_mapped_memory(self.ctx, value));
+    }
+
     pub fn deinit(self: Context) !void {
         return err(aeronC.aeron_context_close(self.ctx));
     }

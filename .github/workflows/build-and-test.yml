@@ -16,9 +16,10 @@ jobs:
     name: Test / Zig ${{ matrix.zig-version }}
     steps:
       - uses: actions/checkout@v4
-      - uses: mlugg/setup-zig@v2.2.1
+      - uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2.2.1
         with:
           version: ${{ matrix.zig-version }}
+          cache-key: ${{ matrix.zig-version }}
       - run: zig fmt --check ./*.zig src/*.zig
       #- run: zig build test
       - run: zig build

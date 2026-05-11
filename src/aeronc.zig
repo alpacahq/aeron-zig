@@ -1,59 +1,6 @@
-pub const __builtin_bswap16 = @import("std").zig.c_builtins.__builtin_bswap16;
-pub const __builtin_bswap32 = @import("std").zig.c_builtins.__builtin_bswap32;
-pub const __builtin_bswap64 = @import("std").zig.c_builtins.__builtin_bswap64;
-pub const __builtin_signbit = @import("std").zig.c_builtins.__builtin_signbit;
-pub const __builtin_signbitf = @import("std").zig.c_builtins.__builtin_signbitf;
-pub const __builtin_popcount = @import("std").zig.c_builtins.__builtin_popcount;
-pub const __builtin_ctz = @import("std").zig.c_builtins.__builtin_ctz;
-pub const __builtin_clz = @import("std").zig.c_builtins.__builtin_clz;
-pub const __builtin_sqrt = @import("std").zig.c_builtins.__builtin_sqrt;
-pub const __builtin_sqrtf = @import("std").zig.c_builtins.__builtin_sqrtf;
-pub const __builtin_sin = @import("std").zig.c_builtins.__builtin_sin;
-pub const __builtin_sinf = @import("std").zig.c_builtins.__builtin_sinf;
-pub const __builtin_cos = @import("std").zig.c_builtins.__builtin_cos;
-pub const __builtin_cosf = @import("std").zig.c_builtins.__builtin_cosf;
-pub const __builtin_exp = @import("std").zig.c_builtins.__builtin_exp;
-pub const __builtin_expf = @import("std").zig.c_builtins.__builtin_expf;
-pub const __builtin_exp2 = @import("std").zig.c_builtins.__builtin_exp2;
-pub const __builtin_exp2f = @import("std").zig.c_builtins.__builtin_exp2f;
-pub const __builtin_log = @import("std").zig.c_builtins.__builtin_log;
-pub const __builtin_logf = @import("std").zig.c_builtins.__builtin_logf;
-pub const __builtin_log2 = @import("std").zig.c_builtins.__builtin_log2;
-pub const __builtin_log2f = @import("std").zig.c_builtins.__builtin_log2f;
-pub const __builtin_log10 = @import("std").zig.c_builtins.__builtin_log10;
-pub const __builtin_log10f = @import("std").zig.c_builtins.__builtin_log10f;
-pub const __builtin_abs = @import("std").zig.c_builtins.__builtin_abs;
-pub const __builtin_labs = @import("std").zig.c_builtins.__builtin_labs;
-pub const __builtin_llabs = @import("std").zig.c_builtins.__builtin_llabs;
-pub const __builtin_fabs = @import("std").zig.c_builtins.__builtin_fabs;
-pub const __builtin_fabsf = @import("std").zig.c_builtins.__builtin_fabsf;
-pub const __builtin_floor = @import("std").zig.c_builtins.__builtin_floor;
-pub const __builtin_floorf = @import("std").zig.c_builtins.__builtin_floorf;
-pub const __builtin_ceil = @import("std").zig.c_builtins.__builtin_ceil;
-pub const __builtin_ceilf = @import("std").zig.c_builtins.__builtin_ceilf;
-pub const __builtin_trunc = @import("std").zig.c_builtins.__builtin_trunc;
-pub const __builtin_truncf = @import("std").zig.c_builtins.__builtin_truncf;
-pub const __builtin_round = @import("std").zig.c_builtins.__builtin_round;
-pub const __builtin_roundf = @import("std").zig.c_builtins.__builtin_roundf;
-pub const __builtin_strlen = @import("std").zig.c_builtins.__builtin_strlen;
-pub const __builtin_strcmp = @import("std").zig.c_builtins.__builtin_strcmp;
-pub const __builtin_object_size = @import("std").zig.c_builtins.__builtin_object_size;
-pub const __builtin___memset_chk = @import("std").zig.c_builtins.__builtin___memset_chk;
-pub const __builtin_memset = @import("std").zig.c_builtins.__builtin_memset;
-pub const __builtin___memcpy_chk = @import("std").zig.c_builtins.__builtin___memcpy_chk;
-pub const __builtin_memcpy = @import("std").zig.c_builtins.__builtin_memcpy;
-pub const __builtin_expect = @import("std").zig.c_builtins.__builtin_expect;
-pub const __builtin_nanf = @import("std").zig.c_builtins.__builtin_nanf;
-pub const __builtin_huge_valf = @import("std").zig.c_builtins.__builtin_huge_valf;
-pub const __builtin_inff = @import("std").zig.c_builtins.__builtin_inff;
-pub const __builtin_isnan = @import("std").zig.c_builtins.__builtin_isnan;
-pub const __builtin_isinf = @import("std").zig.c_builtins.__builtin_isinf;
-pub const __builtin_isinf_sign = @import("std").zig.c_builtins.__builtin_isinf_sign;
-pub const __has_builtin = @import("std").zig.c_builtins.__has_builtin;
-pub const __builtin_assume = @import("std").zig.c_builtins.__builtin_assume;
-pub const __builtin_unreachable = @import("std").zig.c_builtins.__builtin_unreachable;
-pub const __builtin_constant_p = @import("std").zig.c_builtins.__builtin_constant_p;
-pub const __builtin_mul_overflow = @import("std").zig.c_builtins.__builtin_mul_overflow;
+const __root = @This();
+pub const __builtin = @import("std").zig.c_translation.builtins;
+pub const __helpers = @import("std").zig.c_translation.helpers;
 pub const __u_char = u8;
 pub const __u_short = c_ushort;
 pub const __u_int = c_uint;
@@ -137,41 +84,38 @@ pub const uint_fast32_t = c_ulong;
 pub const uint_fast64_t = c_ulong;
 pub const intmax_t = __intmax_t;
 pub const uintmax_t = __uintmax_t;
+pub const ptrdiff_t = c_long;
 pub const wchar_t = c_int;
-// /usr/include/x86_64-linux-gnu/bits/floatn.h:83:24: warning: unsupported type: 'Complex'
-pub const __cfloat128 = @compileError("unable to resolve typedef child type");
-// /usr/include/x86_64-linux-gnu/bits/floatn.h:83:24
-pub const _Float128 = f128;
-pub const _Float32 = f32;
-pub const _Float64 = f64;
-pub const _Float32x = f64;
-pub const _Float64x = c_longdouble;
+pub const max_align_t = extern struct {
+    __aro_max_align_ll: c_longlong = 0,
+    __aro_max_align_ld: c_longdouble = 0,
+};
 pub const div_t = extern struct {
-    quot: c_int = @import("std").mem.zeroes(c_int),
-    rem: c_int = @import("std").mem.zeroes(c_int),
+    quot: c_int = 0,
+    rem: c_int = 0,
 };
 pub const ldiv_t = extern struct {
-    quot: c_long = @import("std").mem.zeroes(c_long),
-    rem: c_long = @import("std").mem.zeroes(c_long),
+    quot: c_long = 0,
+    rem: c_long = 0,
 };
 pub const lldiv_t = extern struct {
-    quot: c_longlong = @import("std").mem.zeroes(c_longlong),
-    rem: c_longlong = @import("std").mem.zeroes(c_longlong),
+    quot: c_longlong = 0,
+    rem: c_longlong = 0,
 };
 pub extern fn __ctype_get_mb_cur_max() usize;
 pub extern fn atof(__nptr: [*c]const u8) f64;
 pub extern fn atoi(__nptr: [*c]const u8) c_int;
 pub extern fn atol(__nptr: [*c]const u8) c_long;
 pub extern fn atoll(__nptr: [*c]const u8) c_longlong;
-pub extern fn strtod(__nptr: [*c]const u8, __endptr: [*c][*c]u8) f64;
-pub extern fn strtof(__nptr: [*c]const u8, __endptr: [*c][*c]u8) f32;
-pub extern fn strtold(__nptr: [*c]const u8, __endptr: [*c][*c]u8) c_longdouble;
-pub extern fn strtol(__nptr: [*c]const u8, __endptr: [*c][*c]u8, __base: c_int) c_long;
-pub extern fn strtoul(__nptr: [*c]const u8, __endptr: [*c][*c]u8, __base: c_int) c_ulong;
+pub extern fn strtod(noalias __nptr: [*c]const u8, noalias __endptr: [*c][*c]u8) f64;
+pub extern fn strtof(noalias __nptr: [*c]const u8, noalias __endptr: [*c][*c]u8) f32;
+pub extern fn strtold(noalias __nptr: [*c]const u8, noalias __endptr: [*c][*c]u8) c_longdouble;
+pub extern fn strtol(noalias __nptr: [*c]const u8, noalias __endptr: [*c][*c]u8, __base: c_int) c_long;
+pub extern fn strtoul(noalias __nptr: [*c]const u8, noalias __endptr: [*c][*c]u8, __base: c_int) c_ulong;
 pub extern fn strtoq(noalias __nptr: [*c]const u8, noalias __endptr: [*c][*c]u8, __base: c_int) c_longlong;
 pub extern fn strtouq(noalias __nptr: [*c]const u8, noalias __endptr: [*c][*c]u8, __base: c_int) c_ulonglong;
-pub extern fn strtoll(__nptr: [*c]const u8, __endptr: [*c][*c]u8, __base: c_int) c_longlong;
-pub extern fn strtoull(__nptr: [*c]const u8, __endptr: [*c][*c]u8, __base: c_int) c_ulonglong;
+pub extern fn strtoll(noalias __nptr: [*c]const u8, noalias __endptr: [*c][*c]u8, __base: c_int) c_longlong;
+pub extern fn strtoull(noalias __nptr: [*c]const u8, noalias __endptr: [*c][*c]u8, __base: c_int) c_ulonglong;
 pub extern fn l64a(__n: c_long) [*c]u8;
 pub extern fn a64l(__s: [*c]const u8) c_long;
 pub const u_char = __u_char;
@@ -205,21 +149,21 @@ pub const u_int8_t = __uint8_t;
 pub const u_int16_t = __uint16_t;
 pub const u_int32_t = __uint32_t;
 pub const u_int64_t = __uint64_t;
-pub const register_t = c_long;
+pub const register_t = c_int;
 pub fn __bswap_16(arg___bsx: __uint16_t) callconv(.c) __uint16_t {
     var __bsx = arg___bsx;
     _ = &__bsx;
-    return @as(__uint16_t, @bitCast(@as(c_short, @truncate(((@as(c_int, @bitCast(@as(c_uint, __bsx))) >> @intCast(8)) & @as(c_int, 255)) | ((@as(c_int, @bitCast(@as(c_uint, __bsx))) & @as(c_int, 255)) << @intCast(8))))));
+    return @byteSwap(@as(__uint16_t, __bsx));
 }
 pub fn __bswap_32(arg___bsx: __uint32_t) callconv(.c) __uint32_t {
     var __bsx = arg___bsx;
     _ = &__bsx;
-    return ((((__bsx & @as(c_uint, 4278190080)) >> @intCast(24)) | ((__bsx & @as(c_uint, 16711680)) >> @intCast(8))) | ((__bsx & @as(c_uint, 65280)) << @intCast(8))) | ((__bsx & @as(c_uint, 255)) << @intCast(24));
+    return @bitCast(@as(c_int, @byteSwap(@as(c_int, @bitCast(@as(c_uint, @truncate(__bsx)))))));
 }
 pub fn __bswap_64(arg___bsx: __uint64_t) callconv(.c) __uint64_t {
     var __bsx = arg___bsx;
     _ = &__bsx;
-    return @as(__uint64_t, @bitCast(@as(c_ulong, @truncate(((((((((@as(c_ulonglong, @bitCast(@as(c_ulonglong, __bsx))) & @as(c_ulonglong, 18374686479671623680)) >> @intCast(56)) | ((@as(c_ulonglong, @bitCast(@as(c_ulonglong, __bsx))) & @as(c_ulonglong, 71776119061217280)) >> @intCast(40))) | ((@as(c_ulonglong, @bitCast(@as(c_ulonglong, __bsx))) & @as(c_ulonglong, 280375465082880)) >> @intCast(24))) | ((@as(c_ulonglong, @bitCast(@as(c_ulonglong, __bsx))) & @as(c_ulonglong, 1095216660480)) >> @intCast(8))) | ((@as(c_ulonglong, @bitCast(@as(c_ulonglong, __bsx))) & @as(c_ulonglong, 4278190080)) << @intCast(8))) | ((@as(c_ulonglong, @bitCast(@as(c_ulonglong, __bsx))) & @as(c_ulonglong, 16711680)) << @intCast(24))) | ((@as(c_ulonglong, @bitCast(@as(c_ulonglong, __bsx))) & @as(c_ulonglong, 65280)) << @intCast(40))) | ((@as(c_ulonglong, @bitCast(@as(c_ulonglong, __bsx))) & @as(c_ulonglong, 255)) << @intCast(56))))));
+    return @bitCast(@as(c_long, @byteSwap(@as(c_long, @bitCast(@as(c_ulong, @truncate(__bsx)))))));
 }
 pub fn __uint16_identity(arg___x: __uint16_t) callconv(.c) __uint16_t {
     var __x = arg___x;
@@ -241,12 +185,15 @@ pub const __sigset_t = extern struct {
 };
 pub const sigset_t = __sigset_t;
 pub const struct_timeval = extern struct {
-    tv_sec: __time_t = @import("std").mem.zeroes(__time_t),
-    tv_usec: __suseconds_t = @import("std").mem.zeroes(__suseconds_t),
+    tv_sec: __time_t = 0,
+    tv_usec: __suseconds_t = 0,
 };
 pub const struct_timespec = extern struct {
-    tv_sec: __time_t = @import("std").mem.zeroes(__time_t),
-    tv_nsec: __syscall_slong_t = @import("std").mem.zeroes(__syscall_slong_t),
+    tv_sec: __time_t = 0,
+    tv_nsec: __syscall_slong_t = 0,
+    pub const nanosleep = __root.nanosleep;
+    pub const timespec_get = __root.timespec_get;
+    pub const get = __root.timespec_get;
 };
 pub const suseconds_t = __suseconds_t;
 pub const __fd_mask = c_long;
@@ -261,117 +208,268 @@ pub const blkcnt_t = __blkcnt_t;
 pub const fsblkcnt_t = __fsblkcnt_t;
 pub const fsfilcnt_t = __fsfilcnt_t;
 const struct_unnamed_1 = extern struct {
-    __low: c_uint = @import("std").mem.zeroes(c_uint),
-    __high: c_uint = @import("std").mem.zeroes(c_uint),
+    __low: c_uint = 0,
+    __high: c_uint = 0,
 };
 pub const __atomic_wide_counter = extern union {
     __value64: c_ulonglong,
     __value32: struct_unnamed_1,
 };
 pub const struct___pthread_internal_list = extern struct {
-    __prev: [*c]struct___pthread_internal_list = @import("std").mem.zeroes([*c]struct___pthread_internal_list),
-    __next: [*c]struct___pthread_internal_list = @import("std").mem.zeroes([*c]struct___pthread_internal_list),
+    __prev: [*c]struct___pthread_internal_list = null,
+    __next: [*c]struct___pthread_internal_list = null,
 };
 pub const __pthread_list_t = struct___pthread_internal_list;
 pub const struct___pthread_internal_slist = extern struct {
-    __next: [*c]struct___pthread_internal_slist = @import("std").mem.zeroes([*c]struct___pthread_internal_slist),
+    __next: [*c]struct___pthread_internal_slist = null,
 };
 pub const __pthread_slist_t = struct___pthread_internal_slist;
 pub const struct___pthread_mutex_s = extern struct {
-    __lock: c_int = @import("std").mem.zeroes(c_int),
-    __count: c_uint = @import("std").mem.zeroes(c_uint),
-    __owner: c_int = @import("std").mem.zeroes(c_int),
-    __nusers: c_uint = @import("std").mem.zeroes(c_uint),
-    __kind: c_int = @import("std").mem.zeroes(c_int),
-    __spins: c_short = @import("std").mem.zeroes(c_short),
-    __elision: c_short = @import("std").mem.zeroes(c_short),
+    __lock: c_int = 0,
+    __count: c_uint = 0,
+    __owner: c_int = 0,
+    __nusers: c_uint = 0,
+    __kind: c_int = 0,
+    __spins: c_short = 0,
+    __elision: c_short = 0,
     __list: __pthread_list_t = @import("std").mem.zeroes(__pthread_list_t),
 };
 pub const struct___pthread_rwlock_arch_t = extern struct {
-    __readers: c_uint = @import("std").mem.zeroes(c_uint),
-    __writers: c_uint = @import("std").mem.zeroes(c_uint),
-    __wrphase_futex: c_uint = @import("std").mem.zeroes(c_uint),
-    __writers_futex: c_uint = @import("std").mem.zeroes(c_uint),
-    __pad3: c_uint = @import("std").mem.zeroes(c_uint),
-    __pad4: c_uint = @import("std").mem.zeroes(c_uint),
-    __cur_writer: c_int = @import("std").mem.zeroes(c_int),
-    __shared: c_int = @import("std").mem.zeroes(c_int),
-    __rwelision: i8 = @import("std").mem.zeroes(i8),
+    __readers: c_uint = 0,
+    __writers: c_uint = 0,
+    __wrphase_futex: c_uint = 0,
+    __writers_futex: c_uint = 0,
+    __pad3: c_uint = 0,
+    __pad4: c_uint = 0,
+    __cur_writer: c_int = 0,
+    __shared: c_int = 0,
+    __rwelision: i8 = 0,
     __pad1: [7]u8 = @import("std").mem.zeroes([7]u8),
-    __pad2: c_ulong = @import("std").mem.zeroes(c_ulong),
-    __flags: c_uint = @import("std").mem.zeroes(c_uint),
+    __pad2: c_ulong = 0,
+    __flags: c_uint = 0,
 };
 pub const struct___pthread_cond_s = extern struct {
     __wseq: __atomic_wide_counter = @import("std").mem.zeroes(__atomic_wide_counter),
     __g1_start: __atomic_wide_counter = @import("std").mem.zeroes(__atomic_wide_counter),
     __g_size: [2]c_uint = @import("std").mem.zeroes([2]c_uint),
-    __g1_orig_size: c_uint = @import("std").mem.zeroes(c_uint),
-    __wrefs: c_uint = @import("std").mem.zeroes(c_uint),
+    __g1_orig_size: c_uint = 0,
+    __wrefs: c_uint = 0,
     __g_signals: [2]c_uint = @import("std").mem.zeroes([2]c_uint),
-    __unused_initialized_1: c_uint = @import("std").mem.zeroes(c_uint),
-    __unused_initialized_2: c_uint = @import("std").mem.zeroes(c_uint),
+    __unused_initialized_1: c_uint = 0,
+    __unused_initialized_2: c_uint = 0,
 };
 pub const __tss_t = c_uint;
 pub const __thrd_t = c_ulong;
 pub const __once_flag = extern struct {
-    __data: c_int = @import("std").mem.zeroes(c_int),
+    __data: c_int = 0,
 };
 pub const pthread_t = c_ulong;
 pub const pthread_mutexattr_t = extern union {
     __size: [4]u8,
     __align: c_int,
+    pub const pthread_mutexattr_init = __root.pthread_mutexattr_init;
+    pub const pthread_mutexattr_destroy = __root.pthread_mutexattr_destroy;
+    pub const pthread_mutexattr_getpshared = __root.pthread_mutexattr_getpshared;
+    pub const pthread_mutexattr_setpshared = __root.pthread_mutexattr_setpshared;
+    pub const pthread_mutexattr_gettype = __root.pthread_mutexattr_gettype;
+    pub const pthread_mutexattr_settype = __root.pthread_mutexattr_settype;
+    pub const pthread_mutexattr_getprotocol = __root.pthread_mutexattr_getprotocol;
+    pub const pthread_mutexattr_setprotocol = __root.pthread_mutexattr_setprotocol;
+    pub const pthread_mutexattr_getprioceiling = __root.pthread_mutexattr_getprioceiling;
+    pub const pthread_mutexattr_setprioceiling = __root.pthread_mutexattr_setprioceiling;
+    pub const pthread_mutexattr_getrobust = __root.pthread_mutexattr_getrobust;
+    pub const pthread_mutexattr_setrobust = __root.pthread_mutexattr_setrobust;
+    pub const init = __root.pthread_mutexattr_init;
+    pub const destroy = __root.pthread_mutexattr_destroy;
+    pub const getpshared = __root.pthread_mutexattr_getpshared;
+    pub const setpshared = __root.pthread_mutexattr_setpshared;
+    pub const gettype = __root.pthread_mutexattr_gettype;
+    pub const settype = __root.pthread_mutexattr_settype;
+    pub const getprotocol = __root.pthread_mutexattr_getprotocol;
+    pub const setprotocol = __root.pthread_mutexattr_setprotocol;
+    pub const getprioceiling = __root.pthread_mutexattr_getprioceiling;
+    pub const setprioceiling = __root.pthread_mutexattr_setprioceiling;
+    pub const getrobust = __root.pthread_mutexattr_getrobust;
+    pub const setrobust = __root.pthread_mutexattr_setrobust;
 };
 pub const pthread_condattr_t = extern union {
     __size: [4]u8,
     __align: c_int,
+    pub const pthread_condattr_init = __root.pthread_condattr_init;
+    pub const pthread_condattr_destroy = __root.pthread_condattr_destroy;
+    pub const pthread_condattr_getpshared = __root.pthread_condattr_getpshared;
+    pub const pthread_condattr_setpshared = __root.pthread_condattr_setpshared;
+    pub const pthread_condattr_getclock = __root.pthread_condattr_getclock;
+    pub const pthread_condattr_setclock = __root.pthread_condattr_setclock;
+    pub const init = __root.pthread_condattr_init;
+    pub const destroy = __root.pthread_condattr_destroy;
+    pub const getpshared = __root.pthread_condattr_getpshared;
+    pub const setpshared = __root.pthread_condattr_setpshared;
+    pub const getclock = __root.pthread_condattr_getclock;
+    pub const setclock = __root.pthread_condattr_setclock;
 };
 pub const pthread_key_t = c_uint;
 pub const pthread_once_t = c_int;
 pub const union_pthread_attr_t = extern union {
     __size: [56]u8,
     __align: c_long,
+    pub const pthread_attr_init = __root.pthread_attr_init;
+    pub const pthread_attr_destroy = __root.pthread_attr_destroy;
+    pub const pthread_attr_getdetachstate = __root.pthread_attr_getdetachstate;
+    pub const pthread_attr_setdetachstate = __root.pthread_attr_setdetachstate;
+    pub const pthread_attr_getguardsize = __root.pthread_attr_getguardsize;
+    pub const pthread_attr_setguardsize = __root.pthread_attr_setguardsize;
+    pub const pthread_attr_getschedparam = __root.pthread_attr_getschedparam;
+    pub const pthread_attr_setschedparam = __root.pthread_attr_setschedparam;
+    pub const pthread_attr_getschedpolicy = __root.pthread_attr_getschedpolicy;
+    pub const pthread_attr_setschedpolicy = __root.pthread_attr_setschedpolicy;
+    pub const pthread_attr_getinheritsched = __root.pthread_attr_getinheritsched;
+    pub const pthread_attr_setinheritsched = __root.pthread_attr_setinheritsched;
+    pub const pthread_attr_getscope = __root.pthread_attr_getscope;
+    pub const pthread_attr_setscope = __root.pthread_attr_setscope;
+    pub const pthread_attr_getstackaddr = __root.pthread_attr_getstackaddr;
+    pub const pthread_attr_setstackaddr = __root.pthread_attr_setstackaddr;
+    pub const pthread_attr_getstacksize = __root.pthread_attr_getstacksize;
+    pub const pthread_attr_setstacksize = __root.pthread_attr_setstacksize;
+    pub const pthread_attr_getstack = __root.pthread_attr_getstack;
+    pub const pthread_attr_setstack = __root.pthread_attr_setstack;
+    pub const init = __root.pthread_attr_init;
+    pub const destroy = __root.pthread_attr_destroy;
+    pub const getdetachstate = __root.pthread_attr_getdetachstate;
+    pub const setdetachstate = __root.pthread_attr_setdetachstate;
+    pub const getguardsize = __root.pthread_attr_getguardsize;
+    pub const setguardsize = __root.pthread_attr_setguardsize;
+    pub const getschedparam = __root.pthread_attr_getschedparam;
+    pub const setschedparam = __root.pthread_attr_setschedparam;
+    pub const getschedpolicy = __root.pthread_attr_getschedpolicy;
+    pub const setschedpolicy = __root.pthread_attr_setschedpolicy;
+    pub const getinheritsched = __root.pthread_attr_getinheritsched;
+    pub const setinheritsched = __root.pthread_attr_setinheritsched;
+    pub const getscope = __root.pthread_attr_getscope;
+    pub const setscope = __root.pthread_attr_setscope;
+    pub const getstackaddr = __root.pthread_attr_getstackaddr;
+    pub const setstackaddr = __root.pthread_attr_setstackaddr;
+    pub const getstacksize = __root.pthread_attr_getstacksize;
+    pub const setstacksize = __root.pthread_attr_setstacksize;
+    pub const getstack = __root.pthread_attr_getstack;
+    pub const setstack = __root.pthread_attr_setstack;
 };
 pub const pthread_attr_t = union_pthread_attr_t;
 pub const pthread_mutex_t = extern union {
     __data: struct___pthread_mutex_s,
     __size: [40]u8,
     __align: c_long,
+    pub const pthread_mutex_init = __root.pthread_mutex_init;
+    pub const pthread_mutex_destroy = __root.pthread_mutex_destroy;
+    pub const pthread_mutex_trylock = __root.pthread_mutex_trylock;
+    pub const pthread_mutex_lock = __root.pthread_mutex_lock;
+    pub const pthread_mutex_timedlock = __root.pthread_mutex_timedlock;
+    pub const pthread_mutex_unlock = __root.pthread_mutex_unlock;
+    pub const pthread_mutex_getprioceiling = __root.pthread_mutex_getprioceiling;
+    pub const pthread_mutex_setprioceiling = __root.pthread_mutex_setprioceiling;
+    pub const pthread_mutex_consistent = __root.pthread_mutex_consistent;
+    pub const init = __root.pthread_mutex_init;
+    pub const destroy = __root.pthread_mutex_destroy;
+    pub const trylock = __root.pthread_mutex_trylock;
+    pub const lock = __root.pthread_mutex_lock;
+    pub const timedlock = __root.pthread_mutex_timedlock;
+    pub const unlock = __root.pthread_mutex_unlock;
+    pub const getprioceiling = __root.pthread_mutex_getprioceiling;
+    pub const setprioceiling = __root.pthread_mutex_setprioceiling;
+    pub const consistent = __root.pthread_mutex_consistent;
 };
 pub const pthread_cond_t = extern union {
     __data: struct___pthread_cond_s,
     __size: [48]u8,
     __align: c_longlong,
+    pub const pthread_cond_init = __root.pthread_cond_init;
+    pub const pthread_cond_destroy = __root.pthread_cond_destroy;
+    pub const pthread_cond_signal = __root.pthread_cond_signal;
+    pub const pthread_cond_broadcast = __root.pthread_cond_broadcast;
+    pub const pthread_cond_wait = __root.pthread_cond_wait;
+    pub const pthread_cond_timedwait = __root.pthread_cond_timedwait;
+    pub const init = __root.pthread_cond_init;
+    pub const destroy = __root.pthread_cond_destroy;
+    pub const signal = __root.pthread_cond_signal;
+    pub const broadcast = __root.pthread_cond_broadcast;
+    pub const wait = __root.pthread_cond_wait;
+    pub const timedwait = __root.pthread_cond_timedwait;
 };
 pub const pthread_rwlock_t = extern union {
     __data: struct___pthread_rwlock_arch_t,
     __size: [56]u8,
     __align: c_long,
+    pub const pthread_rwlock_init = __root.pthread_rwlock_init;
+    pub const pthread_rwlock_destroy = __root.pthread_rwlock_destroy;
+    pub const pthread_rwlock_rdlock = __root.pthread_rwlock_rdlock;
+    pub const pthread_rwlock_tryrdlock = __root.pthread_rwlock_tryrdlock;
+    pub const pthread_rwlock_timedrdlock = __root.pthread_rwlock_timedrdlock;
+    pub const pthread_rwlock_wrlock = __root.pthread_rwlock_wrlock;
+    pub const pthread_rwlock_trywrlock = __root.pthread_rwlock_trywrlock;
+    pub const pthread_rwlock_timedwrlock = __root.pthread_rwlock_timedwrlock;
+    pub const pthread_rwlock_unlock = __root.pthread_rwlock_unlock;
+    pub const init = __root.pthread_rwlock_init;
+    pub const destroy = __root.pthread_rwlock_destroy;
+    pub const rdlock = __root.pthread_rwlock_rdlock;
+    pub const tryrdlock = __root.pthread_rwlock_tryrdlock;
+    pub const timedrdlock = __root.pthread_rwlock_timedrdlock;
+    pub const wrlock = __root.pthread_rwlock_wrlock;
+    pub const trywrlock = __root.pthread_rwlock_trywrlock;
+    pub const timedwrlock = __root.pthread_rwlock_timedwrlock;
+    pub const unlock = __root.pthread_rwlock_unlock;
 };
 pub const pthread_rwlockattr_t = extern union {
     __size: [8]u8,
     __align: c_long,
+    pub const pthread_rwlockattr_init = __root.pthread_rwlockattr_init;
+    pub const pthread_rwlockattr_destroy = __root.pthread_rwlockattr_destroy;
+    pub const pthread_rwlockattr_getpshared = __root.pthread_rwlockattr_getpshared;
+    pub const pthread_rwlockattr_setpshared = __root.pthread_rwlockattr_setpshared;
+    pub const pthread_rwlockattr_getkind_np = __root.pthread_rwlockattr_getkind_np;
+    pub const pthread_rwlockattr_setkind_np = __root.pthread_rwlockattr_setkind_np;
+    pub const init = __root.pthread_rwlockattr_init;
+    pub const destroy = __root.pthread_rwlockattr_destroy;
+    pub const getpshared = __root.pthread_rwlockattr_getpshared;
+    pub const setpshared = __root.pthread_rwlockattr_setpshared;
+    pub const np = __root.pthread_rwlockattr_getkind_np;
 };
 pub const pthread_spinlock_t = c_int;
 pub const pthread_barrier_t = extern union {
     __size: [32]u8,
     __align: c_long,
+    pub const pthread_barrier_init = __root.pthread_barrier_init;
+    pub const pthread_barrier_destroy = __root.pthread_barrier_destroy;
+    pub const pthread_barrier_wait = __root.pthread_barrier_wait;
+    pub const init = __root.pthread_barrier_init;
+    pub const destroy = __root.pthread_barrier_destroy;
+    pub const wait = __root.pthread_barrier_wait;
 };
 pub const pthread_barrierattr_t = extern union {
     __size: [4]u8,
     __align: c_int,
+    pub const pthread_barrierattr_init = __root.pthread_barrierattr_init;
+    pub const pthread_barrierattr_destroy = __root.pthread_barrierattr_destroy;
+    pub const pthread_barrierattr_getpshared = __root.pthread_barrierattr_getpshared;
+    pub const pthread_barrierattr_setpshared = __root.pthread_barrierattr_setpshared;
+    pub const init = __root.pthread_barrierattr_init;
+    pub const destroy = __root.pthread_barrierattr_destroy;
+    pub const getpshared = __root.pthread_barrierattr_getpshared;
+    pub const setpshared = __root.pthread_barrierattr_setpshared;
 };
 pub extern fn random() c_long;
 pub extern fn srandom(__seed: c_uint) void;
 pub extern fn initstate(__seed: c_uint, __statebuf: [*c]u8, __statelen: usize) [*c]u8;
 pub extern fn setstate(__statebuf: [*c]u8) [*c]u8;
 pub const struct_random_data = extern struct {
-    fptr: [*c]i32 = @import("std").mem.zeroes([*c]i32),
-    rptr: [*c]i32 = @import("std").mem.zeroes([*c]i32),
-    state: [*c]i32 = @import("std").mem.zeroes([*c]i32),
-    rand_type: c_int = @import("std").mem.zeroes(c_int),
-    rand_deg: c_int = @import("std").mem.zeroes(c_int),
-    rand_sep: c_int = @import("std").mem.zeroes(c_int),
-    end_ptr: [*c]i32 = @import("std").mem.zeroes([*c]i32),
+    fptr: [*c]i32 = null,
+    rptr: [*c]i32 = null,
+    state: [*c]i32 = null,
+    rand_type: c_int = 0,
+    rand_deg: c_int = 0,
+    rand_sep: c_int = 0,
+    end_ptr: [*c]i32 = null,
+    pub const random_r = __root.random_r;
+    pub const r = __root.random_r;
 };
 pub extern fn random_r(noalias __buf: [*c]struct_random_data, noalias __result: [*c]i32) c_int;
 pub extern fn srandom_r(__seed: c_uint, __buf: [*c]struct_random_data) c_int;
@@ -392,9 +490,13 @@ pub extern fn lcong48(__param: [*c]c_ushort) void;
 pub const struct_drand48_data = extern struct {
     __x: [3]c_ushort = @import("std").mem.zeroes([3]c_ushort),
     __old_x: [3]c_ushort = @import("std").mem.zeroes([3]c_ushort),
-    __c: c_ushort = @import("std").mem.zeroes(c_ushort),
-    __init: c_ushort = @import("std").mem.zeroes(c_ushort),
-    __a: c_ulonglong = @import("std").mem.zeroes(c_ulonglong),
+    __c: c_ushort = 0,
+    __init: c_ushort = 0,
+    __a: c_ulonglong = 0,
+    pub const drand48_r = __root.drand48_r;
+    pub const lrand48_r = __root.lrand48_r;
+    pub const mrand48_r = __root.mrand48_r;
+    pub const r = __root.drand48_r;
 };
 pub extern fn drand48_r(noalias __buffer: [*c]struct_drand48_data, noalias __result: [*c]f64) c_int;
 pub extern fn erand48_r(__xsubi: [*c]c_ushort, noalias __buffer: [*c]struct_drand48_data, noalias __result: [*c]f64) c_int;
@@ -408,19 +510,19 @@ pub extern fn lcong48_r(__param: [*c]c_ushort, __buffer: [*c]struct_drand48_data
 pub extern fn arc4random() __uint32_t;
 pub extern fn arc4random_buf(__buf: ?*anyopaque, __size: usize) void;
 pub extern fn arc4random_uniform(__upper_bound: __uint32_t) __uint32_t;
-pub extern fn malloc(__size: c_ulong) ?*anyopaque;
-pub extern fn calloc(__nmemb: c_ulong, __size: c_ulong) ?*anyopaque;
-pub extern fn realloc(__ptr: ?*anyopaque, __size: c_ulong) ?*anyopaque;
+pub extern fn malloc(__size: usize) ?*anyopaque;
+pub extern fn calloc(__nmemb: usize, __size: usize) ?*anyopaque;
+pub extern fn realloc(__ptr: ?*anyopaque, __size: usize) ?*anyopaque;
 pub extern fn free(__ptr: ?*anyopaque) void;
 pub extern fn reallocarray(__ptr: ?*anyopaque, __nmemb: usize, __size: usize) ?*anyopaque;
-pub extern fn alloca(__size: c_ulong) ?*anyopaque;
+pub extern fn alloca(__size: usize) ?*anyopaque;
 pub extern fn valloc(__size: usize) ?*anyopaque;
 pub extern fn posix_memalign(__memptr: [*c]?*anyopaque, __alignment: usize, __size: usize) c_int;
-pub extern fn aligned_alloc(__alignment: c_ulong, __size: c_ulong) ?*anyopaque;
+pub extern fn aligned_alloc(__alignment: usize, __size: usize) ?*anyopaque;
 pub extern fn abort() noreturn;
 pub extern fn atexit(__func: ?*const fn () callconv(.c) void) c_int;
 pub extern fn at_quick_exit(__func: ?*const fn () callconv(.c) void) c_int;
-pub extern fn on_exit(__func: ?*const fn (c_int, ?*anyopaque) callconv(.c) void, __arg: ?*anyopaque) c_int;
+pub extern fn on_exit(__func: ?*const fn (__status: c_int, __arg: ?*anyopaque) callconv(.c) void, __arg: ?*anyopaque) c_int;
 pub extern fn exit(__status: c_int) noreturn;
 pub extern fn quick_exit(__status: c_int) noreturn;
 pub extern fn _Exit(__status: c_int) noreturn;
@@ -462,138 +564,399 @@ pub extern fn wcstombs(noalias __s: [*c]u8, noalias __pwcs: [*c]const wchar_t, _
 pub extern fn rpmatch(__response: [*c]const u8) c_int;
 pub extern fn getsubopt(noalias __optionp: [*c][*c]u8, noalias __tokens: [*c]const [*c]u8, noalias __valuep: [*c][*c]u8) c_int;
 pub extern fn getloadavg(__loadavg: [*c]f64, __nelem: c_int) c_int;
-pub const aeron_error_handler_t = ?*const fn (?*anyopaque, c_int, [*c]const u8) callconv(.c) void;
-pub const struct_aeron_client_registering_resource_stct = opaque {};
+pub const aeron_error_handler_t = ?*const fn (clientd: ?*anyopaque, errcode: c_int, message: [*c]const u8) callconv(.c) void;
+pub const struct_aeron_client_registering_resource_stct = opaque {
+    pub const aeron_publication_async_destination_poll = __root.aeron_publication_async_destination_poll;
+    pub const aeron_exclusive_publication_async_destination_poll = __root.aeron_exclusive_publication_async_destination_poll;
+    pub const aeron_subscription_async_destination_poll = __root.aeron_subscription_async_destination_poll;
+    pub const aeron_async_add_counter_get_registration_id = __root.aeron_async_add_counter_get_registration_id;
+    pub const aeron_async_add_publication_get_registration_id = __root.aeron_async_add_publication_get_registration_id;
+    pub const aeron_async_add_exclusive_exclusive_publication_get_registration_id = __root.aeron_async_add_exclusive_exclusive_publication_get_registration_id;
+    pub const aeron_async_add_exclusive_publication_get_registration_id = __root.aeron_async_add_exclusive_publication_get_registration_id;
+    pub const aeron_async_add_subscription_get_registration_id = __root.aeron_async_add_subscription_get_registration_id;
+    pub const aeron_async_destination_get_registration_id = __root.aeron_async_destination_get_registration_id;
+    pub const poll = __root.aeron_publication_async_destination_poll;
+    pub const id = __root.aeron_async_add_counter_get_registration_id;
+};
 pub const aeron_async_add_publication_t = struct_aeron_client_registering_resource_stct;
-pub const aeron_on_new_publication_t = ?*const fn (?*anyopaque, ?*aeron_async_add_publication_t, [*c]const u8, i32, i32, i64) callconv(.c) void;
+pub const aeron_on_new_publication_t = ?*const fn (clientd: ?*anyopaque, async: ?*aeron_async_add_publication_t, channel: [*c]const u8, stream_id: i32, session_id: i32, correlation_id: i64) callconv(.c) void;
 pub const aeron_async_add_subscription_t = struct_aeron_client_registering_resource_stct;
-pub const aeron_on_new_subscription_t = ?*const fn (?*anyopaque, ?*aeron_async_add_subscription_t, [*c]const u8, i32, i64) callconv(.c) void;
-pub const struct_aeron_subscription_stct = opaque {};
+pub const aeron_on_new_subscription_t = ?*const fn (clientd: ?*anyopaque, async: ?*aeron_async_add_subscription_t, channel: [*c]const u8, stream_id: i32, correlation_id: i64) callconv(.c) void;
+pub const struct_aeron_subscription_stct = opaque {
+    pub const aeron_subscription_poll = __root.aeron_subscription_poll;
+    pub const aeron_subscription_controlled_poll = __root.aeron_subscription_controlled_poll;
+    pub const aeron_subscription_block_poll = __root.aeron_subscription_block_poll;
+    pub const aeron_subscription_is_connected = __root.aeron_subscription_is_connected;
+    pub const aeron_subscription_constants = __root.aeron_subscription_constants;
+    pub const aeron_subscription_image_count = __root.aeron_subscription_image_count;
+    pub const aeron_subscription_image_by_session_id = __root.aeron_subscription_image_by_session_id;
+    pub const aeron_subscription_image_at_index = __root.aeron_subscription_image_at_index;
+    pub const aeron_subscription_for_each_image = __root.aeron_subscription_for_each_image;
+    pub const aeron_subscription_image_retain = __root.aeron_subscription_image_retain;
+    pub const aeron_subscription_image_release = __root.aeron_subscription_image_release;
+    pub const aeron_subscription_is_closed = __root.aeron_subscription_is_closed;
+    pub const aeron_subscription_channel_status = __root.aeron_subscription_channel_status;
+    pub const aeron_subscription_close = __root.aeron_subscription_close;
+    pub const aeron_subscription_local_sockaddrs = __root.aeron_subscription_local_sockaddrs;
+    pub const aeron_subscription_resolved_endpoint = __root.aeron_subscription_resolved_endpoint;
+    pub const aeron_subscription_try_resolve_channel_endpoint_port = __root.aeron_subscription_try_resolve_channel_endpoint_port;
+    pub const poll = __root.aeron_subscription_poll;
+    pub const connected = __root.aeron_subscription_is_connected;
+    pub const constants = __root.aeron_subscription_constants;
+    pub const count = __root.aeron_subscription_image_count;
+    pub const id = __root.aeron_subscription_image_by_session_id;
+    pub const image = __root.aeron_subscription_for_each_image;
+    pub const retain = __root.aeron_subscription_image_retain;
+    pub const release = __root.aeron_subscription_image_release;
+    pub const closed = __root.aeron_subscription_is_closed;
+    pub const status = __root.aeron_subscription_channel_status;
+    pub const sockaddrs = __root.aeron_subscription_local_sockaddrs;
+    pub const endpoint = __root.aeron_subscription_resolved_endpoint;
+    pub const port = __root.aeron_subscription_try_resolve_channel_endpoint_port;
+};
 pub const aeron_subscription_t = struct_aeron_subscription_stct;
-pub const struct_aeron_image_stct = opaque {};
+pub const struct_aeron_image_stct = opaque {
+    pub const aeron_image_constants = __root.aeron_image_constants;
+    pub const aeron_image_position = __root.aeron_image_position;
+    pub const aeron_image_set_position = __root.aeron_image_set_position;
+    pub const aeron_image_is_end_of_stream = __root.aeron_image_is_end_of_stream;
+    pub const aeron_image_end_of_stream_position = __root.aeron_image_end_of_stream_position;
+    pub const aeron_image_active_transport_count = __root.aeron_image_active_transport_count;
+    pub const aeron_image_is_publication_revoked = __root.aeron_image_is_publication_revoked;
+    pub const aeron_image_poll = __root.aeron_image_poll;
+    pub const aeron_image_controlled_poll = __root.aeron_image_controlled_poll;
+    pub const aeron_image_bounded_poll = __root.aeron_image_bounded_poll;
+    pub const aeron_image_bounded_controlled_poll = __root.aeron_image_bounded_controlled_poll;
+    pub const aeron_image_controlled_peek = __root.aeron_image_controlled_peek;
+    pub const aeron_image_block_poll = __root.aeron_image_block_poll;
+    pub const aeron_image_is_closed = __root.aeron_image_is_closed;
+    pub const aeron_image_reject = __root.aeron_image_reject;
+    pub const constants = __root.aeron_image_constants;
+    pub const position = __root.aeron_image_position;
+    pub const stream = __root.aeron_image_is_end_of_stream;
+    pub const count = __root.aeron_image_active_transport_count;
+    pub const revoked = __root.aeron_image_is_publication_revoked;
+    pub const poll = __root.aeron_image_poll;
+    pub const peek = __root.aeron_image_controlled_peek;
+    pub const closed = __root.aeron_image_is_closed;
+    pub const reject = __root.aeron_image_reject;
+};
 pub const aeron_image_t = struct_aeron_image_stct;
-pub const aeron_on_available_image_t = ?*const fn (?*anyopaque, ?*aeron_subscription_t, ?*aeron_image_t) callconv(.c) void;
-pub const aeron_on_unavailable_image_t = ?*const fn (?*anyopaque, ?*aeron_subscription_t, ?*aeron_image_t) callconv(.c) void;
-pub const struct_aeron_counters_reader_stct = opaque {};
+pub const aeron_on_available_image_t = ?*const fn (clientd: ?*anyopaque, subscription: ?*aeron_subscription_t, image: ?*aeron_image_t) callconv(.c) void;
+pub const aeron_on_unavailable_image_t = ?*const fn (clientd: ?*anyopaque, subscription: ?*aeron_subscription_t, image: ?*aeron_image_t) callconv(.c) void;
+pub const struct_aeron_counters_reader_stct = opaque {
+    pub const aeron_counters_reader_get_buffers = __root.aeron_counters_reader_get_buffers;
+    pub const aeron_counters_reader_foreach_counter = __root.aeron_counters_reader_foreach_counter;
+    pub const aeron_counters_reader_find_by_type_id_and_registration_id = __root.aeron_counters_reader_find_by_type_id_and_registration_id;
+    pub const aeron_counters_reader_max_counter_id = __root.aeron_counters_reader_max_counter_id;
+    pub const aeron_counters_reader_addr = __root.aeron_counters_reader_addr;
+    pub const aeron_counters_reader_counter_registration_id = __root.aeron_counters_reader_counter_registration_id;
+    pub const aeron_counters_reader_counter_owner_id = __root.aeron_counters_reader_counter_owner_id;
+    pub const aeron_counters_reader_counter_reference_id = __root.aeron_counters_reader_counter_reference_id;
+    pub const aeron_counters_reader_counter_state = __root.aeron_counters_reader_counter_state;
+    pub const aeron_counters_reader_counter_type_id = __root.aeron_counters_reader_counter_type_id;
+    pub const aeron_counters_reader_metadata_key = __root.aeron_counters_reader_metadata_key;
+    pub const aeron_counters_reader_counter_label = __root.aeron_counters_reader_counter_label;
+    pub const aeron_counters_reader_free_for_reuse_deadline_ms = __root.aeron_counters_reader_free_for_reuse_deadline_ms;
+    pub const buffers = __root.aeron_counters_reader_get_buffers;
+    pub const counter = __root.aeron_counters_reader_foreach_counter;
+    pub const id = __root.aeron_counters_reader_find_by_type_id_and_registration_id;
+    pub const addr = __root.aeron_counters_reader_addr;
+    pub const state = __root.aeron_counters_reader_counter_state;
+    pub const key = __root.aeron_counters_reader_metadata_key;
+    pub const label = __root.aeron_counters_reader_counter_label;
+    pub const ms = __root.aeron_counters_reader_free_for_reuse_deadline_ms;
+};
 pub const aeron_counters_reader_t = struct_aeron_counters_reader_stct;
-pub const aeron_on_available_counter_t = ?*const fn (?*anyopaque, ?*aeron_counters_reader_t, i64, i32) callconv(.c) void;
-pub const aeron_on_unavailable_counter_t = ?*const fn (?*anyopaque, ?*aeron_counters_reader_t, i64, i32) callconv(.c) void;
+pub const aeron_on_available_counter_t = ?*const fn (clientd: ?*anyopaque, counters_reader: ?*aeron_counters_reader_t, registration_id: i64, counter_id: i32) callconv(.c) void;
+pub const aeron_on_unavailable_counter_t = ?*const fn (clientd: ?*anyopaque, counters_reader: ?*aeron_counters_reader_t, registration_id: i64, counter_id: i32) callconv(.c) void;
 pub const struct_aeron_publication_error_values_stct = extern struct {
-    registration_id: i64 = @import("std").mem.zeroes(i64),
-    destination_registration_id: i64 = @import("std").mem.zeroes(i64),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    receiver_id: i64 = @import("std").mem.zeroes(i64),
-    group_tag: i64 = @import("std").mem.zeroes(i64),
-    address_type: i16 = @import("std").mem.zeroes(i16),
-    source_port: u16 = @import("std").mem.zeroes(u16),
+    registration_id: i64 = 0,
+    destination_registration_id: i64 = 0,
+    session_id: i32 = 0,
+    stream_id: i32 = 0,
+    receiver_id: i64 = 0,
+    group_tag: i64 = 0,
+    address_type: i16 = 0,
+    source_port: u16 = 0,
     source_address: [16]u8 = @import("std").mem.zeroes([16]u8),
-    error_code: i32 = @import("std").mem.zeroes(i32),
-    error_message_length: i32 = @import("std").mem.zeroes(i32),
+    error_code: i32 = 0,
+    error_message_length: i32 = 0,
     error_message: [1]u8 = @import("std").mem.zeroes([1]u8),
+    pub const aeron_publication_error_values_delete = __root.aeron_publication_error_values_delete;
+    pub const delete = __root.aeron_publication_error_values_delete;
 };
 pub const aeron_publication_error_values_t = struct_aeron_publication_error_values_stct;
-pub const aeron_publication_error_frame_handler_t = ?*const fn (?*anyopaque, [*c]aeron_publication_error_values_t) callconv(.c) void;
-pub const aeron_agent_on_start_func_t = ?*const fn (?*anyopaque, [*c]const u8) callconv(.c) void;
-pub const aeron_on_close_client_t = ?*const fn (?*anyopaque) callconv(.c) void;
-pub const aeron_idle_strategy_func_t = ?*const fn (?*anyopaque, c_int) callconv(.c) void;
+pub const aeron_publication_error_frame_handler_t = ?*const fn (clientd: ?*anyopaque, error_frame: [*c]aeron_publication_error_values_t) callconv(.c) void;
+pub const aeron_agent_on_start_func_t = ?*const fn (state: ?*anyopaque, role_name: [*c]const u8) callconv(.c) void;
+pub const aeron_on_close_client_t = ?*const fn (clientd: ?*anyopaque) callconv(.c) void;
+pub const aeron_idle_strategy_func_t = ?*const fn (state: ?*anyopaque, work_count: c_int) callconv(.c) void;
 pub const aeron_clock_func_t = ?*const fn () callconv(.c) i64;
 pub const struct_aeron_mapped_file_stct = extern struct {
-    addr: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    length: usize = @import("std").mem.zeroes(usize),
+    addr: ?*anyopaque = null,
+    length: usize = 0,
+    pub const aeron_map_new_file = __root.aeron_map_new_file;
+    pub const aeron_map_existing_file = __root.aeron_map_existing_file;
+    pub const aeron_unmap = __root.aeron_unmap;
+    pub const file = __root.aeron_map_new_file;
+    pub const unmap = __root.aeron_unmap;
 };
 pub const aeron_mapped_file_t = struct_aeron_mapped_file_stct;
 const struct_unnamed_2 = extern struct {
-    tail: u64 = @import("std").mem.zeroes(u64),
-    head_cache: u64 = @import("std").mem.zeroes(u64),
-    shared_head_cache: u64 = @import("std").mem.zeroes(u64),
+    tail: u64 = 0,
+    head_cache: u64 = 0,
+    shared_head_cache: u64 = 0,
     padding: [40]i8 = @import("std").mem.zeroes([40]i8),
 };
 const struct_unnamed_3 = extern struct {
-    head: u64 = @import("std").mem.zeroes(u64),
+    head: u64 = 0,
     padding: [56]i8 = @import("std").mem.zeroes([56]i8),
 };
 pub const struct_aeron_mpsc_concurrent_array_queue_stct = extern struct {
     padding: [56]i8 = @import("std").mem.zeroes([56]i8),
     producer: struct_unnamed_2 = @import("std").mem.zeroes(struct_unnamed_2),
     consumer: struct_unnamed_3 = @import("std").mem.zeroes(struct_unnamed_3),
-    capacity: usize = @import("std").mem.zeroes(usize),
-    mask: usize = @import("std").mem.zeroes(usize),
-    buffer: [*c]?*volatile anyopaque = @import("std").mem.zeroes([*c]?*volatile anyopaque),
+    capacity: usize = 0,
+    mask: usize = 0,
+    buffer: [*c]?*volatile anyopaque = null,
+    pub const aeron_mpsc_concurrent_array_queue_init = __root.aeron_mpsc_concurrent_array_queue_init;
+    pub const aeron_mpsc_concurrent_array_queue_close = __root.aeron_mpsc_concurrent_array_queue_close;
+    pub const init = __root.aeron_mpsc_concurrent_array_queue_init;
 };
 pub const aeron_mpsc_concurrent_array_queue_t = struct_aeron_mpsc_concurrent_array_queue_stct;
 pub const struct_aeron_context_stct = extern struct {
     aeron_dir: [4096]u8 = @import("std").mem.zeroes([4096]u8),
-    client_name: [*c]const u8 = @import("std").mem.zeroes([*c]const u8),
-    error_handler: aeron_error_handler_t = @import("std").mem.zeroes(aeron_error_handler_t),
-    error_handler_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_new_publication: aeron_on_new_publication_t = @import("std").mem.zeroes(aeron_on_new_publication_t),
-    on_new_publication_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_new_exclusive_publication: aeron_on_new_publication_t = @import("std").mem.zeroes(aeron_on_new_publication_t),
-    on_new_exclusive_publication_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_new_subscription: aeron_on_new_subscription_t = @import("std").mem.zeroes(aeron_on_new_subscription_t),
-    on_new_subscription_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_available_image: aeron_on_available_image_t = @import("std").mem.zeroes(aeron_on_available_image_t),
-    on_available_image_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_unavailable_image: aeron_on_unavailable_image_t = @import("std").mem.zeroes(aeron_on_unavailable_image_t),
-    on_unavailable_image_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_available_counter: aeron_on_available_counter_t = @import("std").mem.zeroes(aeron_on_available_counter_t),
-    on_available_counter_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_unavailable_counter: aeron_on_unavailable_counter_t = @import("std").mem.zeroes(aeron_on_unavailable_counter_t),
-    on_unavailable_counter_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    error_frame_handler: aeron_publication_error_frame_handler_t = @import("std").mem.zeroes(aeron_publication_error_frame_handler_t),
-    error_frame_handler_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    agent_on_start_func: aeron_agent_on_start_func_t = @import("std").mem.zeroes(aeron_agent_on_start_func_t),
-    agent_on_start_state: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_close_client: aeron_on_close_client_t = @import("std").mem.zeroes(aeron_on_close_client_t),
-    on_close_client_clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    idle_strategy_func: aeron_idle_strategy_func_t = @import("std").mem.zeroes(aeron_idle_strategy_func_t),
-    idle_strategy_state: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    driver_timeout_ms: u64 = @import("std").mem.zeroes(u64),
-    keepalive_interval_ns: u64 = @import("std").mem.zeroes(u64),
-    resource_linger_duration_ns: u64 = @import("std").mem.zeroes(u64),
-    idle_sleep_duration_ns: u64 = @import("std").mem.zeroes(u64),
-    use_conductor_agent_invoker: bool = @import("std").mem.zeroes(bool),
-    pre_touch_mapped_memory: bool = @import("std").mem.zeroes(bool),
-    nano_clock: aeron_clock_func_t = @import("std").mem.zeroes(aeron_clock_func_t),
-    epoch_clock: aeron_clock_func_t = @import("std").mem.zeroes(aeron_clock_func_t),
+    client_name: [*c]const u8 = null,
+    error_handler: aeron_error_handler_t = null,
+    error_handler_clientd: ?*anyopaque = null,
+    on_new_publication: aeron_on_new_publication_t = null,
+    on_new_publication_clientd: ?*anyopaque = null,
+    on_new_exclusive_publication: aeron_on_new_publication_t = null,
+    on_new_exclusive_publication_clientd: ?*anyopaque = null,
+    on_new_subscription: aeron_on_new_subscription_t = null,
+    on_new_subscription_clientd: ?*anyopaque = null,
+    on_available_image: aeron_on_available_image_t = null,
+    on_available_image_clientd: ?*anyopaque = null,
+    on_unavailable_image: aeron_on_unavailable_image_t = null,
+    on_unavailable_image_clientd: ?*anyopaque = null,
+    on_available_counter: aeron_on_available_counter_t = null,
+    on_available_counter_clientd: ?*anyopaque = null,
+    on_unavailable_counter: aeron_on_unavailable_counter_t = null,
+    on_unavailable_counter_clientd: ?*anyopaque = null,
+    error_frame_handler: aeron_publication_error_frame_handler_t = null,
+    error_frame_handler_clientd: ?*anyopaque = null,
+    agent_on_start_func: aeron_agent_on_start_func_t = null,
+    agent_on_start_state: ?*anyopaque = null,
+    on_close_client: aeron_on_close_client_t = null,
+    on_close_client_clientd: ?*anyopaque = null,
+    idle_strategy_func: aeron_idle_strategy_func_t = null,
+    idle_strategy_state: ?*anyopaque = null,
+    driver_timeout_ms: u64 = 0,
+    keepalive_interval_ns: u64 = 0,
+    resource_linger_duration_ns: u64 = 0,
+    idle_sleep_duration_ns: u64 = 0,
+    use_conductor_agent_invoker: bool = false,
+    pre_touch_mapped_memory: bool = false,
+    nano_clock: aeron_clock_func_t = null,
+    epoch_clock: aeron_clock_func_t = null,
     cnc_map: aeron_mapped_file_t = @import("std").mem.zeroes(aeron_mapped_file_t),
     command_queue: aeron_mpsc_concurrent_array_queue_t = @import("std").mem.zeroes(aeron_mpsc_concurrent_array_queue_t),
+    pub const aeron_context_set_dir = __root.aeron_context_set_dir;
+    pub const aeron_context_get_dir = __root.aeron_context_get_dir;
+    pub const aeron_context_set_driver_timeout_ms = __root.aeron_context_set_driver_timeout_ms;
+    pub const aeron_context_get_driver_timeout_ms = __root.aeron_context_get_driver_timeout_ms;
+    pub const aeron_context_set_keepalive_interval_ns = __root.aeron_context_set_keepalive_interval_ns;
+    pub const aeron_context_get_keepalive_interval_ns = __root.aeron_context_get_keepalive_interval_ns;
+    pub const aeron_context_set_resource_linger_duration_ns = __root.aeron_context_set_resource_linger_duration_ns;
+    pub const aeron_context_get_resource_linger_duration_ns = __root.aeron_context_get_resource_linger_duration_ns;
+    pub const aeron_context_get_idle_sleep_duration_ns = __root.aeron_context_get_idle_sleep_duration_ns;
+    pub const aeron_context_set_idle_sleep_duration_ns = __root.aeron_context_set_idle_sleep_duration_ns;
+    pub const aeron_context_set_pre_touch_mapped_memory = __root.aeron_context_set_pre_touch_mapped_memory;
+    pub const aeron_context_get_pre_touch_mapped_memory = __root.aeron_context_get_pre_touch_mapped_memory;
+    pub const aeron_context_set_client_name = __root.aeron_context_set_client_name;
+    pub const aeron_context_get_client_name = __root.aeron_context_get_client_name;
+    pub const aeron_context_set_error_handler = __root.aeron_context_set_error_handler;
+    pub const aeron_context_get_error_handler = __root.aeron_context_get_error_handler;
+    pub const aeron_context_get_error_handler_clientd = __root.aeron_context_get_error_handler_clientd;
+    pub const aeron_context_set_publication_error_frame_handler = __root.aeron_context_set_publication_error_frame_handler;
+    pub const aeron_context_get_publication_error_frame_handler = __root.aeron_context_get_publication_error_frame_handler;
+    pub const aeron_context_get_publication_error_frame_handler_clientd = __root.aeron_context_get_publication_error_frame_handler_clientd;
+    pub const aeron_context_set_on_new_publication = __root.aeron_context_set_on_new_publication;
+    pub const aeron_context_get_on_new_publication = __root.aeron_context_get_on_new_publication;
+    pub const aeron_context_get_on_new_publication_clientd = __root.aeron_context_get_on_new_publication_clientd;
+    pub const aeron_context_set_on_new_exclusive_publication = __root.aeron_context_set_on_new_exclusive_publication;
+    pub const aeron_context_get_on_new_exclusive_publication = __root.aeron_context_get_on_new_exclusive_publication;
+    pub const aeron_context_get_on_new_exclusive_publication_clientd = __root.aeron_context_get_on_new_exclusive_publication_clientd;
+    pub const aeron_context_set_on_new_subscription = __root.aeron_context_set_on_new_subscription;
+    pub const aeron_context_get_on_new_subscription = __root.aeron_context_get_on_new_subscription;
+    pub const aeron_context_get_on_new_subscription_clientd = __root.aeron_context_get_on_new_subscription_clientd;
+    pub const aeron_context_set_on_available_counter = __root.aeron_context_set_on_available_counter;
+    pub const aeron_context_get_on_available_counter = __root.aeron_context_get_on_available_counter;
+    pub const aeron_context_get_on_available_counter_clientd = __root.aeron_context_get_on_available_counter_clientd;
+    pub const aeron_context_set_on_unavailable_counter = __root.aeron_context_set_on_unavailable_counter;
+    pub const aeron_context_get_on_unavailable_counter = __root.aeron_context_get_on_unavailable_counter;
+    pub const aeron_context_get_on_unavailable_counter_clientd = __root.aeron_context_get_on_unavailable_counter_clientd;
+    pub const aeron_context_set_on_close_client = __root.aeron_context_set_on_close_client;
+    pub const aeron_context_get_on_close_client = __root.aeron_context_get_on_close_client;
+    pub const aeron_context_get_on_close_client_clientd = __root.aeron_context_get_on_close_client_clientd;
+    pub const aeron_context_set_use_conductor_agent_invoker = __root.aeron_context_set_use_conductor_agent_invoker;
+    pub const aeron_context_get_use_conductor_agent_invoker = __root.aeron_context_get_use_conductor_agent_invoker;
+    pub const aeron_context_set_agent_on_start_function = __root.aeron_context_set_agent_on_start_function;
+    pub const aeron_context_get_agent_on_start_function = __root.aeron_context_get_agent_on_start_function;
+    pub const aeron_context_get_agent_on_start_state = __root.aeron_context_get_agent_on_start_state;
+    pub const aeron_context_close = __root.aeron_context_close;
+    pub const dir = __root.aeron_context_set_dir;
+    pub const ms = __root.aeron_context_set_driver_timeout_ms;
+    pub const ns = __root.aeron_context_set_keepalive_interval_ns;
+    pub const memory = __root.aeron_context_set_pre_touch_mapped_memory;
+    pub const name = __root.aeron_context_set_client_name;
+    pub const handler = __root.aeron_context_set_error_handler;
+    pub const clientd = __root.aeron_context_get_error_handler_clientd;
+    pub const publication = __root.aeron_context_set_on_new_publication;
+    pub const subscription = __root.aeron_context_set_on_new_subscription;
+    pub const counter = __root.aeron_context_set_on_available_counter;
+    pub const client = __root.aeron_context_set_on_close_client;
+    pub const invoker = __root.aeron_context_set_use_conductor_agent_invoker;
+    pub const function = __root.aeron_context_set_agent_on_start_function;
+    pub const state = __root.aeron_context_get_agent_on_start_state;
 };
 pub const aeron_context_t = struct_aeron_context_stct;
-pub const struct_aeron_stct = opaque {};
+pub const struct_aeron_stct = opaque {
+    pub const aeron_start = __root.aeron_start;
+    pub const aeron_main_do_work = __root.aeron_main_do_work;
+    pub const aeron_main_idle_strategy = __root.aeron_main_idle_strategy;
+    pub const aeron_close = __root.aeron_close;
+    pub const aeron_is_closed = __root.aeron_is_closed;
+    pub const aeron_print_counters = __root.aeron_print_counters;
+    pub const aeron_context = __root.aeron_context;
+    pub const aeron_client_id = __root.aeron_client_id;
+    pub const aeron_next_correlation_id = __root.aeron_next_correlation_id;
+    pub const aeron_counters_reader = __root.aeron_counters_reader;
+    pub const aeron_add_available_counter_handler = __root.aeron_add_available_counter_handler;
+    pub const aeron_remove_available_counter_handler = __root.aeron_remove_available_counter_handler;
+    pub const aeron_add_unavailable_counter_handler = __root.aeron_add_unavailable_counter_handler;
+    pub const aeron_remove_unavailable_counter_handler = __root.aeron_remove_unavailable_counter_handler;
+    pub const aeron_add_close_handler = __root.aeron_add_close_handler;
+    pub const aeron_remove_close_handler = __root.aeron_remove_close_handler;
+    pub const start = __root.aeron_start;
+    pub const work = __root.aeron_main_do_work;
+    pub const strategy = __root.aeron_main_idle_strategy;
+    pub const closed = __root.aeron_is_closed;
+    pub const counters = __root.aeron_print_counters;
+    pub const context = __root.aeron_context;
+    pub const id = __root.aeron_client_id;
+    pub const reader = __root.aeron_counters_reader;
+    pub const handler = __root.aeron_add_available_counter_handler;
+};
 pub const aeron_t = struct_aeron_stct;
 pub const struct_aeron_buffer_claim_stct = extern struct {
-    frame_header: [*c]u8 = @import("std").mem.zeroes([*c]u8),
-    data: [*c]u8 = @import("std").mem.zeroes([*c]u8),
-    length: usize = @import("std").mem.zeroes(usize),
+    frame_header: [*c]u8 = null,
+    data: [*c]u8 = null,
+    length: usize = 0,
+    pub const aeron_buffer_claim_commit = __root.aeron_buffer_claim_commit;
+    pub const aeron_buffer_claim_abort = __root.aeron_buffer_claim_abort;
+    pub const commit = __root.aeron_buffer_claim_commit;
 };
 pub const aeron_buffer_claim_t = struct_aeron_buffer_claim_stct;
-pub const struct_aeron_publication_stct = opaque {};
+pub const struct_aeron_publication_stct = opaque {
+    pub const aeron_publication_offer = __root.aeron_publication_offer;
+    pub const aeron_publication_offerv = __root.aeron_publication_offerv;
+    pub const aeron_publication_try_claim = __root.aeron_publication_try_claim;
+    pub const aeron_publication_channel_status = __root.aeron_publication_channel_status;
+    pub const aeron_publication_is_closed = __root.aeron_publication_is_closed;
+    pub const aeron_publication_is_connected = __root.aeron_publication_is_connected;
+    pub const aeron_publication_constants = __root.aeron_publication_constants;
+    pub const aeron_publication_position = __root.aeron_publication_position;
+    pub const aeron_publication_position_limit = __root.aeron_publication_position_limit;
+    pub const aeron_publication_close = __root.aeron_publication_close;
+    pub const aeron_publication_channel = __root.aeron_publication_channel;
+    pub const aeron_publication_stream_id = __root.aeron_publication_stream_id;
+    pub const aeron_publication_session_id = __root.aeron_publication_session_id;
+    pub const aeron_publication_local_sockaddrs = __root.aeron_publication_local_sockaddrs;
+    pub const offer = __root.aeron_publication_offer;
+    pub const offerv = __root.aeron_publication_offerv;
+    pub const claim = __root.aeron_publication_try_claim;
+    pub const status = __root.aeron_publication_channel_status;
+    pub const closed = __root.aeron_publication_is_closed;
+    pub const connected = __root.aeron_publication_is_connected;
+    pub const constants = __root.aeron_publication_constants;
+    pub const position = __root.aeron_publication_position;
+    pub const limit = __root.aeron_publication_position_limit;
+    pub const channel = __root.aeron_publication_channel;
+    pub const id = __root.aeron_publication_stream_id;
+    pub const sockaddrs = __root.aeron_publication_local_sockaddrs;
+};
 pub const aeron_publication_t = struct_aeron_publication_stct;
-pub const struct_aeron_exclusive_publication_stct = opaque {};
+pub const struct_aeron_exclusive_publication_stct = opaque {
+    pub const aeron_exclusive_publication_offer = __root.aeron_exclusive_publication_offer;
+    pub const aeron_exclusive_publication_offerv = __root.aeron_exclusive_publication_offerv;
+    pub const aeron_exclusive_publication_try_claim = __root.aeron_exclusive_publication_try_claim;
+    pub const aeron_exclusive_publication_append_padding = __root.aeron_exclusive_publication_append_padding;
+    pub const aeron_exclusive_publication_offer_block = __root.aeron_exclusive_publication_offer_block;
+    pub const aeron_exclusive_publication_channel_status = __root.aeron_exclusive_publication_channel_status;
+    pub const aeron_exclusive_publication_constants = __root.aeron_exclusive_publication_constants;
+    pub const aeron_exclusive_publication_position = __root.aeron_exclusive_publication_position;
+    pub const aeron_exclusive_publication_position_limit = __root.aeron_exclusive_publication_position_limit;
+    pub const aeron_exclusive_publication_close = __root.aeron_exclusive_publication_close;
+    pub const aeron_exclusive_publication_revoke_on_close = __root.aeron_exclusive_publication_revoke_on_close;
+    pub const aeron_exclusive_publication_revoke = __root.aeron_exclusive_publication_revoke;
+    pub const aeron_exclusive_publication_is_closed = __root.aeron_exclusive_publication_is_closed;
+    pub const aeron_exclusive_publication_is_connected = __root.aeron_exclusive_publication_is_connected;
+    pub const aeron_exclusive_publication_local_sockaddrs = __root.aeron_exclusive_publication_local_sockaddrs;
+    pub const offer = __root.aeron_exclusive_publication_offer;
+    pub const offerv = __root.aeron_exclusive_publication_offerv;
+    pub const claim = __root.aeron_exclusive_publication_try_claim;
+    pub const padding = __root.aeron_exclusive_publication_append_padding;
+    pub const block = __root.aeron_exclusive_publication_offer_block;
+    pub const status = __root.aeron_exclusive_publication_channel_status;
+    pub const constants = __root.aeron_exclusive_publication_constants;
+    pub const position = __root.aeron_exclusive_publication_position;
+    pub const limit = __root.aeron_exclusive_publication_position_limit;
+    pub const closed = __root.aeron_exclusive_publication_is_closed;
+    pub const connected = __root.aeron_exclusive_publication_is_connected;
+    pub const sockaddrs = __root.aeron_exclusive_publication_local_sockaddrs;
+};
 pub const aeron_exclusive_publication_t = struct_aeron_exclusive_publication_stct;
-pub const struct_aeron_header_stct = opaque {};
+pub const struct_aeron_header_stct = opaque {
+    pub const aeron_header_values = __root.aeron_header_values;
+    pub const aeron_header_position = __root.aeron_header_position;
+    pub const aeron_header_position_bits_to_shift = __root.aeron_header_position_bits_to_shift;
+    pub const aeron_header_next_term_offset = __root.aeron_header_next_term_offset;
+    pub const aeron_header_context = __root.aeron_header_context;
+    pub const values = __root.aeron_header_values;
+    pub const position = __root.aeron_header_position;
+    pub const shift = __root.aeron_header_position_bits_to_shift;
+    pub const offset = __root.aeron_header_next_term_offset;
+    pub const context = __root.aeron_header_context;
+};
 pub const aeron_header_t = struct_aeron_header_stct;
 pub const struct_aeron_header_values_frame_stct = extern struct {
-    frame_length: i32 = @import("std").mem.zeroes(i32),
-    version: i8 = @import("std").mem.zeroes(i8),
-    flags: u8 = @import("std").mem.zeroes(u8),
-    type: i16 = @import("std").mem.zeroes(i16),
-    term_offset: i32 = @import("std").mem.zeroes(i32),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    term_id: i32 = @import("std").mem.zeroes(i32),
-    reserved_value: i64 = @import("std").mem.zeroes(i64),
+    frame_length: i32 = 0,
+    version: i8 = 0,
+    flags: u8 = 0,
+    type: i16 = 0,
+    term_offset: i32 = 0,
+    session_id: i32 = 0,
+    stream_id: i32 = 0,
+    term_id: i32 = 0,
+    reserved_value: i64 = 0,
 };
 pub const aeron_header_values_frame_t = struct_aeron_header_values_frame_stct;
 pub const struct_aeron_header_values_stct = extern struct {
     frame: aeron_header_values_frame_t = @import("std").mem.zeroes(aeron_header_values_frame_t),
-    initial_term_id: i32 = @import("std").mem.zeroes(i32),
-    position_bits_to_shift: usize = @import("std").mem.zeroes(usize),
+    initial_term_id: i32 = 0,
+    position_bits_to_shift: usize = 0,
 };
 pub const aeron_header_values_t = struct_aeron_header_values_stct;
-pub const struct_aeron_counter_stct = opaque {};
+pub const struct_aeron_counter_stct = opaque {
+    pub const aeron_counter_addr = __root.aeron_counter_addr;
+    pub const aeron_counter_constants = __root.aeron_counter_constants;
+    pub const aeron_counter_close = __root.aeron_counter_close;
+    pub const aeron_counter_is_closed = __root.aeron_counter_is_closed;
+    pub const addr = __root.aeron_counter_addr;
+    pub const constants = __root.aeron_counter_constants;
+    pub const closed = __root.aeron_counter_is_closed;
+};
 pub const aeron_counter_t = struct_aeron_counter_stct;
 pub const struct_aeron_log_buffer_stct = opaque {};
 pub const aeron_log_buffer_t = struct_aeron_log_buffer_stct;
@@ -601,13 +964,25 @@ pub const aeron_async_add_exclusive_publication_t = struct_aeron_client_register
 pub const aeron_async_add_counter_t = struct_aeron_client_registering_resource_stct;
 pub const aeron_async_destination_t = struct_aeron_client_registering_resource_stct;
 pub const aeron_async_destination_by_id_t = struct_aeron_client_registering_resource_stct;
-pub const struct_aeron_image_fragment_assembler_stct = opaque {};
+pub const struct_aeron_image_fragment_assembler_stct = opaque {
+    pub const aeron_image_fragment_assembler_delete = __root.aeron_image_fragment_assembler_delete;
+    pub const delete = __root.aeron_image_fragment_assembler_delete;
+};
 pub const aeron_image_fragment_assembler_t = struct_aeron_image_fragment_assembler_stct;
-pub const struct_aeron_image_controlled_fragment_assembler_stct = opaque {};
+pub const struct_aeron_image_controlled_fragment_assembler_stct = opaque {
+    pub const aeron_image_controlled_fragment_assembler_delete = __root.aeron_image_controlled_fragment_assembler_delete;
+    pub const delete = __root.aeron_image_controlled_fragment_assembler_delete;
+};
 pub const aeron_image_controlled_fragment_assembler_t = struct_aeron_image_controlled_fragment_assembler_stct;
-pub const struct_aeron_fragment_assembler_stct = opaque {};
+pub const struct_aeron_fragment_assembler_stct = opaque {
+    pub const aeron_fragment_assembler_delete = __root.aeron_fragment_assembler_delete;
+    pub const delete = __root.aeron_fragment_assembler_delete;
+};
 pub const aeron_fragment_assembler_t = struct_aeron_fragment_assembler_stct;
-pub const struct_aeron_controlled_fragment_assembler_stct = opaque {};
+pub const struct_aeron_controlled_fragment_assembler_stct = opaque {
+    pub const aeron_controlled_fragment_assembler_delete = __root.aeron_controlled_fragment_assembler_delete;
+    pub const delete = __root.aeron_controlled_fragment_assembler_delete;
+};
 pub const aeron_controlled_fragment_assembler_t = struct_aeron_controlled_fragment_assembler_stct;
 pub extern fn aeron_context_set_dir(context: [*c]aeron_context_t, value: [*c]const u8) c_int;
 pub extern fn aeron_context_get_dir(context: [*c]aeron_context_t) [*c]const u8;
@@ -625,7 +1000,7 @@ pub extern fn aeron_context_set_client_name(context: [*c]aeron_context_t, value:
 pub extern fn aeron_context_get_client_name(context: [*c]aeron_context_t) [*c]const u8;
 pub extern fn aeron_publication_error_values_copy(dst: [*c][*c]aeron_publication_error_values_t, src: [*c]aeron_publication_error_values_t) c_int;
 pub extern fn aeron_publication_error_values_delete(to_delete: [*c]aeron_publication_error_values_t) void;
-pub const aeron_notification_t = ?*const fn (?*anyopaque) callconv(.c) void;
+pub const aeron_notification_t = ?*const fn (clientd: ?*anyopaque) callconv(.c) void;
 pub extern fn aeron_context_set_error_handler(context: [*c]aeron_context_t, handler: aeron_error_handler_t, clientd: ?*anyopaque) c_int;
 pub extern fn aeron_context_get_error_handler(context: [*c]aeron_context_t) aeron_error_handler_t;
 pub extern fn aeron_context_get_error_handler_clientd(context: [*c]aeron_context_t) ?*anyopaque;
@@ -678,18 +1053,18 @@ pub extern fn aeron_async_add_counter(async: [*c]?*aeron_async_add_counter_t, cl
 pub extern fn aeron_async_add_counter_poll(counter: [*c]?*aeron_counter_t, async: ?*aeron_async_add_counter_t) c_int;
 pub extern fn aeron_async_add_static_counter(async: [*c]?*aeron_async_add_counter_t, client: ?*aeron_t, type_id: i32, key_buffer: [*c]const u8, key_buffer_length: usize, label_buffer: [*c]const u8, label_buffer_length: usize, registration_id: i64) c_int;
 pub const struct_aeron_on_available_counter_pair_stct = extern struct {
-    handler: aeron_on_available_counter_t = @import("std").mem.zeroes(aeron_on_available_counter_t),
-    clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
+    handler: aeron_on_available_counter_t = null,
+    clientd: ?*anyopaque = null,
 };
 pub const aeron_on_available_counter_pair_t = struct_aeron_on_available_counter_pair_stct;
 pub const struct_aeron_on_unavailable_counter_pair_stct = extern struct {
-    handler: aeron_on_unavailable_counter_t = @import("std").mem.zeroes(aeron_on_unavailable_counter_t),
-    clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
+    handler: aeron_on_unavailable_counter_t = null,
+    clientd: ?*anyopaque = null,
 };
 pub const aeron_on_unavailable_counter_pair_t = struct_aeron_on_unavailable_counter_pair_stct;
 pub const struct_aeron_on_close_client_pair_stct = extern struct {
-    handler: aeron_on_close_client_t = @import("std").mem.zeroes(aeron_on_close_client_t),
-    clientd: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
+    handler: aeron_on_close_client_t = null,
+    clientd: ?*anyopaque = null,
 };
 pub const aeron_on_close_client_pair_t = struct_aeron_on_close_client_pair_stct;
 pub extern fn aeron_add_available_counter_handler(client: ?*aeron_t, pair: [*c]aeron_on_available_counter_pair_t) c_int;
@@ -699,31 +1074,31 @@ pub extern fn aeron_remove_unavailable_counter_handler(client: ?*aeron_t, pair: 
 pub extern fn aeron_add_close_handler(client: ?*aeron_t, pair: [*c]aeron_on_close_client_pair_t) c_int;
 pub extern fn aeron_remove_close_handler(client: ?*aeron_t, pair: [*c]aeron_on_close_client_pair_t) c_int;
 pub const struct_aeron_counter_value_descriptor_stct = extern struct {
-    counter_value: i64 = @import("std").mem.zeroes(i64),
-    registration_id: i64 = @import("std").mem.zeroes(i64),
-    owner_id: i64 = @import("std").mem.zeroes(i64),
-    reference_id: i64 = @import("std").mem.zeroes(i64),
+    counter_value: i64 = 0,
+    registration_id: i64 = 0,
+    owner_id: i64 = 0,
+    reference_id: i64 = 0,
     pad1: [96]u8 = @import("std").mem.zeroes([96]u8),
 };
 pub const aeron_counter_value_descriptor_t = struct_aeron_counter_value_descriptor_stct;
 pub const struct_aeron_counter_metadata_descriptor_stct = extern struct {
-    state: i32 = @import("std").mem.zeroes(i32),
-    type_id: i32 = @import("std").mem.zeroes(i32),
-    free_for_reuse_deadline_ms: i64 = @import("std").mem.zeroes(i64),
+    state: i32 = 0,
+    type_id: i32 = 0,
+    free_for_reuse_deadline_ms: i64 = 0,
     key: [112]u8 = @import("std").mem.zeroes([112]u8),
-    label_length: i32 = @import("std").mem.zeroes(i32),
+    label_length: i32 = 0,
     label: [380]u8 = @import("std").mem.zeroes([380]u8),
 };
 pub const aeron_counter_metadata_descriptor_t = struct_aeron_counter_metadata_descriptor_stct;
 pub const struct_aeron_counters_reader_buffers_stct = extern struct {
-    values: [*c]u8 = @import("std").mem.zeroes([*c]u8),
-    metadata: [*c]u8 = @import("std").mem.zeroes([*c]u8),
-    values_length: usize = @import("std").mem.zeroes(usize),
-    metadata_length: usize = @import("std").mem.zeroes(usize),
+    values: [*c]u8 = null,
+    metadata: [*c]u8 = null,
+    values_length: usize = 0,
+    metadata_length: usize = 0,
 };
 pub const aeron_counters_reader_buffers_t = struct_aeron_counters_reader_buffers_stct;
 pub extern fn aeron_counters_reader_get_buffers(reader: ?*aeron_counters_reader_t, buffers: [*c]aeron_counters_reader_buffers_t) c_int;
-pub const aeron_counters_reader_foreach_counter_func_t = ?*const fn (i64, i32, i32, [*c]const u8, usize, [*c]const u8, usize, ?*anyopaque) callconv(.c) void;
+pub const aeron_counters_reader_foreach_counter_func_t = ?*const fn (value: i64, id: i32, type_id: i32, key: [*c]const u8, key_length: usize, label: [*c]const u8, label_length: usize, clientd: ?*anyopaque) callconv(.c) void;
 pub extern fn aeron_counters_reader_foreach_counter(counters_reader: ?*aeron_counters_reader_t, func: aeron_counters_reader_foreach_counter_func_t, clientd: ?*anyopaque) void;
 pub extern fn aeron_counters_reader_find_by_type_id_and_registration_id(counters_reader: ?*aeron_counters_reader_t, type_id: i32, registration_id: i64) i32;
 pub extern fn aeron_counters_reader_max_counter_id(reader: ?*aeron_counters_reader_t) i32;
@@ -736,28 +1111,28 @@ pub extern fn aeron_counters_reader_counter_type_id(counters_reader: ?*aeron_cou
 pub extern fn aeron_counters_reader_metadata_key(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, key_p: [*c][*c]u8) c_int;
 pub extern fn aeron_counters_reader_counter_label(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, buffer: [*c]u8, buffer_length: usize) c_int;
 pub extern fn aeron_counters_reader_free_for_reuse_deadline_ms(counters_reader: ?*aeron_counters_reader_t, counter_id: i32, deadline_ms: [*c]i64) c_int;
-pub const aeron_reserved_value_supplier_t = ?*const fn (?*anyopaque, [*c]u8, usize) callconv(.c) i64;
+pub const aeron_reserved_value_supplier_t = ?*const fn (clientd: ?*anyopaque, buffer: [*c]u8, frame_length: usize) callconv(.c) i64;
 pub const struct_aeron_iovec_stct = extern struct {
-    iov_base: [*c]u8 = @import("std").mem.zeroes([*c]u8),
-    iov_len: usize = @import("std").mem.zeroes(usize),
+    iov_base: [*c]u8 = null,
+    iov_len: usize = 0,
 };
 pub const aeron_iovec_t = struct_aeron_iovec_stct;
 pub extern fn aeron_buffer_claim_commit(buffer_claim: [*c]aeron_buffer_claim_t) c_int;
 pub extern fn aeron_buffer_claim_abort(buffer_claim: [*c]aeron_buffer_claim_t) c_int;
 pub const struct_aeron_publication_constants_stct = extern struct {
-    channel: [*c]const u8 = @import("std").mem.zeroes([*c]const u8),
-    original_registration_id: i64 = @import("std").mem.zeroes(i64),
-    registration_id: i64 = @import("std").mem.zeroes(i64),
-    max_possible_position: i64 = @import("std").mem.zeroes(i64),
-    position_bits_to_shift: usize = @import("std").mem.zeroes(usize),
-    term_buffer_length: usize = @import("std").mem.zeroes(usize),
-    max_message_length: usize = @import("std").mem.zeroes(usize),
-    max_payload_length: usize = @import("std").mem.zeroes(usize),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    initial_term_id: i32 = @import("std").mem.zeroes(i32),
-    publication_limit_counter_id: i32 = @import("std").mem.zeroes(i32),
-    channel_status_indicator_id: i32 = @import("std").mem.zeroes(i32),
+    channel: [*c]const u8 = null,
+    original_registration_id: i64 = 0,
+    registration_id: i64 = 0,
+    max_possible_position: i64 = 0,
+    position_bits_to_shift: usize = 0,
+    term_buffer_length: usize = 0,
+    max_message_length: usize = 0,
+    max_payload_length: usize = 0,
+    stream_id: i32 = 0,
+    session_id: i32 = 0,
+    initial_term_id: i32 = 0,
+    publication_limit_counter_id: i32 = 0,
+    channel_status_indicator_id: i32 = 0,
 };
 pub const aeron_publication_constants_t = struct_aeron_publication_constants_stct;
 pub extern fn aeron_publication_offer(publication: ?*aeron_publication_t, buffer: [*c]const u8, length: usize, reserved_value_supplier: aeron_reserved_value_supplier_t, clientd: ?*anyopaque) i64;
@@ -797,27 +1172,27 @@ pub extern fn aeron_exclusive_publication_revoke(publication: ?*aeron_exclusive_
 pub extern fn aeron_exclusive_publication_is_closed(publication: ?*aeron_exclusive_publication_t) bool;
 pub extern fn aeron_exclusive_publication_is_connected(publication: ?*aeron_exclusive_publication_t) bool;
 pub extern fn aeron_exclusive_publication_local_sockaddrs(publication: ?*aeron_exclusive_publication_t, address_vec: [*c]aeron_iovec_t, address_vec_len: usize) c_int;
-pub const aeron_fragment_handler_t = ?*const fn (?*anyopaque, [*c]const u8, usize, ?*aeron_header_t) callconv(.c) void;
+pub const aeron_fragment_handler_t = ?*const fn (clientd: ?*anyopaque, buffer: [*c]const u8, length: usize, header: ?*aeron_header_t) callconv(.c) void;
 pub const AERON_ACTION_ABORT: c_int = 1;
 pub const AERON_ACTION_BREAK: c_int = 2;
 pub const AERON_ACTION_COMMIT: c_int = 3;
 pub const AERON_ACTION_CONTINUE: c_int = 4;
 pub const enum_aeron_controlled_fragment_handler_action_en = c_uint;
 pub const aeron_controlled_fragment_handler_action_t = enum_aeron_controlled_fragment_handler_action_en;
-pub const aeron_controlled_fragment_handler_t = ?*const fn (?*anyopaque, [*c]const u8, usize, ?*aeron_header_t) callconv(.c) aeron_controlled_fragment_handler_action_t;
-pub const aeron_block_handler_t = ?*const fn (?*anyopaque, [*c]const u8, usize, i32, i32) callconv(.c) void;
+pub const aeron_controlled_fragment_handler_t = ?*const fn (clientd: ?*anyopaque, buffer: [*c]const u8, length: usize, header: ?*aeron_header_t) callconv(.c) aeron_controlled_fragment_handler_action_t;
+pub const aeron_block_handler_t = ?*const fn (clientd: ?*anyopaque, buffer: [*c]const u8, length: usize, session_id: i32, term_id: i32) callconv(.c) void;
 pub extern fn aeron_header_values(header: ?*aeron_header_t, values: [*c]aeron_header_values_t) c_int;
 pub extern fn aeron_header_position(header: ?*aeron_header_t) i64;
 pub extern fn aeron_header_position_bits_to_shift(header: ?*aeron_header_t) usize;
 pub extern fn aeron_header_next_term_offset(header: ?*aeron_header_t) i32;
 pub extern fn aeron_header_context(header: ?*aeron_header_t) ?*anyopaque;
 pub const struct_aeron_subscription_constants_stct = extern struct {
-    channel: [*c]const u8 = @import("std").mem.zeroes([*c]const u8),
-    on_available_image: aeron_on_available_image_t = @import("std").mem.zeroes(aeron_on_available_image_t),
-    on_unavailable_image: aeron_on_unavailable_image_t = @import("std").mem.zeroes(aeron_on_unavailable_image_t),
-    registration_id: i64 = @import("std").mem.zeroes(i64),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    channel_status_indicator_id: i32 = @import("std").mem.zeroes(i32),
+    channel: [*c]const u8 = null,
+    on_available_image: aeron_on_available_image_t = null,
+    on_unavailable_image: aeron_on_unavailable_image_t = null,
+    registration_id: i64 = 0,
+    stream_id: i32 = 0,
+    channel_status_indicator_id: i32 = 0,
 };
 pub const aeron_subscription_constants_t = struct_aeron_subscription_constants_stct;
 pub extern fn aeron_subscription_poll(subscription: ?*aeron_subscription_t, handler: aeron_fragment_handler_t, clientd: ?*anyopaque, fragment_limit: usize) c_int;
@@ -828,7 +1203,7 @@ pub extern fn aeron_subscription_constants(subscription: ?*aeron_subscription_t,
 pub extern fn aeron_subscription_image_count(subscription: ?*aeron_subscription_t) c_int;
 pub extern fn aeron_subscription_image_by_session_id(subscription: ?*aeron_subscription_t, session_id: i32) ?*aeron_image_t;
 pub extern fn aeron_subscription_image_at_index(subscription: ?*aeron_subscription_t, index: usize) ?*aeron_image_t;
-pub extern fn aeron_subscription_for_each_image(subscription: ?*aeron_subscription_t, handler: ?*const fn (?*aeron_image_t, ?*anyopaque) callconv(.c) void, clientd: ?*anyopaque) void;
+pub extern fn aeron_subscription_for_each_image(subscription: ?*aeron_subscription_t, handler: ?*const fn (image: ?*aeron_image_t, clientd: ?*anyopaque) callconv(.c) void, clientd: ?*anyopaque) void;
 pub extern fn aeron_subscription_image_retain(subscription: ?*aeron_subscription_t, image: ?*aeron_image_t) c_int;
 pub extern fn aeron_subscription_image_release(subscription: ?*aeron_subscription_t, image: ?*aeron_image_t) c_int;
 pub extern fn aeron_subscription_is_closed(subscription: ?*aeron_subscription_t) bool;
@@ -841,16 +1216,16 @@ pub extern fn aeron_subscription_local_sockaddrs(subscription: ?*aeron_subscript
 pub extern fn aeron_subscription_resolved_endpoint(subscription: ?*aeron_subscription_t, address: [*c]const u8, address_len: usize) c_int;
 pub extern fn aeron_subscription_try_resolve_channel_endpoint_port(subscription: ?*aeron_subscription_t, uri: [*c]u8, uri_len: usize) c_int;
 pub const struct_aeron_image_constants_stct = extern struct {
-    subscription: ?*aeron_subscription_t = @import("std").mem.zeroes(?*aeron_subscription_t),
-    source_identity: [*c]const u8 = @import("std").mem.zeroes([*c]const u8),
-    correlation_id: i64 = @import("std").mem.zeroes(i64),
-    join_position: i64 = @import("std").mem.zeroes(i64),
-    position_bits_to_shift: usize = @import("std").mem.zeroes(usize),
-    term_buffer_length: usize = @import("std").mem.zeroes(usize),
-    mtu_length: usize = @import("std").mem.zeroes(usize),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    initial_term_id: i32 = @import("std").mem.zeroes(i32),
-    subscriber_position_id: i32 = @import("std").mem.zeroes(i32),
+    subscription: ?*aeron_subscription_t = null,
+    source_identity: [*c]const u8 = null,
+    correlation_id: i64 = 0,
+    join_position: i64 = 0,
+    position_bits_to_shift: usize = 0,
+    term_buffer_length: usize = 0,
+    mtu_length: usize = 0,
+    session_id: i32 = 0,
+    initial_term_id: i32 = 0,
+    subscriber_position_id: i32 = 0,
 };
 pub const aeron_image_constants_t = struct_aeron_image_constants_stct;
 pub extern fn aeron_image_constants(image: ?*aeron_image_t, constants: [*c]aeron_image_constants_t) c_int;
@@ -882,8 +1257,8 @@ pub extern fn aeron_controlled_fragment_assembler_delete(assembler: ?*aeron_cont
 pub extern fn aeron_controlled_fragment_assembler_handler(clientd: ?*anyopaque, buffer: [*c]const u8, length: usize, header: ?*aeron_header_t) aeron_controlled_fragment_handler_action_t;
 pub extern fn aeron_counter_addr(counter: ?*aeron_counter_t) [*c]i64;
 pub const struct_aeron_counter_constants_stct = extern struct {
-    registration_id: i64 = @import("std").mem.zeroes(i64),
-    counter_id: i32 = @import("std").mem.zeroes(i32),
+    registration_id: i64 = 0,
+    counter_id: i32 = 0,
 };
 pub const aeron_counter_constants_t = struct_aeron_counter_constants_stct;
 pub extern fn aeron_counter_constants(counter: ?*aeron_counter_t, constants: [*c]aeron_counter_constants_t) c_int;
@@ -913,46 +1288,55 @@ pub extern fn aeron_async_add_exclusive_publication_get_registration_id(add_excl
 pub extern fn aeron_async_add_subscription_get_registration_id(add_subscription: ?*aeron_async_add_subscription_t) i64;
 pub extern fn aeron_async_destination_get_registration_id(async_destination: ?*aeron_async_destination_t) i64;
 pub extern fn aeron_context_request_driver_termination(directory: [*c]const u8, token_buffer: [*c]const u8, token_length: usize) c_int;
-pub const struct_aeron_cnc_stct = opaque {};
+pub const struct_aeron_cnc_stct = opaque {
+    pub const aeron_cnc_constants = __root.aeron_cnc_constants;
+    pub const aeron_cnc_filename = __root.aeron_cnc_filename;
+    pub const aeron_cnc_to_driver_heartbeat = __root.aeron_cnc_to_driver_heartbeat;
+    pub const aeron_cnc_error_log_read = __root.aeron_cnc_error_log_read;
+    pub const aeron_cnc_counters_reader = __root.aeron_cnc_counters_reader;
+    pub const aeron_cnc_loss_reporter_read = __root.aeron_cnc_loss_reporter_read;
+    pub const aeron_cnc_close = __root.aeron_cnc_close;
+    pub const constants = __root.aeron_cnc_constants;
+    pub const filename = __root.aeron_cnc_filename;
+    pub const heartbeat = __root.aeron_cnc_to_driver_heartbeat;
+    pub const reader = __root.aeron_cnc_counters_reader;
+};
 pub const aeron_cnc_t = struct_aeron_cnc_stct;
 pub const struct_aeron_cnc_constants_stct = extern struct {
-    cnc_version: i32 = @import("std").mem.zeroes(i32),
-    to_driver_buffer_length: i32 = @import("std").mem.zeroes(i32),
-    to_clients_buffer_length: i32 = @import("std").mem.zeroes(i32),
-    counter_metadata_buffer_length: i32 = @import("std").mem.zeroes(i32),
-    counter_values_buffer_length: i32 = @import("std").mem.zeroes(i32),
-    error_log_buffer_length: i32 = @import("std").mem.zeroes(i32),
-    client_liveness_timeout: i64 = @import("std").mem.zeroes(i64),
-    start_timestamp: i64 = @import("std").mem.zeroes(i64),
-    pid: i64 = @import("std").mem.zeroes(i64),
-    file_page_size: i32 = @import("std").mem.zeroes(i32),
+    cnc_version: i32 = 0,
+    to_driver_buffer_length: i32 = 0,
+    to_clients_buffer_length: i32 = 0,
+    counter_metadata_buffer_length: i32 = 0,
+    counter_values_buffer_length: i32 = 0,
+    error_log_buffer_length: i32 = 0,
+    client_liveness_timeout: i64 = 0,
+    start_timestamp: i64 = 0,
+    pid: i64 = 0,
+    file_page_size: i32 = 0,
 };
 pub const aeron_cnc_constants_t = struct_aeron_cnc_constants_stct;
 pub extern fn aeron_cnc_init(aeron_cnc: [*c]?*aeron_cnc_t, base_path: [*c]const u8, timeout_ms: i64) c_int;
 pub extern fn aeron_cnc_constants(aeron_cnc: ?*aeron_cnc_t, constants: [*c]aeron_cnc_constants_t) c_int;
 pub extern fn aeron_cnc_filename(aeron_cnc: ?*aeron_cnc_t) [*c]const u8;
 pub extern fn aeron_cnc_to_driver_heartbeat(aeron_cnc: ?*aeron_cnc_t) i64;
-pub const aeron_error_log_reader_func_t = ?*const fn (i32, i64, i64, [*c]const u8, usize, ?*anyopaque) callconv(.c) void;
+pub const aeron_error_log_reader_func_t = ?*const fn (observation_count: i32, first_observation_timestamp: i64, last_observation_timestamp: i64, @"error": [*c]const u8, error_length: usize, clientd: ?*anyopaque) callconv(.c) void;
 pub extern fn aeron_cnc_error_log_read(aeron_cnc: ?*aeron_cnc_t, callback: aeron_error_log_reader_func_t, clientd: ?*anyopaque, since_timestamp: i64) usize;
 pub extern fn aeron_cnc_counters_reader(aeron_cnc: ?*aeron_cnc_t) ?*aeron_counters_reader_t;
-pub const aeron_loss_reporter_read_entry_func_t = ?*const fn (?*anyopaque, i64, i64, i64, i64, i32, i32, [*c]const u8, i32, [*c]const u8, i32) callconv(.c) void;
+pub const aeron_loss_reporter_read_entry_func_t = ?*const fn (clientd: ?*anyopaque, observation_count: i64, total_bytes_lost: i64, first_observation_timestamp: i64, last_observation_timestamp: i64, session_id: i32, stream_id: i32, channel: [*c]const u8, channel_length: i32, source: [*c]const u8, source_length: i32) callconv(.c) void;
 pub extern fn aeron_cnc_loss_reporter_read(aeron_cnc: ?*aeron_cnc_t, entry_func: aeron_loss_reporter_read_entry_func_t, clientd: ?*anyopaque) c_int;
 pub extern fn aeron_cnc_close(aeron_cnc: ?*aeron_cnc_t) void;
-pub const ptrdiff_t = c_long;
-pub const max_align_t = extern struct {
-    __clang_max_align_nonce1: c_longlong align(8) = @import("std").mem.zeroes(c_longlong),
-    __clang_max_align_nonce2: c_longdouble align(16) = @import("std").mem.zeroes(c_longdouble),
-};
 pub extern fn aeron_thread_set_name(role_name: [*c]const u8) void;
 pub extern fn aeron_nano_sleep(nanoseconds: u64) void;
 pub extern fn aeron_micro_sleep(microseconds: c_uint) void;
 pub extern fn aeron_thread_set_affinity(role_name: [*c]const u8, cpu_affinity_no: u8) c_int;
 pub const struct_sched_param = extern struct {
-    sched_priority: c_int = @import("std").mem.zeroes(c_int),
+    sched_priority: c_int = 0,
 };
 pub const __cpu_mask = c_ulong;
 pub const cpu_set_t = extern struct {
     __bits: [16]__cpu_mask = @import("std").mem.zeroes([16]__cpu_mask),
+    pub const __sched_cpufree = __root.__sched_cpufree;
+    pub const cpufree = __root.__sched_cpufree;
 };
 pub extern fn __sched_cpucount(__setsize: usize, __setp: [*c]const cpu_set_t) c_int;
 pub extern fn __sched_cpualloc(__count: usize) [*c]cpu_set_t;
@@ -966,17 +1350,23 @@ pub extern fn sched_get_priority_max(__algorithm: c_int) c_int;
 pub extern fn sched_get_priority_min(__algorithm: c_int) c_int;
 pub extern fn sched_rr_get_interval(__pid: __pid_t, __t: [*c]struct_timespec) c_int;
 pub const struct_tm = extern struct {
-    tm_sec: c_int = @import("std").mem.zeroes(c_int),
-    tm_min: c_int = @import("std").mem.zeroes(c_int),
-    tm_hour: c_int = @import("std").mem.zeroes(c_int),
-    tm_mday: c_int = @import("std").mem.zeroes(c_int),
-    tm_mon: c_int = @import("std").mem.zeroes(c_int),
-    tm_year: c_int = @import("std").mem.zeroes(c_int),
-    tm_wday: c_int = @import("std").mem.zeroes(c_int),
-    tm_yday: c_int = @import("std").mem.zeroes(c_int),
-    tm_isdst: c_int = @import("std").mem.zeroes(c_int),
-    tm_gmtoff: c_long = @import("std").mem.zeroes(c_long),
-    tm_zone: [*c]const u8 = @import("std").mem.zeroes([*c]const u8),
+    tm_sec: c_int = 0,
+    tm_min: c_int = 0,
+    tm_hour: c_int = 0,
+    tm_mday: c_int = 0,
+    tm_mon: c_int = 0,
+    tm_year: c_int = 0,
+    tm_wday: c_int = 0,
+    tm_yday: c_int = 0,
+    tm_isdst: c_int = 0,
+    tm_gmtoff: c_long = 0,
+    tm_zone: [*c]const u8 = null,
+    pub const mktime = __root.mktime;
+    pub const asctime = __root.asctime;
+    pub const asctime_r = __root.asctime_r;
+    pub const timegm = __root.timegm;
+    pub const timelocal = __root.timelocal;
+    pub const r = __root.asctime_r;
 };
 pub const struct_itimerspec = extern struct {
     it_interval: struct_timespec = @import("std").mem.zeroes(struct_timespec),
@@ -986,9 +1376,9 @@ pub const struct_sigevent = opaque {};
 pub const struct___locale_data_4 = opaque {};
 pub const struct___locale_struct = extern struct {
     __locales: [13]?*struct___locale_data_4 = @import("std").mem.zeroes([13]?*struct___locale_data_4),
-    __ctype_b: [*c]const c_ushort = @import("std").mem.zeroes([*c]const c_ushort),
-    __ctype_tolower: [*c]const c_int = @import("std").mem.zeroes([*c]const c_int),
-    __ctype_toupper: [*c]const c_int = @import("std").mem.zeroes([*c]const c_int),
+    __ctype_b: [*c]const c_ushort = null,
+    __ctype_tolower: [*c]const c_int = null,
+    __ctype_toupper: [*c]const c_int = null,
     __names: [13][*c]const u8 = @import("std").mem.zeroes([13][*c]const u8),
 };
 pub const __locale_t = [*c]struct___locale_struct;
@@ -1032,8 +1422,10 @@ pub extern fn timespec_get(__ts: [*c]struct_timespec, __base: c_int) c_int;
 pub const __jmp_buf = [8]c_long;
 pub const struct___jmp_buf_tag = extern struct {
     __jmpbuf: __jmp_buf = @import("std").mem.zeroes(__jmp_buf),
-    __mask_was_saved: c_int = @import("std").mem.zeroes(c_int),
+    __mask_was_saved: c_int = 0,
     __saved_mask: __sigset_t = @import("std").mem.zeroes(__sigset_t),
+    pub const __sigsetjmp = __root.__sigsetjmp;
+    pub const sigsetjmp = __root.__sigsetjmp;
 };
 pub const PTHREAD_CREATE_JOINABLE: c_int = 0;
 pub const PTHREAD_CREATE_DETACHED: c_int = 1;
@@ -1071,10 +1463,10 @@ pub const PTHREAD_PROCESS_PRIVATE: c_int = 0;
 pub const PTHREAD_PROCESS_SHARED: c_int = 1;
 const enum_unnamed_12 = c_uint;
 pub const struct__pthread_cleanup_buffer = extern struct {
-    __routine: ?*const fn (?*anyopaque) callconv(.c) void = @import("std").mem.zeroes(?*const fn (?*anyopaque) callconv(.c) void),
-    __arg: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    __canceltype: c_int = @import("std").mem.zeroes(c_int),
-    __prev: [*c]struct__pthread_cleanup_buffer = @import("std").mem.zeroes([*c]struct__pthread_cleanup_buffer),
+    __routine: ?*const fn (?*anyopaque) callconv(.c) void = null,
+    __arg: ?*anyopaque = null,
+    __canceltype: c_int = 0,
+    __prev: [*c]struct__pthread_cleanup_buffer = null,
 };
 pub const PTHREAD_CANCEL_ENABLE: c_int = 0;
 pub const PTHREAD_CANCEL_DISABLE: c_int = 1;
@@ -1118,20 +1510,25 @@ pub extern fn pthread_cancel(__th: pthread_t) c_int;
 pub extern fn pthread_testcancel() void;
 pub const struct___cancel_jmp_buf_tag = extern struct {
     __cancel_jmp_buf: __jmp_buf = @import("std").mem.zeroes(__jmp_buf),
-    __mask_was_saved: c_int = @import("std").mem.zeroes(c_int),
+    __mask_was_saved: c_int = 0,
 };
 pub const __pthread_unwind_buf_t = extern struct {
     __cancel_jmp_buf: [1]struct___cancel_jmp_buf_tag = @import("std").mem.zeroes([1]struct___cancel_jmp_buf_tag),
     __pad: [4]?*anyopaque = @import("std").mem.zeroes([4]?*anyopaque),
+    pub const __pthread_register_cancel = __root.__pthread_register_cancel;
+    pub const __pthread_unregister_cancel = __root.__pthread_unregister_cancel;
+    pub const __pthread_unwind_next = __root.__pthread_unwind_next;
+    pub const cancel = __root.__pthread_register_cancel;
+    pub const next = __root.__pthread_unwind_next;
 };
 pub const struct___pthread_cleanup_frame = extern struct {
-    __cancel_routine: ?*const fn (?*anyopaque) callconv(.c) void = @import("std").mem.zeroes(?*const fn (?*anyopaque) callconv(.c) void),
-    __cancel_arg: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    __do_it: c_int = @import("std").mem.zeroes(c_int),
-    __cancel_type: c_int = @import("std").mem.zeroes(c_int),
+    __cancel_routine: ?*const fn (?*anyopaque) callconv(.c) void = null,
+    __cancel_arg: ?*anyopaque = null,
+    __do_it: c_int = 0,
+    __cancel_type: c_int = 0,
 };
 pub extern fn __pthread_register_cancel(__buf: [*c]__pthread_unwind_buf_t) void;
-pub extern fn __pthread_unregister_cancel(__buf: [*c]__pthread_unwind_buf_t) void;
+pub extern fn __pthread_unregister_cancel(__buf: [*c]__pthread_unwind_buf_t) void; // /usr/include/pthread.h:750:13: warning: TODO weak linkage ignored
 pub extern fn __pthread_unwind_next(__buf: [*c]__pthread_unwind_buf_t) noreturn;
 pub extern fn __sigsetjmp(__env: [*c]struct___jmp_buf_tag, __savemask: c_int) c_int;
 pub extern fn pthread_mutex_init(__mutex: [*c]pthread_mutex_t, __mutexattr: [*c]const pthread_mutexattr_t) c_int;
@@ -1204,28 +1601,18 @@ pub const aeron_mutex_t = pthread_mutex_t;
 pub const aeron_thread_t = pthread_t;
 pub const aeron_thread_attr_t = pthread_attr_t;
 pub const aeron_cond_t = pthread_cond_t;
-pub extern fn proc_yield() void;
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:62:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+pub extern fn proc_yield() void; // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:62:5: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:59:13: warning: unable to translate function, demoted to extern
-pub extern fn aeron_cas_int64(arg_dst: [*c]volatile i64, arg_expected: i64, arg_desired: i64) callconv(.c) bool;
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:73:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+pub extern fn aeron_cas_int64(arg_dst: [*c]volatile i64, arg_expected: i64, arg_desired: i64) callconv(.c) bool; // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:73:5: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:70:13: warning: unable to translate function, demoted to extern
-pub extern fn aeron_cas_uint64(arg_dst: [*c]volatile u64, arg_expected: u64, arg_desired: u64) callconv(.c) bool;
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:84:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+pub extern fn aeron_cas_uint64(arg_dst: [*c]volatile u64, arg_expected: u64, arg_desired: u64) callconv(.c) bool; // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:84:5: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:81:13: warning: unable to translate function, demoted to extern
-pub extern fn aeron_cas_int32(arg_dst: [*c]volatile i32, arg_expected: i32, arg_desired: i32) callconv(.c) bool;
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:95:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+pub extern fn aeron_cas_int32(arg_dst: [*c]volatile i32, arg_expected: i32, arg_desired: i32) callconv(.c) bool; // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:95:5: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:92:13: warning: unable to translate function, demoted to extern
-pub extern fn aeron_acquire() callconv(.c) void;
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:102:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+pub extern fn aeron_acquire() callconv(.c) void; // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:102:5: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:98:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_release() callconv(.c) void;
-pub const aeron_idle_strategy_init_func_t = ?*const fn ([*c]?*anyopaque, [*c]const u8, [*c]const u8) callconv(.c) c_int;
+pub const aeron_idle_strategy_init_func_t = ?*const fn (state: [*c]?*anyopaque, env_var: [*c]const u8, init_args: [*c]const u8) callconv(.c) c_int;
 pub extern fn aeron_semantic_version_compose(major: u8, minor: u8, patch: u8) i32;
 pub extern fn aeron_semantic_version_major(version: i32) u8;
 pub extern fn aeron_semantic_version_minor(version: i32) u8;
@@ -1234,8 +1621,8 @@ pub const aeron_fptr_t = ?*const fn () callconv(.c) void;
 pub const aeron_agent_do_work_func_t = ?*const fn (?*anyopaque) callconv(.c) c_int;
 pub const aeron_agent_on_close_func_t = ?*const fn (?*anyopaque) callconv(.c) void;
 pub const struct_aeron_idle_strategy_stct = extern struct {
-    idle: aeron_idle_strategy_func_t = @import("std").mem.zeroes(aeron_idle_strategy_func_t),
-    init: aeron_idle_strategy_init_func_t = @import("std").mem.zeroes(aeron_idle_strategy_init_func_t),
+    idle: aeron_idle_strategy_func_t = null,
+    init: aeron_idle_strategy_init_func_t = null,
 };
 pub const aeron_idle_strategy_t = struct_aeron_idle_strategy_stct;
 pub extern fn aeron_idle_strategy_sleeping_idle(state: ?*anyopaque, work_count: c_int) void;
@@ -1246,17 +1633,28 @@ pub extern fn aeron_idle_strategy_backoff_idle(state: ?*anyopaque, work_count: c
 pub extern fn aeron_idle_strategy_backoff_state_init(state: [*c]?*anyopaque, max_spins: u64, max_yields: u64, min_park_period_ns: u64, max_park_period_ns: u64) c_int;
 pub extern fn aeron_idle_strategy_init_null(state: [*c]?*anyopaque, env_var: [*c]const u8, load_args: [*c]const u8) c_int;
 pub const struct_aeron_agent_runner_stct = extern struct {
-    role_name: [*c]const u8 = @import("std").mem.zeroes([*c]const u8),
-    agent_state: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    idle_strategy_state: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_start_state: ?*anyopaque = @import("std").mem.zeroes(?*anyopaque),
-    on_start: aeron_agent_on_start_func_t = @import("std").mem.zeroes(aeron_agent_on_start_func_t),
-    do_work: aeron_agent_do_work_func_t = @import("std").mem.zeroes(aeron_agent_do_work_func_t),
-    on_close: aeron_agent_on_close_func_t = @import("std").mem.zeroes(aeron_agent_on_close_func_t),
-    idle_strategy: aeron_idle_strategy_func_t = @import("std").mem.zeroes(aeron_idle_strategy_func_t),
-    thread: aeron_thread_t = @import("std").mem.zeroes(aeron_thread_t),
-    running: bool = @import("std").mem.zeroes(bool),
-    state: u8 = @import("std").mem.zeroes(u8),
+    role_name: [*c]const u8 = null,
+    agent_state: ?*anyopaque = null,
+    idle_strategy_state: ?*anyopaque = null,
+    on_start_state: ?*anyopaque = null,
+    on_start: aeron_agent_on_start_func_t = null,
+    do_work: aeron_agent_do_work_func_t = null,
+    on_close: aeron_agent_on_close_func_t = null,
+    idle_strategy: aeron_idle_strategy_func_t = null,
+    thread: aeron_thread_t = 0,
+    running: bool = false,
+    state: u8 = 0,
+    pub const aeron_agent_init = __root.aeron_agent_init;
+    pub const aeron_agent_start = __root.aeron_agent_start;
+    pub const aeron_agent_do_work = __root.aeron_agent_do_work;
+    pub const aeron_agent_idle = __root.aeron_agent_idle;
+    pub const aeron_agent_stop = __root.aeron_agent_stop;
+    pub const aeron_agent_close = __root.aeron_agent_close;
+    pub const init = __root.aeron_agent_init;
+    pub const start = __root.aeron_agent_start;
+    pub const work = __root.aeron_agent_do_work;
+    pub const idle = __root.aeron_agent_idle;
+    pub const stop = __root.aeron_agent_stop;
 };
 pub const aeron_agent_runner_t = struct_aeron_agent_runner_stct;
 pub extern fn aeron_idle_strategy_load(idle_strategy_name: [*c]const u8, idle_strategy_state: [*c]?*anyopaque, env_var: [*c]const u8, load_args: [*c]const u8) aeron_idle_strategy_func_t;
@@ -1267,9 +1665,7 @@ pub fn aeron_agent_do_work(arg_runner: [*c]aeron_agent_runner_t) callconv(.c) c_
     var runner = arg_runner;
     _ = &runner;
     return runner.*.do_work.?(runner.*.agent_state);
-}
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+} // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:25: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/aeron_agent.h:105:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_agent_is_running(arg_runner: [*c]aeron_agent_runner_t) callconv(.c) bool;
 pub fn aeron_agent_idle(arg_runner: [*c]aeron_agent_runner_t, arg_work_count: c_int) callconv(.c) void {
@@ -1281,70 +1677,70 @@ pub fn aeron_agent_idle(arg_runner: [*c]aeron_agent_runner_t, arg_work_count: c_
 }
 pub extern fn aeron_agent_stop(runner: [*c]aeron_agent_runner_t) c_int;
 pub extern fn aeron_agent_close(runner: [*c]aeron_agent_runner_t) c_int;
-pub extern fn memcpy(__dest: ?*anyopaque, __src: ?*const anyopaque, __n: c_ulong) ?*anyopaque;
-pub extern fn memmove(__dest: ?*anyopaque, __src: ?*const anyopaque, __n: c_ulong) ?*anyopaque;
-pub extern fn memccpy(__dest: ?*anyopaque, __src: ?*const anyopaque, __c: c_int, __n: c_ulong) ?*anyopaque;
-pub extern fn memset(__s: ?*anyopaque, __c: c_int, __n: c_ulong) ?*anyopaque;
-pub extern fn memcmp(__s1: ?*const anyopaque, __s2: ?*const anyopaque, __n: c_ulong) c_int;
+pub extern fn memcpy(noalias __dest: ?*anyopaque, noalias __src: ?*const anyopaque, __n: usize) ?*anyopaque;
+pub extern fn memmove(__dest: ?*anyopaque, __src: ?*const anyopaque, __n: usize) ?*anyopaque;
+pub extern fn memccpy(noalias __dest: ?*anyopaque, noalias __src: ?*const anyopaque, __c: c_int, __n: usize) ?*anyopaque;
+pub extern fn memset(__s: ?*anyopaque, __c: c_int, __n: usize) ?*anyopaque;
+pub extern fn memcmp(__s1: ?*const anyopaque, __s2: ?*const anyopaque, __n: usize) c_int;
 pub extern fn __memcmpeq(__s1: ?*const anyopaque, __s2: ?*const anyopaque, __n: usize) c_int;
-pub extern fn memchr(__s: ?*const anyopaque, __c: c_int, __n: c_ulong) ?*anyopaque;
-pub extern fn strcpy(__dest: [*c]u8, __src: [*c]const u8) [*c]u8;
-pub extern fn strncpy(__dest: [*c]u8, __src: [*c]const u8, __n: c_ulong) [*c]u8;
-pub extern fn strcat(__dest: [*c]u8, __src: [*c]const u8) [*c]u8;
-pub extern fn strncat(__dest: [*c]u8, __src: [*c]const u8, __n: c_ulong) [*c]u8;
+pub extern fn memchr(__s: ?*const anyopaque, __c: c_int, __n: usize) ?*anyopaque;
+pub extern fn strcpy(noalias __dest: [*c]u8, noalias __src: [*c]const u8) [*c]u8;
+pub extern fn strncpy(noalias __dest: [*c]u8, noalias __src: [*c]const u8, __n: usize) [*c]u8;
+pub extern fn strcat(noalias __dest: [*c]u8, noalias __src: [*c]const u8) [*c]u8;
+pub extern fn strncat(noalias __dest: [*c]u8, noalias __src: [*c]const u8, __n: usize) [*c]u8;
 pub extern fn strcmp(__s1: [*c]const u8, __s2: [*c]const u8) c_int;
-pub extern fn strncmp(__s1: [*c]const u8, __s2: [*c]const u8, __n: c_ulong) c_int;
+pub extern fn strncmp(__s1: [*c]const u8, __s2: [*c]const u8, __n: usize) c_int;
 pub extern fn strcoll(__s1: [*c]const u8, __s2: [*c]const u8) c_int;
-pub extern fn strxfrm(__dest: [*c]u8, __src: [*c]const u8, __n: c_ulong) c_ulong;
+pub extern fn strxfrm(noalias __dest: [*c]u8, noalias __src: [*c]const u8, __n: usize) usize;
 pub extern fn strcoll_l(__s1: [*c]const u8, __s2: [*c]const u8, __l: locale_t) c_int;
 pub extern fn strxfrm_l(__dest: [*c]u8, __src: [*c]const u8, __n: usize, __l: locale_t) usize;
 pub extern fn strdup(__s: [*c]const u8) [*c]u8;
-pub extern fn strndup(__string: [*c]const u8, __n: c_ulong) [*c]u8;
+pub extern fn strndup(__string: [*c]const u8, __n: usize) [*c]u8;
 pub extern fn strchr(__s: [*c]const u8, __c: c_int) [*c]u8;
 pub extern fn strrchr(__s: [*c]const u8, __c: c_int) [*c]u8;
 pub extern fn strchrnul(__s: [*c]const u8, __c: c_int) [*c]u8;
-pub extern fn strcspn(__s: [*c]const u8, __reject: [*c]const u8) c_ulong;
-pub extern fn strspn(__s: [*c]const u8, __accept: [*c]const u8) c_ulong;
+pub extern fn strcspn(__s: [*c]const u8, __reject: [*c]const u8) usize;
+pub extern fn strspn(__s: [*c]const u8, __accept: [*c]const u8) usize;
 pub extern fn strpbrk(__s: [*c]const u8, __accept: [*c]const u8) [*c]u8;
 pub extern fn strstr(__haystack: [*c]const u8, __needle: [*c]const u8) [*c]u8;
-pub extern fn strtok(__s: [*c]u8, __delim: [*c]const u8) [*c]u8;
+pub extern fn strtok(noalias __s: [*c]u8, noalias __delim: [*c]const u8) [*c]u8;
 pub extern fn __strtok_r(noalias __s: [*c]u8, noalias __delim: [*c]const u8, noalias __save_ptr: [*c][*c]u8) [*c]u8;
 pub extern fn strtok_r(noalias __s: [*c]u8, noalias __delim: [*c]const u8, noalias __save_ptr: [*c][*c]u8) [*c]u8;
 pub extern fn strcasestr(__haystack: [*c]const u8, __needle: [*c]const u8) [*c]u8;
 pub extern fn memmem(__haystack: ?*const anyopaque, __haystacklen: usize, __needle: ?*const anyopaque, __needlelen: usize) ?*anyopaque;
 pub extern fn __mempcpy(noalias __dest: ?*anyopaque, noalias __src: ?*const anyopaque, __n: usize) ?*anyopaque;
-pub extern fn mempcpy(__dest: ?*anyopaque, __src: ?*const anyopaque, __n: c_ulong) ?*anyopaque;
-pub extern fn strlen(__s: [*c]const u8) c_ulong;
+pub extern fn mempcpy(noalias __dest: ?*anyopaque, noalias __src: ?*const anyopaque, __n: usize) ?*anyopaque;
+pub extern fn strlen(__s: [*c]const u8) usize;
 pub extern fn strnlen(__string: [*c]const u8, __maxlen: usize) usize;
 pub extern fn strerror(__errnum: c_int) [*c]u8;
 pub extern fn strerror_r(__errnum: c_int, __buf: [*c]u8, __buflen: usize) c_int;
 pub extern fn strerror_l(__errnum: c_int, __l: locale_t) [*c]u8;
-pub extern fn bcmp(__s1: ?*const anyopaque, __s2: ?*const anyopaque, __n: c_ulong) c_int;
-pub extern fn bcopy(__src: ?*const anyopaque, __dest: ?*anyopaque, __n: c_ulong) void;
-pub extern fn bzero(__s: ?*anyopaque, __n: c_ulong) void;
+pub extern fn bcmp(__s1: ?*const anyopaque, __s2: ?*const anyopaque, __n: usize) c_int;
+pub extern fn bcopy(__src: ?*const anyopaque, __dest: ?*anyopaque, __n: usize) void;
+pub extern fn bzero(__s: ?*anyopaque, __n: usize) void;
 pub extern fn index(__s: [*c]const u8, __c: c_int) [*c]u8;
 pub extern fn rindex(__s: [*c]const u8, __c: c_int) [*c]u8;
 pub extern fn ffs(__i: c_int) c_int;
 pub extern fn ffsl(__l: c_long) c_int;
 pub extern fn ffsll(__ll: c_longlong) c_int;
 pub extern fn strcasecmp(__s1: [*c]const u8, __s2: [*c]const u8) c_int;
-pub extern fn strncasecmp(__s1: [*c]const u8, __s2: [*c]const u8, __n: c_ulong) c_int;
+pub extern fn strncasecmp(__s1: [*c]const u8, __s2: [*c]const u8, __n: usize) c_int;
 pub extern fn strcasecmp_l(__s1: [*c]const u8, __s2: [*c]const u8, __loc: locale_t) c_int;
 pub extern fn strncasecmp_l(__s1: [*c]const u8, __s2: [*c]const u8, __n: usize, __loc: locale_t) c_int;
 pub extern fn explicit_bzero(__s: ?*anyopaque, __n: usize) void;
 pub extern fn strsep(noalias __stringp: [*c][*c]u8, noalias __delim: [*c]const u8) [*c]u8;
 pub extern fn strsignal(__sig: c_int) [*c]u8;
 pub extern fn __stpcpy(noalias __dest: [*c]u8, noalias __src: [*c]const u8) [*c]u8;
-pub extern fn stpcpy(__dest: [*c]u8, __src: [*c]const u8) [*c]u8;
+pub extern fn stpcpy(noalias __dest: [*c]u8, noalias __src: [*c]const u8) [*c]u8;
 pub extern fn __stpncpy(noalias __dest: [*c]u8, noalias __src: [*c]const u8, __n: usize) [*c]u8;
-pub extern fn stpncpy(__dest: [*c]u8, __src: [*c]const u8, __n: c_ulong) [*c]u8;
-pub extern fn strlcpy(__dest: [*c]u8, __src: [*c]const u8, __n: c_ulong) c_ulong;
-pub extern fn strlcat(__dest: [*c]u8, __src: [*c]const u8, __n: c_ulong) c_ulong;
+pub extern fn stpncpy(noalias __dest: [*c]u8, noalias __src: [*c]const u8, __n: usize) [*c]u8;
+pub extern fn strlcpy(noalias __dest: [*c]u8, noalias __src: [*c]const u8, __n: usize) usize;
+pub extern fn strlcat(noalias __dest: [*c]u8, noalias __src: [*c]const u8, __n: usize) usize;
 pub const struct_aeron_frame_header_stct = extern struct {
-    frame_length: i32 = @import("std").mem.zeroes(i32),
-    version: i8 = @import("std").mem.zeroes(i8),
-    flags: u8 = @import("std").mem.zeroes(u8),
-    type: i16 = @import("std").mem.zeroes(i16),
+    frame_length: i32 = 0,
+    version: i8 = 0,
+    flags: u8 = 0,
+    type: i16 = 0,
 };
 pub const aeron_frame_header_t = struct_aeron_frame_header_stct;
 pub const struct_aeron_data_header_as_longs_stct = extern struct {
@@ -1353,110 +1749,116 @@ pub const struct_aeron_data_header_as_longs_stct = extern struct {
 pub const aeron_data_header_as_longs_t = struct_aeron_data_header_as_longs_stct;
 pub const struct_aeron_setup_header_stct = extern struct {
     frame_header: aeron_frame_header_t = @import("std").mem.zeroes(aeron_frame_header_t),
-    term_offset: i32 = @import("std").mem.zeroes(i32),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    initial_term_id: i32 = @import("std").mem.zeroes(i32),
-    active_term_id: i32 = @import("std").mem.zeroes(i32),
-    term_length: i32 = @import("std").mem.zeroes(i32),
-    mtu: i32 = @import("std").mem.zeroes(i32),
-    ttl: i32 = @import("std").mem.zeroes(i32),
+    term_offset: i32 = 0,
+    session_id: i32 = 0,
+    stream_id: i32 = 0,
+    initial_term_id: i32 = 0,
+    active_term_id: i32 = 0,
+    term_length: i32 = 0,
+    mtu: i32 = 0,
+    ttl: i32 = 0,
 };
 pub const aeron_setup_header_t = struct_aeron_setup_header_stct;
 pub const struct_aeron_data_header_stct = extern struct {
     frame_header: aeron_frame_header_t = @import("std").mem.zeroes(aeron_frame_header_t),
-    term_offset: i32 = @import("std").mem.zeroes(i32),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    term_id: i32 = @import("std").mem.zeroes(i32),
-    reserved_value: i64 = @import("std").mem.zeroes(i64),
+    term_offset: i32 = 0,
+    session_id: i32 = 0,
+    stream_id: i32 = 0,
+    term_id: i32 = 0,
+    reserved_value: i64 = 0,
 };
 pub const aeron_data_header_t = struct_aeron_data_header_stct;
 pub const struct_aeron_nak_header_stct = extern struct {
     frame_header: aeron_frame_header_t = @import("std").mem.zeroes(aeron_frame_header_t),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    term_id: i32 = @import("std").mem.zeroes(i32),
-    term_offset: i32 = @import("std").mem.zeroes(i32),
-    length: i32 = @import("std").mem.zeroes(i32),
+    session_id: i32 = 0,
+    stream_id: i32 = 0,
+    term_id: i32 = 0,
+    term_offset: i32 = 0,
+    length: i32 = 0,
 };
 pub const aeron_nak_header_t = struct_aeron_nak_header_stct;
 pub const struct_aeron_status_message_header_stct = extern struct {
     frame_header: aeron_frame_header_t = @import("std").mem.zeroes(aeron_frame_header_t),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    consumption_term_id: i32 = @import("std").mem.zeroes(i32),
-    consumption_term_offset: i32 = @import("std").mem.zeroes(i32),
-    receiver_window: i32 = @import("std").mem.zeroes(i32),
-    receiver_id: i64 = @import("std").mem.zeroes(i64),
+    session_id: i32 = 0,
+    stream_id: i32 = 0,
+    consumption_term_id: i32 = 0,
+    consumption_term_offset: i32 = 0,
+    receiver_window: i32 = 0,
+    receiver_id: i64 = 0,
+    pub const aeron_udp_protocol_group_tag = __root.aeron_udp_protocol_group_tag;
+    pub const tag = __root.aeron_udp_protocol_group_tag;
 };
 pub const aeron_status_message_header_t = struct_aeron_status_message_header_stct;
 pub const struct_aeron_error_stct = extern struct {
     frame_header: aeron_frame_header_t = @import("std").mem.zeroes(aeron_frame_header_t),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    receiver_id: i64 = @import("std").mem.zeroes(i64),
-    group_tag: i64 = @import("std").mem.zeroes(i64),
-    error_code: i32 = @import("std").mem.zeroes(i32),
-    error_length: i32 = @import("std").mem.zeroes(i32),
+    session_id: i32 = 0,
+    stream_id: i32 = 0,
+    receiver_id: i64 = 0,
+    group_tag: i64 = 0,
+    error_code: i32 = 0,
+    error_length: i32 = 0,
 };
 pub const aeron_error_t = struct_aeron_error_stct;
 pub const struct_aeron_status_message_optional_header_stct = extern struct {
-    group_tag: i64 = @import("std").mem.zeroes(i64),
+    group_tag: i64 = 0,
 };
 pub const aeron_status_message_optional_header_t = struct_aeron_status_message_optional_header_stct;
 pub const struct_aeron_rttm_header_stct = extern struct {
     frame_header: aeron_frame_header_t = @import("std").mem.zeroes(aeron_frame_header_t),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    echo_timestamp: i64 = @import("std").mem.zeroes(i64),
-    reception_delta: i64 = @import("std").mem.zeroes(i64),
-    receiver_id: i64 = @import("std").mem.zeroes(i64),
+    session_id: i32 = 0,
+    stream_id: i32 = 0,
+    echo_timestamp: i64 = 0,
+    reception_delta: i64 = 0,
+    receiver_id: i64 = 0,
 };
 pub const aeron_rttm_header_t = struct_aeron_rttm_header_stct;
 pub const struct_aeron_resolution_header_stct = extern struct {
-    res_type: i8 = @import("std").mem.zeroes(i8),
-    res_flags: u8 = @import("std").mem.zeroes(u8),
-    udp_port: u16 = @import("std").mem.zeroes(u16),
-    age_in_ms: i32 = @import("std").mem.zeroes(i32),
+    res_type: i8 = 0,
+    res_flags: u8 = 0,
+    udp_port: u16 = 0,
+    age_in_ms: i32 = 0,
 };
 pub const aeron_resolution_header_t = struct_aeron_resolution_header_stct;
 pub const struct_aeron_resolution_header_ipv4_stct = extern struct {
     resolution_header: aeron_resolution_header_t = @import("std").mem.zeroes(aeron_resolution_header_t),
     addr: [4]u8 = @import("std").mem.zeroes([4]u8),
-    name_length: i16 = @import("std").mem.zeroes(i16),
+    name_length: i16 = 0,
+    pub const aeron_res_header_entry_length_ipv4 = __root.aeron_res_header_entry_length_ipv4;
+    pub const ipv4 = __root.aeron_res_header_entry_length_ipv4;
 };
 pub const aeron_resolution_header_ipv4_t = struct_aeron_resolution_header_ipv4_stct;
 pub const struct_aeron_resolution_header_ipv6_stct = extern struct {
     resolution_header: aeron_resolution_header_t = @import("std").mem.zeroes(aeron_resolution_header_t),
     addr: [16]u8 = @import("std").mem.zeroes([16]u8),
-    name_length: i16 = @import("std").mem.zeroes(i16),
+    name_length: i16 = 0,
+    pub const aeron_res_header_entry_length_ipv6 = __root.aeron_res_header_entry_length_ipv6;
+    pub const ipv6 = __root.aeron_res_header_entry_length_ipv6;
 };
 pub const aeron_resolution_header_ipv6_t = struct_aeron_resolution_header_ipv6_stct;
 pub const struct_aeron_option_header_stct = extern struct {
-    option_length: u16 = @import("std").mem.zeroes(u16),
-    type: u16 = @import("std").mem.zeroes(u16),
+    option_length: u16 = 0,
+    type: u16 = 0,
 };
 pub const aeron_option_header_t = struct_aeron_option_header_stct;
 pub const struct_aeron_response_setup_header_stct = extern struct {
     frame_header: aeron_frame_header_t = @import("std").mem.zeroes(aeron_frame_header_t),
-    session_id: i32 = @import("std").mem.zeroes(i32),
-    stream_id: i32 = @import("std").mem.zeroes(i32),
-    response_session_id: i32 = @import("std").mem.zeroes(i32),
+    session_id: i32 = 0,
+    stream_id: i32 = 0,
+    response_session_id: i32 = 0,
 };
 pub const aeron_response_setup_header_t = struct_aeron_response_setup_header_stct;
 pub extern fn aeron_udp_protocol_group_tag(sm: [*c]aeron_status_message_header_t, group_tag: [*c]i64) c_int;
 pub fn aeron_res_header_address_length(arg_res_type: i8) callconv(.c) usize {
     var res_type = arg_res_type;
     _ = &res_type;
-    return @as(usize, @bitCast(@as(c_ulong, if (@as(c_int, 2) == @as(c_int, @bitCast(@as(c_int, res_type)))) @as(c_uint, 16) else @as(c_uint, 4))));
+    return if (@as(c_int, 2) == @as(c_int, res_type)) @as(c_uint, 16) else @as(c_uint, 4);
 }
 pub fn aeron_compute_max_message_length(arg_term_length: usize) callconv(.c) usize {
     var term_length = arg_term_length;
     _ = &term_length;
-    var max_length_for_term: usize = term_length / @as(usize, @bitCast(@as(c_long, @as(c_int, 8))));
+    var max_length_for_term: usize = term_length / @as(usize, 8);
     _ = &max_length_for_term;
-    return if (max_length_for_term < @as(usize, @bitCast(@as(c_ulong, (@as(c_uint, 16) *% @as(c_uint, 1024)) *% @as(c_uint, 1024))))) max_length_for_term else @as(usize, @bitCast(@as(c_ulong, (@as(c_uint, 16) *% @as(c_uint, 1024)) *% @as(c_uint, 1024))));
+    return if (max_length_for_term < @as(usize, (@as(c_uint, 16) *% @as(c_uint, 1024)) *% @as(c_uint, 1024))) max_length_for_term else @as(usize, (@as(c_uint, 16) *% @as(c_uint, 1024)) *% @as(c_uint, 1024));
 }
 pub extern fn aeron_res_header_entry_length_ipv4(header: [*c]aeron_resolution_header_ipv4_t) usize;
 pub extern fn aeron_res_header_entry_length_ipv6(header: [*c]aeron_resolution_header_ipv6_t) usize;
@@ -1467,9 +1869,9 @@ pub extern fn __assert(__assertion: [*c]const u8, __file: [*c]const u8, __line: 
 pub fn aeron_cache_line_align_buffer(arg_buffer: [*c]u8) callconv(.c) [*c]u8 {
     var buffer = arg_buffer;
     _ = &buffer;
-    var remainder: usize = @as(usize, @intCast(@intFromPtr(buffer))) % @as(usize, @bitCast(@as(c_ulong, @as(c_uint, 64))));
+    var remainder: usize = @as(usize, @intCast(@intFromPtr(buffer))) % @as(usize, @as(c_uint, 64));
     _ = &remainder;
-    return if (@as(usize, @bitCast(@as(c_long, @as(c_int, 0)))) == remainder) buffer else buffer + (@as(usize, @bitCast(@as(c_ulong, @as(c_uint, 64)))) -% remainder);
+    return if (@as(usize, 0) == remainder) buffer else buffer + (@as(usize, @as(c_uint, 64)) -% remainder);
 }
 pub fn aeron_number_of_trailing_zeroes(arg_value: i32) callconv(.c) c_int {
     var value = arg_value;
@@ -1477,10 +1879,8 @@ pub fn aeron_number_of_trailing_zeroes(arg_value: i32) callconv(.c) c_int {
     if (@as(c_int, 0) == value) {
         return 32;
     }
-    return __builtin_ctz(@as(c_uint, @bitCast(value)));
-}
-// aeron-1.48.6/aeron-client/src/main/c/util/aeron_bitutil.h:103:12: warning: TODO implement function '__builtin_ctzll' in std.zig.c_builtins
-
+    return __builtin.ctz(@bitCast(@as(c_int, value)));
+} // aeron-1.48.6/aeron-client/src/main/c/util/aeron_bitutil.h:103:12: warning: TODO implement function '__builtin_ctzll' in std.zig.c_builtins
 // aeron-1.48.6/aeron-client/src/main/c/util/aeron_bitutil.h:95:12: warning: unable to translate function, demoted to extern
 pub extern fn aeron_number_of_trailing_zeroes_u64(arg_value: u64) callconv(.c) c_int;
 pub fn aeron_number_of_leading_zeroes(arg_value: i32) callconv(.c) c_int {
@@ -1489,7 +1889,7 @@ pub fn aeron_number_of_leading_zeroes(arg_value: i32) callconv(.c) c_int {
     if (@as(c_int, 0) == value) {
         return 32;
     }
-    return __builtin_clz(@as(c_uint, @bitCast(value)));
+    return __builtin.clz(@bitCast(@as(c_int, value)));
 }
 pub fn aeron_find_next_power_of_two(arg_value: i32) callconv(.c) i32 {
     var value = arg_value;
@@ -1498,8 +1898,11 @@ pub fn aeron_find_next_power_of_two(arg_value: i32) callconv(.c) i32 {
     {
         var i: usize = 1;
         _ = &i;
-        while (i < (@sizeOf(i32) *% @as(c_ulong, @bitCast(@as(c_long, @as(c_int, 8)))))) : (i = i *% @as(usize, @bitCast(@as(c_long, @as(c_int, 2))))) {
-            value |= value >> @intCast(i);
+        while (i < (@sizeOf(@TypeOf(value)) *% @as(c_ulong, 8))) : (i = i *% @as(usize, 2)) {
+            {
+                const ref = &value;
+                ref.* = @bitCast(@as(c_uint, @truncate(@as(usize, @bitCast(@as(c_long, ref.*))) | (@as(usize, @bitCast(@as(c_long, value))) >> @intCast(i)))));
+            }
         }
     }
     return value + @as(c_int, 1);
@@ -1510,80 +1913,84 @@ pub fn aeron_add_wrap_i32(arg_a: i32, arg_b: i32) callconv(.c) i32 {
     _ = &a;
     var b = arg_b;
     _ = &b;
-    const a_widened: i64 = @as(i64, @bitCast(@as(c_long, a)));
+    const a_widened: i64 = a;
     _ = &a_widened;
-    const b_widened: i64 = @as(i64, @bitCast(@as(c_long, b)));
+    const b_widened: i64 = b;
     _ = &b_widened;
     const sum: i64 = a_widened + b_widened;
     _ = &sum;
-    return @as(i32, @bitCast(@as(c_int, @truncate(sum & @as(c_long, 4294967295)))));
+    return @truncate(sum & @as(c_long, 4294967295));
 }
 pub fn aeron_sub_wrap_i32(arg_a: i32, arg_b: i32) callconv(.c) i32 {
     var a = arg_a;
     _ = &a;
     var b = arg_b;
     _ = &b;
-    const a_widened: i64 = @as(i64, @bitCast(@as(c_long, a)));
+    const a_widened: i64 = a;
     _ = &a_widened;
-    const b_widened: i64 = @as(i64, @bitCast(@as(c_long, b)));
+    const b_widened: i64 = b;
     _ = &b_widened;
     const difference: i64 = a_widened - b_widened;
     _ = &difference;
-    return @as(i32, @bitCast(@as(c_int, @truncate(difference & @as(c_long, 4294967295)))));
+    return @truncate(difference & @as(c_long, 4294967295));
 }
 pub fn aeron_mul_wrap_i32(arg_a: i32, arg_b: i32) callconv(.c) i32 {
     var a = arg_a;
     _ = &a;
     var b = arg_b;
     _ = &b;
-    const a_widened: i64 = @as(i64, @bitCast(@as(c_long, a)));
+    const a_widened: i64 = a;
     _ = &a_widened;
-    const b_widened: i64 = @as(i64, @bitCast(@as(c_long, b)));
+    const b_widened: i64 = b;
     _ = &b_widened;
     const product: i64 = a_widened * b_widened;
     _ = &product;
-    return @as(i32, @bitCast(@as(c_int, @truncate(product & @as(c_long, 4294967295)))));
+    return @truncate(product & @as(c_long, 4294967295));
 }
 pub const struct_aeron_logbuffer_metadata_stct = extern struct {
     term_tail_counters: [3]i64 = @import("std").mem.zeroes([3]i64),
-    active_term_count: i32 = @import("std").mem.zeroes(i32),
+    active_term_count: i32 = 0,
     pad1: [100]u8 = @import("std").mem.zeroes([100]u8),
-    end_of_stream_position: i64 = @import("std").mem.zeroes(i64),
-    is_connected: i32 = @import("std").mem.zeroes(i32),
-    active_transport_count: i32 = @import("std").mem.zeroes(i32),
+    end_of_stream_position: i64 = 0,
+    is_connected: i32 = 0,
+    active_transport_count: i32 = 0,
     pad2: [112]u8 = @import("std").mem.zeroes([112]u8),
-    correlation_id: i64 = @import("std").mem.zeroes(i64),
-    initial_term_id: i32 = @import("std").mem.zeroes(i32),
-    default_frame_header_length: i32 = @import("std").mem.zeroes(i32),
-    mtu_length: i32 = @import("std").mem.zeroes(i32),
-    term_length: i32 = @import("std").mem.zeroes(i32),
-    page_size: i32 = @import("std").mem.zeroes(i32),
-    publication_window_length: i32 = @import("std").mem.zeroes(i32),
-    receiver_window_length: i32 = @import("std").mem.zeroes(i32),
-    socket_sndbuf_length: i32 = @import("std").mem.zeroes(i32),
-    os_default_socket_sndbuf_length: i32 = @import("std").mem.zeroes(i32),
-    os_max_socket_sndbuf_length: i32 = @import("std").mem.zeroes(i32),
-    socket_rcvbuf_length: i32 = @import("std").mem.zeroes(i32),
-    os_default_socket_rcvbuf_length: i32 = @import("std").mem.zeroes(i32),
-    os_max_socket_rcvbuf_length: i32 = @import("std").mem.zeroes(i32),
-    max_resend: i32 = @import("std").mem.zeroes(i32),
+    correlation_id: i64 = 0,
+    initial_term_id: i32 = 0,
+    default_frame_header_length: i32 = 0,
+    mtu_length: i32 = 0,
+    term_length: i32 = 0,
+    page_size: i32 = 0,
+    publication_window_length: i32 = 0,
+    receiver_window_length: i32 = 0,
+    socket_sndbuf_length: i32 = 0,
+    os_default_socket_sndbuf_length: i32 = 0,
+    os_max_socket_sndbuf_length: i32 = 0,
+    socket_rcvbuf_length: i32 = 0,
+    os_default_socket_rcvbuf_length: i32 = 0,
+    os_max_socket_rcvbuf_length: i32 = 0,
+    max_resend: i32 = 0,
     default_header: [128]u8 = @import("std").mem.zeroes([128]u8),
-    entity_tag: i64 = @import("std").mem.zeroes(i64),
-    response_correlation_id: i64 = @import("std").mem.zeroes(i64),
-    linger_timeout_ns: i64 = @import("std").mem.zeroes(i64),
-    untethered_window_limit_timeout_ns: i64 = @import("std").mem.zeroes(i64),
-    untethered_resting_timeout_ns: i64 = @import("std").mem.zeroes(i64),
-    group: u8 = @import("std").mem.zeroes(u8),
-    is_response: u8 = @import("std").mem.zeroes(u8),
-    rejoin: u8 = @import("std").mem.zeroes(u8),
-    reliable: u8 = @import("std").mem.zeroes(u8),
-    sparse: u8 = @import("std").mem.zeroes(u8),
-    signal_eos: u8 = @import("std").mem.zeroes(u8),
-    spies_simulate_connection: u8 = @import("std").mem.zeroes(u8),
-    tether: u8 = @import("std").mem.zeroes(u8),
-    is_publication_revoked: u8 = @import("std").mem.zeroes(u8),
+    entity_tag: i64 = 0,
+    response_correlation_id: i64 = 0,
+    linger_timeout_ns: i64 = 0,
+    untethered_window_limit_timeout_ns: i64 = 0,
+    untethered_resting_timeout_ns: i64 = 0,
+    group: u8 = 0,
+    is_response: u8 = 0,
+    rejoin: u8 = 0,
+    reliable: u8 = 0,
+    sparse: u8 = 0,
+    signal_eos: u8 = 0,
+    spies_simulate_connection: u8 = 0,
+    tether: u8 = 0,
+    is_publication_revoked: u8 = 0,
     pad3: [3]u8 = @import("std").mem.zeroes([3]u8),
-    untethered_linger_timeout_ns: i64 = @import("std").mem.zeroes(i64),
+    untethered_linger_timeout_ns: i64 = 0,
+    pub const aeron_logbuffer_cas_raw_tail = __root.aeron_logbuffer_cas_raw_tail;
+    pub const aeron_logbuffer_cas_active_term_count = __root.aeron_logbuffer_cas_active_term_count;
+    pub const tail = __root.aeron_logbuffer_cas_raw_tail;
+    pub const count = __root.aeron_logbuffer_cas_active_term_count;
 };
 pub const aeron_logbuffer_metadata_t = struct_aeron_logbuffer_metadata_stct;
 pub extern fn aeron_logbuffer_check_term_length(term_length: u64) c_int;
@@ -1593,7 +2000,7 @@ pub fn aeron_logbuffer_compute_log_length(arg_term_length: u64, arg_page_size: u
     _ = &term_length;
     var page_size = arg_page_size;
     _ = &page_size;
-    return (((term_length *% @as(u64, @bitCast(@as(c_long, @as(c_int, 3))))) +% @as(u64, @bitCast(@as(c_ulong, @as(c_uint, @bitCast(@as(c_int, 4))) *% @as(c_uint, 1024))))) +% (page_size -% @as(u64, @bitCast(@as(c_ulong, @as(c_uint, 1)))))) & ~(page_size -% @as(u64, @bitCast(@as(c_ulong, @as(c_uint, 1)))));
+    return (((term_length *% @as(u64, @bitCast(@as(c_long, @as(c_int, 3))))) +% @as(u64, @as(c_uint, 4) *% @as(c_uint, 1024))) +% (page_size -% @as(u64, 1))) & ~(page_size -% @as(u64, 1));
 }
 pub fn aeron_logbuffer_term_offset(arg_raw_tail: i64, arg_term_length: i32) callconv(.c) i32 {
     var raw_tail = arg_raw_tail;
@@ -1602,12 +2009,12 @@ pub fn aeron_logbuffer_term_offset(arg_raw_tail: i64, arg_term_length: i32) call
     _ = &term_length;
     var offset: i64 = raw_tail & @as(c_long, 4294967295);
     _ = &offset;
-    return if (offset < @as(i64, @bitCast(@as(c_long, term_length)))) @as(i32, @bitCast(@as(c_int, @truncate(offset)))) else term_length;
+    return if (offset < @as(i64, term_length)) @as(i32, @truncate(offset)) else term_length;
 }
 pub fn aeron_logbuffer_term_id(arg_raw_tail: i64) callconv(.c) i32 {
     var raw_tail = arg_raw_tail;
     _ = &raw_tail;
-    return @as(i32, @bitCast(@as(c_int, @truncate(raw_tail >> @intCast(32)))));
+    return @truncate(raw_tail >> @intCast(@as(i64, 32)));
 }
 pub fn aeron_logbuffer_compute_term_count(arg_term_id: i32, arg_initial_term_id: i32) callconv(.c) i32 {
     var term_id = arg_term_id;
@@ -1621,7 +2028,7 @@ pub fn aeron_logbuffer_index_by_position(arg_position: i64, arg_position_bits_to
     _ = &position;
     var position_bits_to_shift = arg_position_bits_to_shift;
     _ = &position_bits_to_shift;
-    return @as(usize, @bitCast(@import("std").zig.c_translation.signedRemainder(position >> @intCast(position_bits_to_shift), @as(i64, @bitCast(@as(c_long, @as(c_int, 3)))))));
+    return (@as(usize, @bitCast(@as(c_long, position))) >> @intCast(position_bits_to_shift)) % @as(usize, @bitCast(@as(c_long, @as(c_int, 3))));
 }
 pub fn aeron_logbuffer_index_by_term(arg_initial_term_id: i32, arg_active_term_id: i32) callconv(.c) usize {
     var initial_term_id = arg_initial_term_id;
@@ -1630,12 +2037,12 @@ pub fn aeron_logbuffer_index_by_term(arg_initial_term_id: i32, arg_active_term_i
     _ = &active_term_id;
     var term_count: i32 = aeron_logbuffer_compute_term_count(active_term_id, initial_term_id);
     _ = &term_count;
-    return @as(usize, @bitCast(@as(c_long, @import("std").zig.c_translation.signedRemainder(term_count, @as(c_int, 3)))));
+    return @bitCast(@as(c_long, __helpers.signedRemainder(term_count, @as(c_int, 3))));
 }
 pub fn aeron_logbuffer_index_by_term_count(arg_term_count: i32) callconv(.c) usize {
     var term_count = arg_term_count;
     _ = &term_count;
-    return @as(usize, @bitCast(@as(c_long, @import("std").zig.c_translation.signedRemainder(term_count, @as(c_int, 3)))));
+    return @bitCast(@as(c_long, __helpers.signedRemainder(term_count, @as(c_int, 3))));
 }
 pub fn aeron_logbuffer_compute_position(arg_active_term_id: i32, arg_term_offset: i32, arg_position_bits_to_shift: usize, arg_initial_term_id: i32) callconv(.c) i64 {
     var active_term_id = arg_active_term_id;
@@ -1646,9 +2053,9 @@ pub fn aeron_logbuffer_compute_position(arg_active_term_id: i32, arg_term_offset
     _ = &position_bits_to_shift;
     var initial_term_id = arg_initial_term_id;
     _ = &initial_term_id;
-    var term_count: i64 = @as(i64, @bitCast(@as(c_long, aeron_logbuffer_compute_term_count(active_term_id, initial_term_id))));
+    var term_count: i64 = aeron_logbuffer_compute_term_count(active_term_id, initial_term_id);
     _ = &term_count;
-    return (term_count << @intCast(position_bits_to_shift)) + @as(i64, @bitCast(@as(c_long, term_offset)));
+    return @bitCast(@as(c_ulong, @truncate((@as(usize, @bitCast(@as(c_long, term_count))) << @intCast(position_bits_to_shift)) +% @as(usize, @bitCast(@as(c_long, term_offset))))));
 }
 pub fn aeron_logbuffer_compute_term_begin_position(arg_active_term_id: i32, arg_position_bits_to_shift: usize, arg_initial_term_id: i32) callconv(.c) i64 {
     var active_term_id = arg_active_term_id;
@@ -1657,7 +2064,7 @@ pub fn aeron_logbuffer_compute_term_begin_position(arg_active_term_id: i32, arg_
     _ = &position_bits_to_shift;
     var initial_term_id = arg_initial_term_id;
     _ = &initial_term_id;
-    return aeron_logbuffer_compute_position(active_term_id, @as(c_int, 0), position_bits_to_shift, initial_term_id);
+    return aeron_logbuffer_compute_position(active_term_id, 0, position_bits_to_shift, initial_term_id);
 }
 pub fn aeron_logbuffer_compute_term_id_from_position(arg_position: i64, arg_position_bits_to_shift: usize, arg_initial_term_id: i32) callconv(.c) i32 {
     var position = arg_position;
@@ -1666,16 +2073,16 @@ pub fn aeron_logbuffer_compute_term_id_from_position(arg_position: i64, arg_posi
     _ = &position_bits_to_shift;
     var initial_term_id = arg_initial_term_id;
     _ = &initial_term_id;
-    return aeron_add_wrap_i32(@as(i32, @bitCast(@as(c_int, @truncate(position >> @intCast(position_bits_to_shift))))), initial_term_id);
+    return aeron_add_wrap_i32(@bitCast(@as(c_uint, @truncate(@as(usize, @bitCast(@as(c_long, position))) >> @intCast(position_bits_to_shift)))), initial_term_id);
 }
 pub fn aeron_logbuffer_compute_term_offset_from_position(arg_position: i64, arg_position_bits_to_shift: usize) callconv(.c) i32 {
     var position = arg_position;
     _ = &position;
     var position_bits_to_shift = arg_position_bits_to_shift;
     _ = &position_bits_to_shift;
-    var mask: i64 = @as(i64, @bitCast(@as(c_ulong, (@as(c_uint, 1) << @intCast(position_bits_to_shift)) -% @as(c_uint, @bitCast(@as(c_int, 1))))));
+    var mask: i64 = @bitCast(@as(c_ulong, @truncate((@as(usize, 1) << @intCast(position_bits_to_shift)) -% @as(usize, 1))));
     _ = &mask;
-    return @as(i32, @bitCast(@as(c_int, @truncate(position & mask))));
+    return @truncate(position & mask);
 }
 pub fn aeron_logbuffer_cas_raw_tail(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t, arg_partition_index: usize, arg_expected_raw_tail: i64, arg_update_raw_tail: i64) callconv(.c) bool {
     var log_meta_data = arg_log_meta_data;
@@ -1687,9 +2094,7 @@ pub fn aeron_logbuffer_cas_raw_tail(arg_log_meta_data: [*c]aeron_logbuffer_metad
     var update_raw_tail = arg_update_raw_tail;
     _ = &update_raw_tail;
     return aeron_cas_int64(&log_meta_data.*.term_tail_counters[partition_index], expected_raw_tail, update_raw_tail);
-}
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+} // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:25: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:175:16: warning: unable to translate function, demoted to extern
 pub extern fn aeron_logbuffer_active_term_count(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t) callconv(.c) i32;
 pub fn aeron_logbuffer_cas_active_term_count(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t, arg_expected_term_count: i32, arg_update_term_count: i32) callconv(.c) bool {
@@ -1700,9 +2105,7 @@ pub fn aeron_logbuffer_cas_active_term_count(arg_log_meta_data: [*c]aeron_logbuf
     var update_term_count = arg_update_term_count;
     _ = &update_term_count;
     return aeron_cas_int32(&log_meta_data.*.active_term_count, expected_term_count, update_term_count);
-}
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+} // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:25: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:190:13: warning: unable to translate function, demoted to extern
 pub extern fn aeron_logbuffer_rotate_log(arg_log_meta_data: [*c]aeron_logbuffer_metadata_t, arg_current_term_count: i32, arg_current_term_id: i32) callconv(.c) bool;
 pub fn aeron_logbuffer_fill_default_header(arg_log_meta_data_buffer: [*c]u8, arg_session_id: i32, arg_stream_id: i32, arg_initial_term_id: i32) callconv(.c) void {
@@ -1714,15 +2117,15 @@ pub fn aeron_logbuffer_fill_default_header(arg_log_meta_data_buffer: [*c]u8, arg
     _ = &stream_id;
     var initial_term_id = arg_initial_term_id;
     _ = &initial_term_id;
-    var log_meta_data: [*c]aeron_logbuffer_metadata_t = @as([*c]aeron_logbuffer_metadata_t, @ptrCast(@alignCast(log_meta_data_buffer)));
+    var log_meta_data: [*c]aeron_logbuffer_metadata_t = @ptrCast(@alignCast(log_meta_data_buffer));
     _ = &log_meta_data;
-    var data_header: [*c]aeron_data_header_t = @as([*c]aeron_data_header_t, @ptrCast(@alignCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header[@as(usize, @intCast(0))]))))));
+    var data_header: [*c]aeron_data_header_t = @ptrCast(@alignCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header)))));
     _ = &data_header;
-    log_meta_data.*.default_frame_header_length = @as(i32, @bitCast(@as(c_uint, @truncate(@sizeOf(aeron_data_header_t)))));
+    log_meta_data.*.default_frame_header_length = @bitCast(@as(c_uint, @truncate(@sizeOf(aeron_data_header_t))));
     data_header.*.frame_header.frame_length = 0;
-    data_header.*.frame_header.version = @as(i8, @bitCast(@as(i8, @truncate(@as(c_int, 0)))));
-    data_header.*.frame_header.flags = @as(u8, @bitCast(@as(i8, @truncate(@as(c_int, 128) | @as(c_int, 64)))));
-    data_header.*.frame_header.type = @as(i16, @bitCast(@as(c_short, @truncate(@as(c_int, 1)))));
+    data_header.*.frame_header.version = @truncate(@as(c_int, 0));
+    data_header.*.frame_header.flags = @bitCast(@as(i8, @truncate(@as(c_int, 128) | @as(c_int, 64))));
+    data_header.*.frame_header.type = @truncate(@as(c_int, 1));
     data_header.*.stream_id = stream_id;
     data_header.*.session_id = session_id;
     data_header.*.term_id = initial_term_id;
@@ -1798,7 +2201,7 @@ pub fn aeron_logbuffer_metadata_init(arg_log_meta_data_buffer: [*c]u8, arg_end_o
     _ = &spies_simulate_connection;
     var tether = arg_tether;
     _ = &tether;
-    var log_meta_data: [*c]aeron_logbuffer_metadata_t = @as([*c]aeron_logbuffer_metadata_t, @ptrCast(@alignCast(log_meta_data_buffer)));
+    var log_meta_data: [*c]aeron_logbuffer_metadata_t = @ptrCast(@alignCast(log_meta_data_buffer));
     _ = &log_meta_data;
     log_meta_data.*.end_of_stream_position = end_of_stream_position;
     log_meta_data.*.is_connected = is_connected;
@@ -1832,16 +2235,16 @@ pub fn aeron_logbuffer_metadata_init(arg_log_meta_data_buffer: [*c]u8, arg_end_o
     log_meta_data.*.signal_eos = signal_eos;
     log_meta_data.*.spies_simulate_connection = spies_simulate_connection;
     log_meta_data.*.tether = tether;
-    log_meta_data.*.is_publication_revoked = @as(u8, @bitCast(@as(i8, @truncate(@as(c_int, 0)))));
+    log_meta_data.*.is_publication_revoked = @bitCast(@as(i8, @truncate(@"false")));
 }
 pub fn aeron_logbuffer_apply_default_header(arg_log_meta_data_buffer: [*c]u8, arg_buffer: [*c]u8) callconv(.c) void {
     var log_meta_data_buffer = arg_log_meta_data_buffer;
     _ = &log_meta_data_buffer;
     var buffer = arg_buffer;
     _ = &buffer;
-    var log_meta_data: [*c]aeron_logbuffer_metadata_t = @as([*c]aeron_logbuffer_metadata_t, @ptrCast(@alignCast(log_meta_data_buffer)));
+    var log_meta_data: [*c]aeron_logbuffer_metadata_t = @ptrCast(@alignCast(log_meta_data_buffer));
     _ = &log_meta_data;
-    _ = memcpy(@as(?*anyopaque, @ptrCast(buffer)), @as(?*const anyopaque, @ptrCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header[@as(usize, @intCast(0))]))))), @as(usize, @bitCast(@as(c_long, log_meta_data.*.default_frame_header_length))));
+    _ = memcpy(@ptrCast(@alignCast(buffer)), @ptrCast(@alignCast(@as([*c]u8, @ptrCast(@alignCast(&log_meta_data.*.default_header))))), @bitCast(@as(c_long, log_meta_data.*.default_frame_header_length)));
 }
 pub fn aeron_logbuffer_compute_fragmented_length(arg_length: usize, arg_max_payload_length: usize) callconv(.c) usize {
     var length = arg_length;
@@ -1852,13 +2255,13 @@ pub fn aeron_logbuffer_compute_fragmented_length(arg_length: usize, arg_max_payl
     _ = &num_max_payloads;
     const remaining_payload: usize = length % max_payload_length;
     _ = &remaining_payload;
-    const last_frame_length: usize = if (remaining_payload > @as(usize, @bitCast(@as(c_long, @as(c_int, 0))))) ((remaining_payload +% @sizeOf(aeron_data_header_t)) +% @as(c_ulong, @bitCast(@as(c_ulong, @as(c_uint, @bitCast(@as(c_int, 32))) -% @as(c_uint, 1))))) & @as(c_ulong, @bitCast(@as(c_ulong, ~(@as(c_uint, @bitCast(@as(c_int, 32))) -% @as(c_uint, 1))))) else @as(c_ulong, @bitCast(@as(c_long, @as(c_int, 0))));
+    const last_frame_length: usize = if (remaining_payload > @as(usize, 0)) ((remaining_payload +% @sizeOf(aeron_data_header_t)) +% @as(usize, @as(c_uint, @bitCast(@as(c_int, @as(c_int, 32)))) -% @as(c_uint, 1))) & @as(usize, ~(@as(c_uint, @bitCast(@as(c_int, @as(c_int, 32)))) -% @as(c_uint, 1))) else @as(usize, 0);
     _ = &last_frame_length;
     return (num_max_payloads *% (max_payload_length +% @sizeOf(aeron_data_header_t))) +% last_frame_length;
 }
 pub const struct_aeron_mapped_buffer_stct = extern struct {
-    addr: [*c]u8 = @import("std").mem.zeroes([*c]u8),
-    length: usize = @import("std").mem.zeroes(usize),
+    addr: [*c]u8 = null,
+    length: usize = 0,
 };
 pub const aeron_mapped_buffer_t = struct_aeron_mapped_buffer_stct;
 pub extern fn aeron_is_directory(path: [*c]const u8) c_int;
@@ -2236,7 +2639,7 @@ pub extern fn setgid(__gid: __gid_t) c_int;
 pub extern fn setregid(__rgid: __gid_t, __egid: __gid_t) c_int;
 pub extern fn setegid(__gid: __gid_t) c_int;
 pub extern fn fork() __pid_t;
-pub extern fn vfork() c_int;
+pub extern fn vfork() __pid_t;
 pub extern fn ttyname(__fd: c_int) [*c]u8;
 pub extern fn ttyname_r(__fd: c_int, __buf: [*c]u8, __buflen: usize) c_int;
 pub extern fn isatty(__fd: c_int) c_int;
@@ -2289,7 +2692,7 @@ pub extern fn lockf(__fd: c_int, __cmd: c_int, __len: __off_t) c_int;
 pub extern fn fdatasync(__fildes: c_int) c_int;
 pub extern fn crypt(__key: [*c]const u8, __salt: [*c]const u8) [*c]u8;
 pub extern fn getentropy(__buffer: ?*anyopaque, __length: usize) c_int;
-pub const aeron_usable_fs_space_func_t = ?*const fn ([*c]const u8) callconv(.c) u64;
+pub const aeron_usable_fs_space_func_t = ?*const fn (path: [*c]const u8) callconv(.c) u64;
 pub extern fn aeron_file_length(path: [*c]const u8) i64;
 pub extern fn aeron_usable_fs_space(path: [*c]const u8) u64;
 pub extern fn aeron_usable_fs_space_disabled(path: [*c]const u8) u64;
@@ -2297,7 +2700,13 @@ pub const struct_aeron_mapped_raw_log_stct = extern struct {
     term_buffers: [3]aeron_mapped_buffer_t = @import("std").mem.zeroes([3]aeron_mapped_buffer_t),
     log_meta_data: aeron_mapped_buffer_t = @import("std").mem.zeroes(aeron_mapped_buffer_t),
     mapped_file: aeron_mapped_file_t = @import("std").mem.zeroes(aeron_mapped_file_t),
-    term_length: usize = @import("std").mem.zeroes(usize),
+    term_length: usize = 0,
+    pub const aeron_raw_log_map = __root.aeron_raw_log_map;
+    pub const aeron_raw_log_map_existing = __root.aeron_raw_log_map_existing;
+    pub const aeron_raw_log_close = __root.aeron_raw_log_close;
+    pub const aeron_raw_log_free = __root.aeron_raw_log_free;
+    pub const map = __root.aeron_raw_log_map;
+    pub const existing = __root.aeron_raw_log_map_existing;
 };
 pub const aeron_mapped_raw_log_t = struct_aeron_mapped_raw_log_stct;
 pub extern fn aeron_ipc_publication_location(dst: [*c]u8, length: usize, aeron_dir: [*c]const u8, correlation_id: i64) c_int;
@@ -2305,8 +2714,8 @@ pub extern fn aeron_network_publication_location(dst: [*c]u8, length: usize, aer
 pub extern fn aeron_publication_image_location(dst: [*c]u8, length: usize, aeron_dir: [*c]const u8, correlation_id: i64) c_int;
 pub extern fn aeron_temp_filename(filename: [*c]u8, length: usize) usize;
 pub const aeron_raw_log_map_func_t = ?*const fn ([*c]aeron_mapped_raw_log_t, [*c]const u8, bool, u64, u64) callconv(.c) c_int;
-pub const aeron_raw_log_close_func_t = ?*const fn ([*c]aeron_mapped_raw_log_t, [*c]const u8) callconv(.c) c_int;
-pub const aeron_raw_log_free_func_t = ?*const fn ([*c]aeron_mapped_raw_log_t, [*c]const u8) callconv(.c) bool;
+pub const aeron_raw_log_close_func_t = ?*const fn ([*c]aeron_mapped_raw_log_t, filename: [*c]const u8) callconv(.c) c_int;
+pub const aeron_raw_log_free_func_t = ?*const fn ([*c]aeron_mapped_raw_log_t, filename: [*c]const u8) callconv(.c) bool;
 pub extern fn aeron_raw_log_map(mapped_raw_log: [*c]aeron_mapped_raw_log_t, path: [*c]const u8, use_sparse_files: bool, term_length: u64, page_size: u64) c_int;
 pub extern fn aeron_raw_log_map_existing(mapped_raw_log: [*c]aeron_mapped_raw_log_t, path: [*c]const u8, pre_touch: bool) c_int;
 pub extern fn aeron_raw_log_close(mapped_raw_log: [*c]aeron_mapped_raw_log_t, filename: [*c]const u8) c_int;
@@ -2317,214 +2726,180 @@ pub const AERON_OFFER_ERROR: c_int = -2;
 pub const AERON_OFFER_FULL: c_int = -1;
 pub const enum_aeron_queue_offer_result_stct = c_int;
 pub const aeron_queue_offer_result_t = enum_aeron_queue_offer_result_stct;
-pub const aeron_queue_drain_func_t = ?*const fn (?*anyopaque, ?*anyopaque) callconv(.c) void;
+pub const aeron_queue_drain_func_t = ?*const fn (clientd: ?*anyopaque, item: ?*anyopaque) callconv(.c) void;
 pub extern fn aeron_mpsc_concurrent_array_queue_init(queue: [*c]aeron_mpsc_concurrent_array_queue_t, length: usize) c_int;
-pub extern fn aeron_mpsc_concurrent_array_queue_close(queue: [*c]aeron_mpsc_concurrent_array_queue_t) c_int;
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+pub extern fn aeron_mpsc_concurrent_array_queue_close(queue: [*c]aeron_mpsc_concurrent_array_queue_t) c_int; // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:25: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:52:35: warning: unable to translate function, demoted to extern
-pub extern fn aeron_mpsc_concurrent_array_queue_offer(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_element: ?*anyopaque) callconv(.c) aeron_queue_offer_result_t;
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+pub extern fn aeron_mpsc_concurrent_array_queue_offer(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_element: ?*anyopaque) callconv(.c) aeron_queue_offer_result_t; // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:25: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:89:15: warning: unable to translate function, demoted to extern
-pub extern fn aeron_mpsc_concurrent_array_queue_drain(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque, arg_limit: usize) callconv(.c) usize;
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+pub extern fn aeron_mpsc_concurrent_array_queue_drain(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque, arg_limit: usize) callconv(.c) usize; // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:25: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:116:15: warning: unable to translate function, demoted to extern
-pub extern fn aeron_mpsc_concurrent_array_queue_drain_all(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque) callconv(.c) usize;
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:5: warning: TODO implement translation of stmt class GCCAsmStmtClass
-
+pub extern fn aeron_mpsc_concurrent_array_queue_drain_all(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t, arg_func: aeron_queue_drain_func_t, arg_clientd: ?*anyopaque) callconv(.c) usize; // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:27:25: warning: TODO asm stmt
 // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_mpsc_concurrent_array_queue.h:126:15: warning: unable to translate function, demoted to extern
 pub extern fn aeron_mpsc_concurrent_array_queue_size(arg_queue: [*c]aeron_mpsc_concurrent_array_queue_t) callconv(.c) usize;
-pub const __llvm__ = @as(c_int, 1);
-pub const __clang__ = @as(c_int, 1);
-pub const __clang_major__ = @as(c_int, 20);
-pub const __clang_minor__ = @as(c_int, 1);
-pub const __clang_patchlevel__ = @as(c_int, 2);
-pub const __clang_version__ = "20.1.2 (https://github.com/ziglang/zig-bootstrap c6bc9398c72c7a63fe9420a9055dcfd1845bc266)";
-pub const __GNUC__ = @as(c_int, 4);
-pub const __GNUC_MINOR__ = @as(c_int, 2);
-pub const __GNUC_PATCHLEVEL__ = @as(c_int, 1);
-pub const __GXX_ABI_VERSION = @as(c_int, 1002);
+
+pub const __VERSION__ = "Aro aro-zig";
+pub const __Aro__ = "";
+pub const __STDC__ = @as(c_int, 1);
+pub const __STDC_HOSTED__ = @as(c_int, 1);
+pub const __STDC_UTF_16__ = @as(c_int, 1);
+pub const __STDC_UTF_32__ = @as(c_int, 1);
+pub const __STDC_EMBED_NOT_FOUND__ = @as(c_int, 0);
+pub const __STDC_EMBED_FOUND__ = @as(c_int, 1);
+pub const __STDC_EMBED_EMPTY__ = @as(c_int, 2);
+pub const __STDC_VERSION__ = @as(c_long, 201710);
+pub const __GNUC__ = @as(c_int, 7);
+pub const __GNUC_MINOR__ = @as(c_int, 1);
+pub const __GNUC_PATCHLEVEL__ = @as(c_int, 0);
+pub const __ARO_EMULATE_NO__ = @as(c_int, 0);
+pub const __ARO_EMULATE_CLANG__ = @as(c_int, 1);
+pub const __ARO_EMULATE_GCC__ = @as(c_int, 2);
+pub const __ARO_EMULATE_MSVC__ = @as(c_int, 3);
+pub const __ARO_EMULATE__ = __ARO_EMULATE_GCC__;
+pub inline fn __building_module(x: anytype) @TypeOf(@as(c_int, 0)) {
+    _ = &x;
+    return @as(c_int, 0);
+}
+pub const linux = @as(c_int, 1);
+pub const __linux = @as(c_int, 1);
+pub const __linux__ = @as(c_int, 1);
+pub const unix = @as(c_int, 1);
+pub const __unix = @as(c_int, 1);
+pub const __unix__ = @as(c_int, 1);
+pub const __code_model_small__ = @as(c_int, 1);
+pub const __amd64__ = @as(c_int, 1);
+pub const __amd64 = @as(c_int, 1);
+pub const __x86_64__ = @as(c_int, 1);
+pub const __x86_64 = @as(c_int, 1);
+pub const __SEG_GS = @as(c_int, 1);
+pub const __SEG_FS = @as(c_int, 1);
+pub const __seg_gs = @compileError("unable to translate macro: undefined identifier `address_space`"); // <builtin>:33:9
+pub const __seg_fs = @compileError("unable to translate macro: undefined identifier `address_space`"); // <builtin>:34:9
+pub const __LAHF_SAHF__ = @as(c_int, 1);
+pub const __AES__ = @as(c_int, 1);
+pub const __VAES__ = @as(c_int, 1);
+pub const __PCLMUL__ = @as(c_int, 1);
+pub const __LZCNT__ = @as(c_int, 1);
+pub const __RDRND__ = @as(c_int, 1);
+pub const __FSGSBASE__ = @as(c_int, 1);
+pub const __BMI__ = @as(c_int, 1);
+pub const __BMI2__ = @as(c_int, 1);
+pub const __POPCNT__ = @as(c_int, 1);
+pub const __PRFCHW__ = @as(c_int, 1);
+pub const __RDSEED__ = @as(c_int, 1);
+pub const __ADX__ = @as(c_int, 1);
+pub const __MOVBE__ = @as(c_int, 1);
+pub const __SSE4A__ = @as(c_int, 1);
+pub const __FMA__ = @as(c_int, 1);
+pub const __F16C__ = @as(c_int, 1);
+pub const __SHA__ = @as(c_int, 1);
+pub const __FXSR__ = @as(c_int, 1);
+pub const __XSAVE__ = @as(c_int, 1);
+pub const __XSAVEOPT__ = @as(c_int, 1);
+pub const __CLFLUSHOPT__ = @as(c_int, 1);
+pub const __CLWB__ = @as(c_int, 1);
+pub const __WBNOINVD__ = @as(c_int, 1);
+pub const __RDPID__ = @as(c_int, 1);
+pub const __INVPCID__ = @as(c_int, 1);
+pub const __CMPCCXADD__ = @as(c_int, 1);
+pub const __CRC32__ = @as(c_int, 1);
+pub const __AVX2__ = @as(c_int, 1);
+pub const __AVX__ = @as(c_int, 1);
+pub const __SSE4_2__ = @as(c_int, 1);
+pub const __SSE4_1__ = @as(c_int, 1);
+pub const __SSSE3__ = @as(c_int, 1);
+pub const __SSE3__ = @as(c_int, 1);
+pub const __SSE2__ = @as(c_int, 1);
+pub const __SSE__ = @as(c_int, 1);
+pub const __SSE_MATH__ = @as(c_int, 1);
+pub const __MMX__ = @as(c_int, 1);
+pub const __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 = @as(c_int, 1);
+pub const __SIZEOF_FLOAT128__ = @as(c_int, 16);
+pub const _LP64 = @as(c_int, 1);
+pub const __LP64__ = @as(c_int, 1);
+pub const __FLOAT128__ = @as(c_int, 1);
+pub const __ORDER_LITTLE_ENDIAN__ = @as(c_int, 1234);
+pub const __ORDER_BIG_ENDIAN__ = @as(c_int, 4321);
+pub const __ORDER_PDP_ENDIAN__ = @as(c_int, 3412);
+pub const __BYTE_ORDER__ = __ORDER_LITTLE_ENDIAN__;
+pub const __LITTLE_ENDIAN__ = @as(c_int, 1);
+pub const __ELF__ = @as(c_int, 1);
 pub const __ATOMIC_RELAXED = @as(c_int, 0);
 pub const __ATOMIC_CONSUME = @as(c_int, 1);
 pub const __ATOMIC_ACQUIRE = @as(c_int, 2);
 pub const __ATOMIC_RELEASE = @as(c_int, 3);
 pub const __ATOMIC_ACQ_REL = @as(c_int, 4);
 pub const __ATOMIC_SEQ_CST = @as(c_int, 5);
-pub const __MEMORY_SCOPE_SYSTEM = @as(c_int, 0);
-pub const __MEMORY_SCOPE_DEVICE = @as(c_int, 1);
-pub const __MEMORY_SCOPE_WRKGRP = @as(c_int, 2);
-pub const __MEMORY_SCOPE_WVFRNT = @as(c_int, 3);
-pub const __MEMORY_SCOPE_SINGLE = @as(c_int, 4);
-pub const __OPENCL_MEMORY_SCOPE_WORK_ITEM = @as(c_int, 0);
-pub const __OPENCL_MEMORY_SCOPE_WORK_GROUP = @as(c_int, 1);
-pub const __OPENCL_MEMORY_SCOPE_DEVICE = @as(c_int, 2);
-pub const __OPENCL_MEMORY_SCOPE_ALL_SVM_DEVICES = @as(c_int, 3);
-pub const __OPENCL_MEMORY_SCOPE_SUB_GROUP = @as(c_int, 4);
-pub const __FPCLASS_SNAN = @as(c_int, 0x0001);
-pub const __FPCLASS_QNAN = @as(c_int, 0x0002);
-pub const __FPCLASS_NEGINF = @as(c_int, 0x0004);
-pub const __FPCLASS_NEGNORMAL = @as(c_int, 0x0008);
-pub const __FPCLASS_NEGSUBNORMAL = @as(c_int, 0x0010);
-pub const __FPCLASS_NEGZERO = @as(c_int, 0x0020);
-pub const __FPCLASS_POSZERO = @as(c_int, 0x0040);
-pub const __FPCLASS_POSSUBNORMAL = @as(c_int, 0x0080);
-pub const __FPCLASS_POSNORMAL = @as(c_int, 0x0100);
-pub const __FPCLASS_POSINF = @as(c_int, 0x0200);
-pub const __PRAGMA_REDEFINE_EXTNAME = @as(c_int, 1);
-pub const __VERSION__ = "Clang 20.1.2 (https://github.com/ziglang/zig-bootstrap c6bc9398c72c7a63fe9420a9055dcfd1845bc266)";
-pub const __OBJC_BOOL_IS_BOOL = @as(c_int, 0);
-pub const __CONSTANT_CFSTRINGS__ = @as(c_int, 1);
-pub const __clang_literal_encoding__ = "UTF-8";
-pub const __clang_wide_literal_encoding__ = "UTF-32";
-pub const __ORDER_LITTLE_ENDIAN__ = @as(c_int, 1234);
-pub const __ORDER_BIG_ENDIAN__ = @as(c_int, 4321);
-pub const __ORDER_PDP_ENDIAN__ = @as(c_int, 3412);
-pub const __BYTE_ORDER__ = __ORDER_LITTLE_ENDIAN__;
-pub const __LITTLE_ENDIAN__ = @as(c_int, 1);
-pub const _LP64 = @as(c_int, 1);
-pub const __LP64__ = @as(c_int, 1);
+pub const __ATOMIC_BOOL_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_CHAR_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_CHAR16_T_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_CHAR32_T_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_WCHAR_T_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_WINT_T_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_SHORT_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_INT_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_LONG_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_LLONG_LOCK_FREE = @as(c_int, 1);
+pub const __ATOMIC_POINTER_LOCK_FREE = @as(c_int, 1);
+pub const __WINT_UNSIGNED__ = @as(c_int, 1);
 pub const __CHAR_BIT__ = @as(c_int, 8);
-pub const __BOOL_WIDTH__ = @as(c_int, 1);
-pub const __SHRT_WIDTH__ = @as(c_int, 16);
-pub const __INT_WIDTH__ = @as(c_int, 32);
-pub const __LONG_WIDTH__ = @as(c_int, 64);
-pub const __LLONG_WIDTH__ = @as(c_int, 64);
-pub const __BITINT_MAXWIDTH__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 8388608, .decimal);
+pub const __BOOL_WIDTH__ = @as(c_int, 8);
 pub const __SCHAR_MAX__ = @as(c_int, 127);
+pub const __SCHAR_WIDTH__ = @as(c_int, 8);
 pub const __SHRT_MAX__ = @as(c_int, 32767);
-pub const __INT_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
-pub const __LONG_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const __SHRT_WIDTH__ = @as(c_int, 16);
+pub const __INT_MAX__ = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const __INT_WIDTH__ = @as(c_int, 32);
+pub const __LONG_MAX__ = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const __LONG_WIDTH__ = @as(c_int, 64);
 pub const __LONG_LONG_MAX__ = @as(c_longlong, 9223372036854775807);
-pub const __WCHAR_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const __LONG_LONG_WIDTH__ = @as(c_int, 64);
+pub const __WCHAR_MAX__ = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
 pub const __WCHAR_WIDTH__ = @as(c_int, 32);
-pub const __WINT_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 4294967295, .decimal);
+pub const __WINT_MAX__ = __helpers.promoteIntLiteral(c_uint, 4294967295, .decimal);
 pub const __WINT_WIDTH__ = @as(c_int, 32);
-pub const __INTMAX_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const __INTMAX_MAX__ = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
 pub const __INTMAX_WIDTH__ = @as(c_int, 64);
-pub const __SIZE_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const __SIZE_MAX__ = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
 pub const __SIZE_WIDTH__ = @as(c_int, 64);
-pub const __UINTMAX_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const __UINTMAX_MAX__ = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
 pub const __UINTMAX_WIDTH__ = @as(c_int, 64);
-pub const __PTRDIFF_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const __PTRDIFF_MAX__ = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
 pub const __PTRDIFF_WIDTH__ = @as(c_int, 64);
-pub const __INTPTR_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const __INTPTR_MAX__ = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
 pub const __INTPTR_WIDTH__ = @as(c_int, 64);
-pub const __UINTPTR_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const __UINTPTR_MAX__ = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
 pub const __UINTPTR_WIDTH__ = @as(c_int, 64);
-pub const __SIZEOF_DOUBLE__ = @as(c_int, 8);
+pub const __SIG_ATOMIC_MAX__ = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const __SIG_ATOMIC_WIDTH__ = @as(c_int, 32);
+pub const __BITINT_MAXWIDTH__ = __helpers.promoteIntLiteral(c_int, 65535, .decimal);
 pub const __SIZEOF_FLOAT__ = @as(c_int, 4);
+pub const __SIZEOF_DOUBLE__ = @as(c_int, 8);
+pub const __SIZEOF_LONG_DOUBLE__ = @as(c_int, 10);
+pub const __SIZEOF_SHORT__ = @as(c_int, 2);
 pub const __SIZEOF_INT__ = @as(c_int, 4);
 pub const __SIZEOF_LONG__ = @as(c_int, 8);
-pub const __SIZEOF_LONG_DOUBLE__ = @as(c_int, 16);
 pub const __SIZEOF_LONG_LONG__ = @as(c_int, 8);
 pub const __SIZEOF_POINTER__ = @as(c_int, 8);
-pub const __SIZEOF_SHORT__ = @as(c_int, 2);
 pub const __SIZEOF_PTRDIFF_T__ = @as(c_int, 8);
 pub const __SIZEOF_SIZE_T__ = @as(c_int, 8);
 pub const __SIZEOF_WCHAR_T__ = @as(c_int, 4);
 pub const __SIZEOF_WINT_T__ = @as(c_int, 4);
 pub const __SIZEOF_INT128__ = @as(c_int, 16);
-pub const __INTMAX_TYPE__ = c_long;
-pub const __INTMAX_FMTd__ = "ld";
-pub const __INTMAX_FMTi__ = "li";
-pub const __INTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`");
-// (no file):95:9
-pub const __INTMAX_C = @import("std").zig.c_translation.Macros.L_SUFFIX;
-pub const __UINTMAX_TYPE__ = c_ulong;
-pub const __UINTMAX_FMTo__ = "lo";
-pub const __UINTMAX_FMTu__ = "lu";
-pub const __UINTMAX_FMTx__ = "lx";
-pub const __UINTMAX_FMTX__ = "lX";
-pub const __UINTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`");
-// (no file):102:9
-pub const __UINTMAX_C = @import("std").zig.c_translation.Macros.UL_SUFFIX;
-pub const __PTRDIFF_TYPE__ = c_long;
-pub const __PTRDIFF_FMTd__ = "ld";
-pub const __PTRDIFF_FMTi__ = "li";
 pub const __INTPTR_TYPE__ = c_long;
-pub const __INTPTR_FMTd__ = "ld";
-pub const __INTPTR_FMTi__ = "li";
+pub const __UINTPTR_TYPE__ = c_ulong;
+pub const __INTMAX_TYPE__ = c_long;
+pub const __INTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`"); // <builtin>:150:9
+pub const __INTMAX_C = __helpers.L_SUFFIX;
+pub const __UINTMAX_TYPE__ = c_ulong;
+pub const __UINTMAX_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`"); // <builtin>:153:9
+pub const __UINTMAX_C = __helpers.UL_SUFFIX;
+pub const __PTRDIFF_TYPE__ = c_long;
 pub const __SIZE_TYPE__ = c_ulong;
-pub const __SIZE_FMTo__ = "lo";
-pub const __SIZE_FMTu__ = "lu";
-pub const __SIZE_FMTx__ = "lx";
-pub const __SIZE_FMTX__ = "lX";
 pub const __WCHAR_TYPE__ = c_int;
 pub const __WINT_TYPE__ = c_uint;
-pub const __SIG_ATOMIC_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
-pub const __SIG_ATOMIC_WIDTH__ = @as(c_int, 32);
 pub const __CHAR16_TYPE__ = c_ushort;
 pub const __CHAR32_TYPE__ = c_uint;
-pub const __UINTPTR_TYPE__ = c_ulong;
-pub const __UINTPTR_FMTo__ = "lo";
-pub const __UINTPTR_FMTu__ = "lu";
-pub const __UINTPTR_FMTx__ = "lx";
-pub const __UINTPTR_FMTX__ = "lX";
-pub const __FLT16_DENORM_MIN__ = @as(f16, 5.9604644775390625e-8);
-pub const __FLT16_NORM_MAX__ = @as(f16, 6.5504e+4);
-pub const __FLT16_HAS_DENORM__ = @as(c_int, 1);
-pub const __FLT16_DIG__ = @as(c_int, 3);
-pub const __FLT16_DECIMAL_DIG__ = @as(c_int, 5);
-pub const __FLT16_EPSILON__ = @as(f16, 9.765625e-4);
-pub const __FLT16_HAS_INFINITY__ = @as(c_int, 1);
-pub const __FLT16_HAS_QUIET_NAN__ = @as(c_int, 1);
-pub const __FLT16_MANT_DIG__ = @as(c_int, 11);
-pub const __FLT16_MAX_10_EXP__ = @as(c_int, 4);
-pub const __FLT16_MAX_EXP__ = @as(c_int, 16);
-pub const __FLT16_MAX__ = @as(f16, 6.5504e+4);
-pub const __FLT16_MIN_10_EXP__ = -@as(c_int, 4);
-pub const __FLT16_MIN_EXP__ = -@as(c_int, 13);
-pub const __FLT16_MIN__ = @as(f16, 6.103515625e-5);
-pub const __FLT_DENORM_MIN__ = @as(f32, 1.40129846e-45);
-pub const __FLT_NORM_MAX__ = @as(f32, 3.40282347e+38);
-pub const __FLT_HAS_DENORM__ = @as(c_int, 1);
-pub const __FLT_DIG__ = @as(c_int, 6);
-pub const __FLT_DECIMAL_DIG__ = @as(c_int, 9);
-pub const __FLT_EPSILON__ = @as(f32, 1.19209290e-7);
-pub const __FLT_HAS_INFINITY__ = @as(c_int, 1);
-pub const __FLT_HAS_QUIET_NAN__ = @as(c_int, 1);
-pub const __FLT_MANT_DIG__ = @as(c_int, 24);
-pub const __FLT_MAX_10_EXP__ = @as(c_int, 38);
-pub const __FLT_MAX_EXP__ = @as(c_int, 128);
-pub const __FLT_MAX__ = @as(f32, 3.40282347e+38);
-pub const __FLT_MIN_10_EXP__ = -@as(c_int, 37);
-pub const __FLT_MIN_EXP__ = -@as(c_int, 125);
-pub const __FLT_MIN__ = @as(f32, 1.17549435e-38);
-pub const __DBL_DENORM_MIN__ = @as(f64, 4.9406564584124654e-324);
-pub const __DBL_NORM_MAX__ = @as(f64, 1.7976931348623157e+308);
-pub const __DBL_HAS_DENORM__ = @as(c_int, 1);
-pub const __DBL_DIG__ = @as(c_int, 15);
-pub const __DBL_DECIMAL_DIG__ = @as(c_int, 17);
-pub const __DBL_EPSILON__ = @as(f64, 2.2204460492503131e-16);
-pub const __DBL_HAS_INFINITY__ = @as(c_int, 1);
-pub const __DBL_HAS_QUIET_NAN__ = @as(c_int, 1);
-pub const __DBL_MANT_DIG__ = @as(c_int, 53);
-pub const __DBL_MAX_10_EXP__ = @as(c_int, 308);
-pub const __DBL_MAX_EXP__ = @as(c_int, 1024);
-pub const __DBL_MAX__ = @as(f64, 1.7976931348623157e+308);
-pub const __DBL_MIN_10_EXP__ = -@as(c_int, 307);
-pub const __DBL_MIN_EXP__ = -@as(c_int, 1021);
-pub const __DBL_MIN__ = @as(f64, 2.2250738585072014e-308);
-pub const __LDBL_DENORM_MIN__ = @as(c_longdouble, 3.64519953188247460253e-4951);
-pub const __LDBL_NORM_MAX__ = @as(c_longdouble, 1.18973149535723176502e+4932);
-pub const __LDBL_HAS_DENORM__ = @as(c_int, 1);
-pub const __LDBL_DIG__ = @as(c_int, 18);
-pub const __LDBL_DECIMAL_DIG__ = @as(c_int, 21);
-pub const __LDBL_EPSILON__ = @as(c_longdouble, 1.08420217248550443401e-19);
-pub const __LDBL_HAS_INFINITY__ = @as(c_int, 1);
-pub const __LDBL_HAS_QUIET_NAN__ = @as(c_int, 1);
-pub const __LDBL_MANT_DIG__ = @as(c_int, 64);
-pub const __LDBL_MAX_10_EXP__ = @as(c_int, 4932);
-pub const __LDBL_MAX_EXP__ = @as(c_int, 16384);
-pub const __LDBL_MAX__ = @as(c_longdouble, 1.18973149535723176502e+4932);
-pub const __LDBL_MIN_10_EXP__ = -@as(c_int, 4931);
-pub const __LDBL_MIN_EXP__ = -@as(c_int, 16381);
-pub const __LDBL_MIN__ = @as(c_longdouble, 3.36210314311209350626e-4932);
-pub const __POINTER_WIDTH__ = @as(c_int, 64);
-pub const __BIGGEST_ALIGNMENT__ = @as(c_int, 16);
-pub const __WINT_UNSIGNED__ = @as(c_int, 1);
 pub const __INT8_TYPE__ = i8;
 pub const __INT8_FMTd__ = "hhd";
 pub const __INT8_FMTi__ = "hhi";
@@ -2552,9 +2927,8 @@ pub inline fn __INT32_C(c: anytype) @TypeOf(c) {
 pub const __INT64_TYPE__ = c_long;
 pub const __INT64_FMTd__ = "ld";
 pub const __INT64_FMTi__ = "li";
-pub const __INT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`");
-// (no file):207:9
-pub const __INT64_C = @import("std").zig.c_translation.Macros.L_SUFFIX;
+pub const __INT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `L`"); // <builtin>:179:9
+pub const __INT64_C = __helpers.L_SUFFIX;
 pub const __UINT8_TYPE__ = u8;
 pub const __UINT8_FMTo__ = "hho";
 pub const __UINT8_FMTu__ = "hhu";
@@ -2577,220 +2951,180 @@ pub inline fn __UINT16_C(c: anytype) @TypeOf(c) {
     _ = &c;
     return c;
 }
-pub const __UINT16_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 65535, .decimal);
+pub const __UINT16_MAX__ = __helpers.promoteIntLiteral(c_int, 65535, .decimal);
 pub const __INT16_MAX__ = @as(c_int, 32767);
 pub const __UINT32_TYPE__ = c_uint;
 pub const __UINT32_FMTo__ = "o";
 pub const __UINT32_FMTu__ = "u";
 pub const __UINT32_FMTx__ = "x";
 pub const __UINT32_FMTX__ = "X";
-pub const __UINT32_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `U`");
-// (no file):232:9
-pub const __UINT32_C = @import("std").zig.c_translation.Macros.U_SUFFIX;
-pub const __UINT32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 4294967295, .decimal);
-pub const __INT32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const __UINT32_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `U`"); // <builtin>:204:9
+pub const __UINT32_C = __helpers.U_SUFFIX;
+pub const __UINT32_MAX__ = __helpers.promoteIntLiteral(c_uint, 4294967295, .decimal);
+pub const __INT32_MAX__ = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
 pub const __UINT64_TYPE__ = c_ulong;
 pub const __UINT64_FMTo__ = "lo";
 pub const __UINT64_FMTu__ = "lu";
 pub const __UINT64_FMTx__ = "lx";
 pub const __UINT64_FMTX__ = "lX";
-pub const __UINT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`");
-// (no file):241:9
-pub const __UINT64_C = @import("std").zig.c_translation.Macros.UL_SUFFIX;
-pub const __UINT64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
-pub const __INT64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const __UINT64_C_SUFFIX__ = @compileError("unable to translate macro: undefined identifier `UL`"); // <builtin>:213:9
+pub const __UINT64_C = __helpers.UL_SUFFIX;
+pub const __UINT64_MAX__ = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const __INT64_MAX__ = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
 pub const __INT_LEAST8_TYPE__ = i8;
 pub const __INT_LEAST8_MAX__ = @as(c_int, 127);
 pub const __INT_LEAST8_WIDTH__ = @as(c_int, 8);
-pub const __INT_LEAST8_FMTd__ = "hhd";
-pub const __INT_LEAST8_FMTi__ = "hhi";
+pub const INT_LEAST8_FMTd__ = "hhd";
+pub const INT_LEAST8_FMTi__ = "hhi";
 pub const __UINT_LEAST8_TYPE__ = u8;
 pub const __UINT_LEAST8_MAX__ = @as(c_int, 255);
-pub const __UINT_LEAST8_FMTo__ = "hho";
-pub const __UINT_LEAST8_FMTu__ = "hhu";
-pub const __UINT_LEAST8_FMTx__ = "hhx";
-pub const __UINT_LEAST8_FMTX__ = "hhX";
-pub const __INT_LEAST16_TYPE__ = c_short;
-pub const __INT_LEAST16_MAX__ = @as(c_int, 32767);
-pub const __INT_LEAST16_WIDTH__ = @as(c_int, 16);
-pub const __INT_LEAST16_FMTd__ = "hd";
-pub const __INT_LEAST16_FMTi__ = "hi";
-pub const __UINT_LEAST16_TYPE__ = c_ushort;
-pub const __UINT_LEAST16_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 65535, .decimal);
-pub const __UINT_LEAST16_FMTo__ = "ho";
-pub const __UINT_LEAST16_FMTu__ = "hu";
-pub const __UINT_LEAST16_FMTx__ = "hx";
-pub const __UINT_LEAST16_FMTX__ = "hX";
-pub const __INT_LEAST32_TYPE__ = c_int;
-pub const __INT_LEAST32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
-pub const __INT_LEAST32_WIDTH__ = @as(c_int, 32);
-pub const __INT_LEAST32_FMTd__ = "d";
-pub const __INT_LEAST32_FMTi__ = "i";
-pub const __UINT_LEAST32_TYPE__ = c_uint;
-pub const __UINT_LEAST32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 4294967295, .decimal);
-pub const __UINT_LEAST32_FMTo__ = "o";
-pub const __UINT_LEAST32_FMTu__ = "u";
-pub const __UINT_LEAST32_FMTx__ = "x";
-pub const __UINT_LEAST32_FMTX__ = "X";
-pub const __INT_LEAST64_TYPE__ = c_long;
-pub const __INT_LEAST64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
-pub const __INT_LEAST64_WIDTH__ = @as(c_int, 64);
-pub const __INT_LEAST64_FMTd__ = "ld";
-pub const __INT_LEAST64_FMTi__ = "li";
-pub const __UINT_LEAST64_TYPE__ = c_ulong;
-pub const __UINT_LEAST64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
-pub const __UINT_LEAST64_FMTo__ = "lo";
-pub const __UINT_LEAST64_FMTu__ = "lu";
-pub const __UINT_LEAST64_FMTx__ = "lx";
-pub const __UINT_LEAST64_FMTX__ = "lX";
+pub const UINT_LEAST8_FMTo__ = "hho";
+pub const UINT_LEAST8_FMTu__ = "hhu";
+pub const UINT_LEAST8_FMTx__ = "hhx";
+pub const UINT_LEAST8_FMTX__ = "hhX";
 pub const __INT_FAST8_TYPE__ = i8;
 pub const __INT_FAST8_MAX__ = @as(c_int, 127);
 pub const __INT_FAST8_WIDTH__ = @as(c_int, 8);
-pub const __INT_FAST8_FMTd__ = "hhd";
-pub const __INT_FAST8_FMTi__ = "hhi";
+pub const INT_FAST8_FMTd__ = "hhd";
+pub const INT_FAST8_FMTi__ = "hhi";
 pub const __UINT_FAST8_TYPE__ = u8;
 pub const __UINT_FAST8_MAX__ = @as(c_int, 255);
-pub const __UINT_FAST8_FMTo__ = "hho";
-pub const __UINT_FAST8_FMTu__ = "hhu";
-pub const __UINT_FAST8_FMTx__ = "hhx";
-pub const __UINT_FAST8_FMTX__ = "hhX";
+pub const UINT_FAST8_FMTo__ = "hho";
+pub const UINT_FAST8_FMTu__ = "hhu";
+pub const UINT_FAST8_FMTx__ = "hhx";
+pub const UINT_FAST8_FMTX__ = "hhX";
+pub const __INT_LEAST16_TYPE__ = c_short;
+pub const __INT_LEAST16_MAX__ = @as(c_int, 32767);
+pub const __INT_LEAST16_WIDTH__ = @as(c_int, 16);
+pub const INT_LEAST16_FMTd__ = "hd";
+pub const INT_LEAST16_FMTi__ = "hi";
+pub const __UINT_LEAST16_TYPE__ = c_ushort;
+pub const __UINT_LEAST16_MAX__ = __helpers.promoteIntLiteral(c_int, 65535, .decimal);
+pub const UINT_LEAST16_FMTo__ = "ho";
+pub const UINT_LEAST16_FMTu__ = "hu";
+pub const UINT_LEAST16_FMTx__ = "hx";
+pub const UINT_LEAST16_FMTX__ = "hX";
 pub const __INT_FAST16_TYPE__ = c_short;
 pub const __INT_FAST16_MAX__ = @as(c_int, 32767);
 pub const __INT_FAST16_WIDTH__ = @as(c_int, 16);
-pub const __INT_FAST16_FMTd__ = "hd";
-pub const __INT_FAST16_FMTi__ = "hi";
+pub const INT_FAST16_FMTd__ = "hd";
+pub const INT_FAST16_FMTi__ = "hi";
 pub const __UINT_FAST16_TYPE__ = c_ushort;
-pub const __UINT_FAST16_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 65535, .decimal);
-pub const __UINT_FAST16_FMTo__ = "ho";
-pub const __UINT_FAST16_FMTu__ = "hu";
-pub const __UINT_FAST16_FMTx__ = "hx";
-pub const __UINT_FAST16_FMTX__ = "hX";
+pub const __UINT_FAST16_MAX__ = __helpers.promoteIntLiteral(c_int, 65535, .decimal);
+pub const UINT_FAST16_FMTo__ = "ho";
+pub const UINT_FAST16_FMTu__ = "hu";
+pub const UINT_FAST16_FMTx__ = "hx";
+pub const UINT_FAST16_FMTX__ = "hX";
+pub const __INT_LEAST32_TYPE__ = c_int;
+pub const __INT_LEAST32_MAX__ = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const __INT_LEAST32_WIDTH__ = @as(c_int, 32);
+pub const INT_LEAST32_FMTd__ = "d";
+pub const INT_LEAST32_FMTi__ = "i";
+pub const __UINT_LEAST32_TYPE__ = c_uint;
+pub const __UINT_LEAST32_MAX__ = __helpers.promoteIntLiteral(c_uint, 4294967295, .decimal);
+pub const UINT_LEAST32_FMTo__ = "o";
+pub const UINT_LEAST32_FMTu__ = "u";
+pub const UINT_LEAST32_FMTx__ = "x";
+pub const UINT_LEAST32_FMTX__ = "X";
 pub const __INT_FAST32_TYPE__ = c_int;
-pub const __INT_FAST32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const __INT_FAST32_MAX__ = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
 pub const __INT_FAST32_WIDTH__ = @as(c_int, 32);
-pub const __INT_FAST32_FMTd__ = "d";
-pub const __INT_FAST32_FMTi__ = "i";
+pub const INT_FAST32_FMTd__ = "d";
+pub const INT_FAST32_FMTi__ = "i";
 pub const __UINT_FAST32_TYPE__ = c_uint;
-pub const __UINT_FAST32_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 4294967295, .decimal);
-pub const __UINT_FAST32_FMTo__ = "o";
-pub const __UINT_FAST32_FMTu__ = "u";
-pub const __UINT_FAST32_FMTx__ = "x";
-pub const __UINT_FAST32_FMTX__ = "X";
+pub const __UINT_FAST32_MAX__ = __helpers.promoteIntLiteral(c_uint, 4294967295, .decimal);
+pub const UINT_FAST32_FMTo__ = "o";
+pub const UINT_FAST32_FMTu__ = "u";
+pub const UINT_FAST32_FMTx__ = "x";
+pub const UINT_FAST32_FMTX__ = "X";
+pub const __INT_LEAST64_TYPE__ = c_long;
+pub const __INT_LEAST64_MAX__ = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const __INT_LEAST64_WIDTH__ = @as(c_int, 64);
+pub const INT_LEAST64_FMTd__ = "ld";
+pub const INT_LEAST64_FMTi__ = "li";
+pub const __UINT_LEAST64_TYPE__ = c_ulong;
+pub const __UINT_LEAST64_MAX__ = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const UINT_LEAST64_FMTo__ = "lo";
+pub const UINT_LEAST64_FMTu__ = "lu";
+pub const UINT_LEAST64_FMTx__ = "lx";
+pub const UINT_LEAST64_FMTX__ = "lX";
 pub const __INT_FAST64_TYPE__ = c_long;
-pub const __INT_FAST64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const __INT_FAST64_MAX__ = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
 pub const __INT_FAST64_WIDTH__ = @as(c_int, 64);
-pub const __INT_FAST64_FMTd__ = "ld";
-pub const __INT_FAST64_FMTi__ = "li";
+pub const INT_FAST64_FMTd__ = "ld";
+pub const INT_FAST64_FMTi__ = "li";
 pub const __UINT_FAST64_TYPE__ = c_ulong;
-pub const __UINT_FAST64_MAX__ = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
-pub const __UINT_FAST64_FMTo__ = "lo";
-pub const __UINT_FAST64_FMTu__ = "lu";
-pub const __UINT_FAST64_FMTx__ = "lx";
-pub const __UINT_FAST64_FMTX__ = "lX";
-pub const __USER_LABEL_PREFIX__ = "";
-pub const __FINITE_MATH_ONLY__ = @as(c_int, 0);
-pub const __GNUC_STDC_INLINE__ = @as(c_int, 1);
-pub const __GCC_ATOMIC_TEST_AND_SET_TRUEVAL = @as(c_int, 1);
-pub const __GCC_DESTRUCTIVE_SIZE = @as(c_int, 64);
-pub const __GCC_CONSTRUCTIVE_SIZE = @as(c_int, 64);
-pub const __CLANG_ATOMIC_BOOL_LOCK_FREE = @as(c_int, 2);
-pub const __CLANG_ATOMIC_CHAR_LOCK_FREE = @as(c_int, 2);
-pub const __CLANG_ATOMIC_CHAR16_T_LOCK_FREE = @as(c_int, 2);
-pub const __CLANG_ATOMIC_CHAR32_T_LOCK_FREE = @as(c_int, 2);
-pub const __CLANG_ATOMIC_WCHAR_T_LOCK_FREE = @as(c_int, 2);
-pub const __CLANG_ATOMIC_SHORT_LOCK_FREE = @as(c_int, 2);
-pub const __CLANG_ATOMIC_INT_LOCK_FREE = @as(c_int, 2);
-pub const __CLANG_ATOMIC_LONG_LOCK_FREE = @as(c_int, 2);
-pub const __CLANG_ATOMIC_LLONG_LOCK_FREE = @as(c_int, 2);
-pub const __CLANG_ATOMIC_POINTER_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_BOOL_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_CHAR_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_CHAR16_T_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_CHAR32_T_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_WCHAR_T_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_SHORT_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_INT_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_LONG_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_LLONG_LOCK_FREE = @as(c_int, 2);
-pub const __GCC_ATOMIC_POINTER_LOCK_FREE = @as(c_int, 2);
-pub const __NO_INLINE__ = @as(c_int, 1);
+pub const __UINT_FAST64_MAX__ = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const UINT_FAST64_FMTo__ = "lo";
+pub const UINT_FAST64_FMTu__ = "lu";
+pub const UINT_FAST64_FMTx__ = "lx";
+pub const UINT_FAST64_FMTX__ = "lX";
+pub const __FLT16_DENORM_MIN__ = @as(f16, 5.9604644775390625e-8);
+pub const __FLT16_HAS_DENORM__ = "";
+pub const __FLT16_DIG__ = @as(c_int, 3);
+pub const __FLT16_DECIMAL_DIG__ = @as(c_int, 5);
+pub const __FLT16_EPSILON__ = @as(f16, 9.765625e-4);
+pub const __FLT16_HAS_INFINITY__ = "";
+pub const __FLT16_HAS_QUIET_NAN__ = "";
+pub const __FLT16_MANT_DIG__ = @as(c_int, 11);
+pub const __FLT16_MAX_10_EXP__ = @as(c_int, 4);
+pub const __FLT16_MAX_EXP__ = @as(c_int, 16);
+pub const __FLT16_MAX__ = @as(f16, 6.5504e+4);
+pub const __FLT16_MIN_10_EXP__ = -@as(c_int, 4);
+pub const __FLT16_MIN_EXP__ = -@as(c_int, 13);
+pub const __FLT16_MIN__ = @as(f16, 6.103515625e-5);
+pub const __FLT_DENORM_MIN__ = @as(f32, 1.40129846e-45);
+pub const __FLT_HAS_DENORM__ = "";
+pub const __FLT_DIG__ = @as(c_int, 6);
+pub const __FLT_DECIMAL_DIG__ = @as(c_int, 9);
+pub const __FLT_EPSILON__ = @as(f32, 1.19209290e-7);
+pub const __FLT_HAS_INFINITY__ = "";
+pub const __FLT_HAS_QUIET_NAN__ = "";
+pub const __FLT_MANT_DIG__ = @as(c_int, 24);
+pub const __FLT_MAX_10_EXP__ = @as(c_int, 38);
+pub const __FLT_MAX_EXP__ = @as(c_int, 128);
+pub const __FLT_MAX__ = @as(f32, 3.40282347e+38);
+pub const __FLT_MIN_10_EXP__ = -@as(c_int, 37);
+pub const __FLT_MIN_EXP__ = -@as(c_int, 125);
+pub const __FLT_MIN__ = @as(f32, 1.17549435e-38);
+pub const __DBL_DENORM_MIN__ = @as(f64, 4.9406564584124654e-324);
+pub const __DBL_HAS_DENORM__ = "";
+pub const __DBL_DIG__ = @as(c_int, 15);
+pub const __DBL_DECIMAL_DIG__ = @as(c_int, 17);
+pub const __DBL_EPSILON__ = @as(f64, 2.2204460492503131e-16);
+pub const __DBL_HAS_INFINITY__ = "";
+pub const __DBL_HAS_QUIET_NAN__ = "";
+pub const __DBL_MANT_DIG__ = @as(c_int, 53);
+pub const __DBL_MAX_10_EXP__ = @as(c_int, 308);
+pub const __DBL_MAX_EXP__ = @as(c_int, 1024);
+pub const __DBL_MAX__ = @as(f64, 1.7976931348623157e+308);
+pub const __DBL_MIN_10_EXP__ = -@as(c_int, 307);
+pub const __DBL_MIN_EXP__ = -@as(c_int, 1021);
+pub const __DBL_MIN__ = @as(f64, 2.2250738585072014e-308);
+pub const __LDBL_DENORM_MIN__ = @as(c_longdouble, 3.64519953188247460253e-4951);
+pub const __LDBL_HAS_DENORM__ = "";
+pub const __LDBL_DIG__ = @as(c_int, 18);
+pub const __LDBL_DECIMAL_DIG__ = @as(c_int, 21);
+pub const __LDBL_EPSILON__ = @as(c_longdouble, 1.08420217248550443401e-19);
+pub const __LDBL_HAS_INFINITY__ = "";
+pub const __LDBL_HAS_QUIET_NAN__ = "";
+pub const __LDBL_MANT_DIG__ = @as(c_int, 64);
+pub const __LDBL_MAX_10_EXP__ = @as(c_int, 4932);
+pub const __LDBL_MAX_EXP__ = @as(c_int, 16384);
+pub const __LDBL_MAX__ = @as(c_longdouble, 1.18973149535723176502e+4932);
+pub const __LDBL_MIN_10_EXP__ = -@as(c_int, 4931);
+pub const __LDBL_MIN_EXP__ = -@as(c_int, 16381);
+pub const __LDBL_MIN__ = @as(c_longdouble, 3.36210314311209350626e-4932);
+pub const __FLT_EVAL_METHOD__ = @as(c_int, 0);
 pub const __FLT_RADIX__ = @as(c_int, 2);
 pub const __DECIMAL_DIG__ = __LDBL_DECIMAL_DIG__;
-pub const __ELF__ = @as(c_int, 1);
-pub const __GCC_ASM_FLAG_OUTPUTS__ = @as(c_int, 1);
-pub const __code_model_small__ = @as(c_int, 1);
-pub const __amd64__ = @as(c_int, 1);
-pub const __amd64 = @as(c_int, 1);
-pub const __x86_64 = @as(c_int, 1);
-pub const __x86_64__ = @as(c_int, 1);
-pub const __SEG_GS = @as(c_int, 1);
-pub const __SEG_FS = @as(c_int, 1);
-pub const __seg_gs = @compileError("unable to translate macro: undefined identifier `address_space`");
-// (no file):373:9
-pub const __seg_fs = @compileError("unable to translate macro: undefined identifier `address_space`");
-// (no file):374:9
-pub const __corei7 = @as(c_int, 1);
-pub const __corei7__ = @as(c_int, 1);
-pub const __tune_corei7__ = @as(c_int, 1);
-pub const __REGISTER_PREFIX__ = "";
-pub const __NO_MATH_INLINES = @as(c_int, 1);
-pub const __AES__ = @as(c_int, 1);
-pub const __PCLMUL__ = @as(c_int, 1);
-pub const __LAHF_SAHF__ = @as(c_int, 1);
-pub const __LZCNT__ = @as(c_int, 1);
-pub const __RDRND__ = @as(c_int, 1);
-pub const __BMI__ = @as(c_int, 1);
-pub const __BMI2__ = @as(c_int, 1);
-pub const __POPCNT__ = @as(c_int, 1);
-pub const __MOVBE__ = @as(c_int, 1);
-pub const __FMA__ = @as(c_int, 1);
-pub const __F16C__ = @as(c_int, 1);
-pub const __FXSR__ = @as(c_int, 1);
-pub const __XSAVE__ = @as(c_int, 1);
-pub const __CRC32__ = @as(c_int, 1);
-pub const __AVX2__ = @as(c_int, 1);
-pub const __AVX__ = @as(c_int, 1);
-pub const __SSE4_2__ = @as(c_int, 1);
-pub const __SSE4_1__ = @as(c_int, 1);
-pub const __SSSE3__ = @as(c_int, 1);
-pub const __SSE3__ = @as(c_int, 1);
-pub const __SSE2__ = @as(c_int, 1);
-pub const __SSE2_MATH__ = @as(c_int, 1);
-pub const __SSE__ = @as(c_int, 1);
-pub const __SSE_MATH__ = @as(c_int, 1);
-pub const __MMX__ = @as(c_int, 1);
-pub const __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 = @as(c_int, 1);
-pub const __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 = @as(c_int, 1);
-pub const __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 = @as(c_int, 1);
-pub const __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 = @as(c_int, 1);
-pub const __GCC_HAVE_SYNC_COMPARE_AND_SWAP_16 = @as(c_int, 1);
-pub const __SIZEOF_FLOAT128__ = @as(c_int, 16);
-pub const unix = @as(c_int, 1);
-pub const __unix = @as(c_int, 1);
-pub const __unix__ = @as(c_int, 1);
-pub const linux = @as(c_int, 1);
-pub const __linux = @as(c_int, 1);
-pub const __linux__ = @as(c_int, 1);
-pub const __gnu_linux__ = @as(c_int, 1);
-pub const __FLOAT128__ = @as(c_int, 1);
-pub const __STDC__ = @as(c_int, 1);
-pub const __STDC_HOSTED__ = @as(c_int, 1);
-pub const __STDC_VERSION__ = @as(c_long, 201710);
-pub const __STDC_UTF_16__ = @as(c_int, 1);
-pub const __STDC_UTF_32__ = @as(c_int, 1);
-pub const __STDC_EMBED_NOT_FOUND__ = @as(c_int, 0);
-pub const __STDC_EMBED_FOUND__ = @as(c_int, 1);
-pub const __STDC_EMBED_EMPTY__ = @as(c_int, 2);
-pub const __GCC_HAVE_DWARF2_CFI_ASM = @as(c_int, 1);
 pub const AERON_C_CONTEXT_H = "";
 pub const AERON_C_H = "";
-pub const __STDBOOL_H = "";
-pub const __bool_true_false_are_defined = @as(c_int, 1);
 pub const @"bool" = bool;
 pub const @"true" = @as(c_int, 1);
 pub const @"false" = @as(c_int, 0);
+pub const __bool_true_false_are_defined = @as(c_int, 1);
 pub const _STDINT_H = @as(c_int, 1);
-pub const __GLIBC_INTERNAL_STARTING_HEADER_IMPLEMENTATION = "";
 pub const _FEATURES_H = @as(c_int, 1);
 pub const __KERNEL_STRICT_NAMES = "";
 pub inline fn __GNUC_PREREQ(maj: anytype, min: anytype) @TypeOf(((__GNUC__ << @as(c_int, 16)) + __GNUC_MINOR__) >= ((maj << @as(c_int, 16)) + min)) {
@@ -2798,19 +3132,16 @@ pub inline fn __GNUC_PREREQ(maj: anytype, min: anytype) @TypeOf(((__GNUC__ << @a
     _ = &min;
     return ((__GNUC__ << @as(c_int, 16)) + __GNUC_MINOR__) >= ((maj << @as(c_int, 16)) + min);
 }
-pub inline fn __glibc_clang_prereq(maj: anytype, min: anytype) @TypeOf(((__clang_major__ << @as(c_int, 16)) + __clang_minor__) >= ((maj << @as(c_int, 16)) + min)) {
+pub inline fn __glibc_clang_prereq(maj: anytype, min: anytype) @TypeOf(@as(c_int, 0)) {
     _ = &maj;
     _ = &min;
-    return ((__clang_major__ << @as(c_int, 16)) + __clang_minor__) >= ((maj << @as(c_int, 16)) + min);
+    return @as(c_int, 0);
 }
-pub const __GLIBC_USE = @compileError("unable to translate macro: undefined identifier `__GLIBC_USE_`");
-// /usr/include/features.h:191:9
+pub const __GLIBC_USE = @compileError("unable to translate macro: undefined identifier `__GLIBC_USE_`"); // /usr/include/features.h:191:9
 pub const _DEFAULT_SOURCE = @as(c_int, 1);
 pub const __GLIBC_USE_ISOC2Y = @as(c_int, 0);
 pub const __GLIBC_USE_ISOC23 = @as(c_int, 0);
 pub const __USE_ISOC11 = @as(c_int, 1);
-pub const __USE_ISOC99 = @as(c_int, 1);
-pub const __USE_ISOC95 = @as(c_int, 1);
 pub const __USE_POSIX_IMPLICITLY = @as(c_int, 1);
 pub const _POSIX_SOURCE = @as(c_int, 1);
 pub const _POSIX_C_SOURCE = @as(c_long, 200809);
@@ -2819,6 +3150,8 @@ pub const __USE_POSIX2 = @as(c_int, 1);
 pub const __USE_POSIX199309 = @as(c_int, 1);
 pub const __USE_POSIX199506 = @as(c_int, 1);
 pub const __USE_XOPEN2K = @as(c_int, 1);
+pub const __USE_ISOC95 = @as(c_int, 1);
+pub const __USE_ISOC99 = @as(c_int, 1);
 pub const __USE_XOPEN2K8 = @as(c_int, 1);
 pub const _ATFILE_SOURCE = @as(c_int, 1);
 pub const __WORDSIZE = @as(c_int, 64);
@@ -2847,26 +3180,19 @@ pub inline fn __GLIBC_PREREQ(maj: anytype, min: anytype) @TypeOf(((__GLIBC__ << 
     return ((__GLIBC__ << @as(c_int, 16)) + __GLIBC_MINOR__) >= ((maj << @as(c_int, 16)) + min);
 }
 pub const _SYS_CDEFS_H = @as(c_int, 1);
-pub const __glibc_has_attribute = @compileError("unable to translate macro: undefined identifier `__has_attribute`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:45:10
-pub inline fn __glibc_has_builtin(name: anytype) @TypeOf(__has_builtin(name)) {
+pub const __glibc_has_attribute = @compileError("unable to translate macro: undefined identifier `__has_attribute`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:45:10
+pub inline fn __glibc_has_builtin(name: anytype) @TypeOf(__builtin.has_builtin(name)) {
     _ = &name;
-    return __has_builtin(name);
+    return __builtin.has_builtin(name);
 }
-pub const __glibc_has_extension = @compileError("unable to translate macro: undefined identifier `__has_extension`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:55:10
-pub const __LEAF = "";
-pub const __LEAF_ATTR = "";
-pub const __THROW = @compileError("unable to translate macro: undefined identifier `__nothrow__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:11
-pub const __THROWNL = @compileError("unable to translate macro: undefined identifier `__nothrow__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:80:11
-pub const __NTH = @compileError("unable to translate macro: undefined identifier `__nothrow__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:81:11
-pub const __NTHNL = @compileError("unable to translate macro: undefined identifier `__nothrow__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:82:11
-pub const __COLD = @compileError("unable to translate macro: undefined identifier `__cold__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:102:11
+pub const __glibc_has_extension = @compileError("unable to translate macro: undefined identifier `__has_extension`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:55:10
+pub const __LEAF = @compileError("unable to translate macro: undefined identifier `__leaf__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:65:11
+pub const __LEAF_ATTR = @compileError("unable to translate macro: undefined identifier `__leaf__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:66:11
+pub const __THROW = @compileError("unable to translate macro: undefined identifier `__nothrow__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:11
+pub const __THROWNL = @compileError("unable to translate macro: undefined identifier `__nothrow__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:80:11
+pub const __NTH = @compileError("unable to translate macro: undefined identifier `__nothrow__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:81:11
+pub const __NTHNL = @compileError("unable to translate macro: undefined identifier `__nothrow__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:82:11
+pub const __COLD = @compileError("unable to translate macro: undefined identifier `__cold__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:102:11
 pub inline fn __P(args: anytype) @TypeOf(args) {
     _ = &args;
     return args;
@@ -2875,22 +3201,19 @@ pub inline fn __PMT(args: anytype) @TypeOf(args) {
     _ = &args;
     return args;
 }
-pub const __CONCAT = @compileError("unable to translate C expr: unexpected token '##'");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:131:9
-pub const __STRING = @compileError("unable to translate C expr: unexpected token '#'");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:132:9
+pub const __CONCAT = @compileError("unable to translate C expr: unexpected token '##'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:131:9
+pub const __STRING = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:132:9
 pub const __ptr_t = ?*anyopaque;
 pub const __BEGIN_DECLS = "";
 pub const __END_DECLS = "";
-pub const __attribute_overloadable__ = @compileError("unable to translate macro: undefined identifier `__overloadable__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:151:10
-pub inline fn __bos(ptr: anytype) @TypeOf(__builtin_object_size(ptr, __USE_FORTIFY_LEVEL > @as(c_int, 1))) {
+pub const __attribute_overloadable__ = "";
+pub inline fn __bos(ptr: anytype) @TypeOf(__builtin.object_size(ptr, __USE_FORTIFY_LEVEL > @as(c_int, 1))) {
     _ = &ptr;
-    return __builtin_object_size(ptr, __USE_FORTIFY_LEVEL > @as(c_int, 1));
+    return __builtin.object_size(ptr, __USE_FORTIFY_LEVEL > @as(c_int, 1));
 }
-pub inline fn __bos0(ptr: anytype) @TypeOf(__builtin_object_size(ptr, @as(c_int, 0))) {
+pub inline fn __bos0(ptr: anytype) @TypeOf(__builtin.object_size(ptr, @as(c_int, 0))) {
     _ = &ptr;
-    return __builtin_object_size(ptr, @as(c_int, 0));
+    return __builtin.object_size(ptr, @as(c_int, 0));
 }
 pub inline fn __glibc_objsize0(__o: anytype) @TypeOf(__bos0(__o)) {
     _ = &__o;
@@ -2900,21 +3223,14 @@ pub inline fn __glibc_objsize(__o: anytype) @TypeOf(__bos(__o)) {
     _ = &__o;
     return __bos(__o);
 }
-pub const __warnattr = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:370:10
-pub const __errordecl = @compileError("unable to translate C expr: unexpected token 'extern'");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:371:10
-pub const __flexarr = @compileError("unable to translate C expr: unexpected token '['");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:379:10
+pub const __warnattr = @compileError("unable to translate macro: undefined identifier `__warning__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:366:10
+pub const __errordecl = @compileError("unable to translate macro: undefined identifier `__error__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:367:10
+pub const __flexarr = @compileError("unable to translate C expr: unexpected token '['"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:379:10
 pub const __glibc_c99_flexarr_available = @as(c_int, 1);
-pub const __REDIRECT = @compileError("unable to translate C expr: unexpected token '__asm__'");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:410:10
-pub const __REDIRECT_NTH = @compileError("unable to translate C expr: unexpected token '__asm__'");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:417:11
-pub const __REDIRECT_NTHNL = @compileError("unable to translate C expr: unexpected token '__asm__'");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:419:11
-pub const __ASMNAME = @compileError("unable to translate C expr: unexpected token ','");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:422:10
+pub const __REDIRECT = @compileError("unable to translate C expr: unexpected token '__asm__'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:410:10
+pub const __REDIRECT_NTH = @compileError("unable to translate C expr: unexpected token '__asm__'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:417:11
+pub const __REDIRECT_NTHNL = @compileError("unable to translate C expr: unexpected token '__asm__'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:419:11
+pub const __ASMNAME = @compileError("unable to translate macro: undefined identifier `__USER_LABEL_PREFIX__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:422:10
 pub inline fn __ASMNAME2(prefix: anytype, cname: anytype) @TypeOf(__STRING(prefix) ++ cname) {
     _ = &prefix;
     _ = &cname;
@@ -2922,63 +3238,47 @@ pub inline fn __ASMNAME2(prefix: anytype, cname: anytype) @TypeOf(__STRING(prefi
 }
 pub const __REDIRECT_FORTIFY = __REDIRECT;
 pub const __REDIRECT_FORTIFY_NTH = __REDIRECT_NTH;
-pub const __attribute_malloc__ = @compileError("unable to translate macro: undefined identifier `__malloc__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:452:10
-pub const __attribute_alloc_size__ = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:463:10
-pub const __attribute_alloc_align__ = @compileError("unable to translate macro: undefined identifier `__alloc_align__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:469:10
-pub const __attribute_pure__ = @compileError("unable to translate macro: undefined identifier `__pure__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:479:10
-pub const __attribute_const__ = @compileError("unable to translate C expr: unexpected token '__attribute__'");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:486:10
-pub const __attribute_maybe_unused__ = @compileError("unable to translate macro: undefined identifier `__unused__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:492:10
-pub const __attribute_used__ = @compileError("unable to translate macro: undefined identifier `__used__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:501:10
-pub const __attribute_noinline__ = @compileError("unable to translate macro: undefined identifier `__noinline__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:502:10
-pub const __attribute_deprecated__ = @compileError("unable to translate macro: undefined identifier `__deprecated__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:510:10
-pub const __attribute_deprecated_msg__ = @compileError("unable to translate macro: undefined identifier `__deprecated__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:520:10
-pub const __attribute_format_arg__ = @compileError("unable to translate macro: undefined identifier `__format_arg__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:533:10
-pub const __attribute_format_strfmon__ = @compileError("unable to translate macro: undefined identifier `__format__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:543:10
-pub const __attribute_nonnull__ = @compileError("unable to translate macro: undefined identifier `__nonnull__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:555:11
+pub const __attribute_malloc__ = @compileError("unable to translate macro: undefined identifier `__malloc__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:452:10
+pub const __attribute_alloc_size__ = @compileError("unable to translate macro: undefined identifier `__alloc_size__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:460:10
+pub const __attribute_alloc_align__ = @compileError("unable to translate macro: undefined identifier `__alloc_align__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:469:10
+pub const __attribute_pure__ = @compileError("unable to translate macro: undefined identifier `__pure__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:479:10
+pub const __attribute_const__ = @compileError("unable to translate C expr: unexpected token '__attribute__'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:486:10
+pub const __attribute_maybe_unused__ = @compileError("unable to translate macro: undefined identifier `__unused__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:492:10
+pub const __attribute_used__ = @compileError("unable to translate macro: undefined identifier `__used__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:501:10
+pub const __attribute_noinline__ = @compileError("unable to translate macro: undefined identifier `__noinline__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:502:10
+pub const __attribute_deprecated__ = @compileError("unable to translate macro: undefined identifier `__deprecated__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:510:10
+pub const __attribute_deprecated_msg__ = @compileError("unable to translate macro: undefined identifier `__deprecated__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:520:10
+pub const __attribute_format_arg__ = @compileError("unable to translate macro: undefined identifier `__format_arg__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:533:10
+pub const __attribute_format_strfmon__ = @compileError("unable to translate macro: undefined identifier `__format__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:543:10
+pub const __attribute_nonnull__ = @compileError("unable to translate macro: undefined identifier `__nonnull__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:555:11
 pub inline fn __nonnull(params: anytype) @TypeOf(__attribute_nonnull__(params)) {
     _ = &params;
     return __attribute_nonnull__(params);
 }
-pub const __returns_nonnull = @compileError("unable to translate macro: undefined identifier `__returns_nonnull__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:568:10
-pub const __attribute_warn_unused_result__ = @compileError("unable to translate macro: undefined identifier `__warn_unused_result__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:577:10
+pub const __returns_nonnull = @compileError("unable to translate macro: undefined identifier `__returns_nonnull__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:568:10
+pub const __attribute_warn_unused_result__ = @compileError("unable to translate macro: undefined identifier `__warn_unused_result__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:577:10
 pub const __wur = "";
-pub const __always_inline = @compileError("unable to translate macro: undefined identifier `__always_inline__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:595:10
-pub const __attribute_artificial__ = @compileError("unable to translate macro: undefined identifier `__artificial__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:604:10
-pub const __extern_inline = @compileError("unable to translate macro: undefined identifier `__gnu_inline__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:622:11
-pub const __extern_always_inline = @compileError("unable to translate macro: undefined identifier `__gnu_inline__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:623:11
+pub const __always_inline = @compileError("unable to translate macro: undefined identifier `__always_inline__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:595:10
+pub const __attribute_artificial__ = @compileError("unable to translate macro: undefined identifier `__artificial__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:604:10
+pub const __extern_inline = @compileError("unable to translate C expr: unexpected token 'extern'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:626:11
+pub const __extern_always_inline = @compileError("unable to translate C expr: unexpected token 'extern'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:627:11
 pub const __fortify_function = __extern_always_inline ++ __attribute_artificial__;
-pub const __restrict_arr = @compileError("unable to translate C expr: unexpected token '__restrict'");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:666:10
-pub inline fn __glibc_unlikely(cond: anytype) @TypeOf(__builtin_expect(cond, @as(c_int, 0))) {
+pub const __va_arg_pack = @compileError("unable to translate macro: undefined identifier `__builtin_va_arg_pack`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:638:10
+pub const __va_arg_pack_len = @compileError("unable to translate macro: undefined identifier `__builtin_va_arg_pack_len`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:639:10
+pub const __restrict_arr = @compileError("unable to translate C expr: unexpected token '__restrict'"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:666:10
+pub inline fn __glibc_unlikely(cond: anytype) @TypeOf(__builtin.expect(cond, @as(c_int, 0))) {
     _ = &cond;
-    return __builtin_expect(cond, @as(c_int, 0));
+    return __builtin.expect(cond, @as(c_int, 0));
 }
-pub inline fn __glibc_likely(cond: anytype) @TypeOf(__builtin_expect(cond, @as(c_int, 1))) {
+pub inline fn __glibc_likely(cond: anytype) @TypeOf(__builtin.expect(cond, @as(c_int, 1))) {
     _ = &cond;
-    return __builtin_expect(cond, @as(c_int, 1));
+    return __builtin.expect(cond, @as(c_int, 1));
 }
 pub const __attribute_nonstring__ = "";
-pub const __attribute_copy__ = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:715:10
+pub inline fn __attribute_copy__(arg: anytype) void {
+    _ = &arg;
+    return;
+}
 pub const __LDOUBLE_REDIRECTS_TO_FLOAT128_ABI = @as(c_int, 0);
 pub inline fn __LDBL_REDIR1(name: anytype, proto: anytype, alias: anytype) @TypeOf(name ++ proto) {
     _ = &name;
@@ -3002,10 +3302,14 @@ pub inline fn __LDBL_REDIR_NTH(name: anytype, proto: anytype) @TypeOf(name ++ pr
     _ = &proto;
     return name ++ proto ++ __THROW;
 }
-pub const __LDBL_REDIR2_DECL = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:792:10
-pub const __LDBL_REDIR_DECL = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:793:10
+pub inline fn __LDBL_REDIR2_DECL(name: anytype) void {
+    _ = &name;
+    return;
+}
+pub inline fn __LDBL_REDIR_DECL(name: anytype) void {
+    _ = &name;
+    return;
+}
 pub inline fn __REDIRECT_LDBL(name: anytype, proto: anytype, alias: anytype) @TypeOf(__REDIRECT(name, proto, alias)) {
     _ = &name;
     _ = &proto;
@@ -3018,24 +3322,31 @@ pub inline fn __REDIRECT_NTH_LDBL(name: anytype, proto: anytype, alias: anytype)
     _ = &alias;
     return __REDIRECT_NTH(name, proto, alias);
 }
-pub const __glibc_macro_warning1 = @compileError("unable to translate macro: undefined identifier `_Pragma`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:807:10
-pub const __glibc_macro_warning = @compileError("unable to translate macro: undefined identifier `GCC`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:808:10
+pub const __glibc_macro_warning1 = @compileError("unable to translate macro: undefined identifier `_Pragma`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:807:10
+pub const __glibc_macro_warning = @compileError("unable to translate macro: undefined identifier `GCC`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:808:10
 pub const __HAVE_GENERIC_SELECTION = @as(c_int, 1);
-pub const __fortified_attr_access = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:853:11
-pub const __attr_access = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:854:11
-pub const __attr_access_none = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:855:11
-pub const __attr_dealloc = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:865:10
+pub inline fn __fortified_attr_access(a: anytype, o: anytype, s: anytype) void {
+    _ = &a;
+    _ = &o;
+    _ = &s;
+    return;
+}
+pub inline fn __attr_access(x: anytype) void {
+    _ = &x;
+    return;
+}
+pub inline fn __attr_access_none(argno: anytype) void {
+    _ = &argno;
+    return;
+}
+pub inline fn __attr_dealloc(dealloc: anytype, argno: anytype) void {
+    _ = &dealloc;
+    _ = &argno;
+    return;
+}
 pub const __attr_dealloc_free = "";
-pub const __attribute_returns_twice__ = @compileError("unable to translate macro: undefined identifier `__returns_twice__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:872:10
-pub const __attribute_struct_may_alias__ = @compileError("unable to translate macro: undefined identifier `__may_alias__`");
-// /usr/include/x86_64-linux-gnu/sys/cdefs.h:881:10
+pub const __attribute_returns_twice__ = @compileError("unable to translate macro: undefined identifier `__returns_twice__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:872:10
+pub const __attribute_struct_may_alias__ = @compileError("unable to translate macro: undefined identifier `__may_alias__`"); // /usr/include/x86_64-linux-gnu/sys/cdefs.h:881:10
 pub const __stub___compat_bdflush = "";
 pub const __stub_chflags = "";
 pub const __stub_fchflags = "";
@@ -3044,13 +3355,6 @@ pub const __stub_revoke = "";
 pub const __stub_setlogin = "";
 pub const __stub_sigreturn = "";
 pub const __stub_stty = "";
-pub const __GLIBC_USE_LIB_EXT2 = @as(c_int, 0);
-pub const __GLIBC_USE_IEC_60559_BFP_EXT = @as(c_int, 0);
-pub const __GLIBC_USE_IEC_60559_BFP_EXT_C23 = @as(c_int, 0);
-pub const __GLIBC_USE_IEC_60559_EXT = @as(c_int, 0);
-pub const __GLIBC_USE_IEC_60559_FUNCS_EXT = @as(c_int, 0);
-pub const __GLIBC_USE_IEC_60559_FUNCS_EXT_C23 = @as(c_int, 0);
-pub const __GLIBC_USE_IEC_60559_TYPES_EXT = @as(c_int, 0);
 pub const _BITS_TYPES_H = @as(c_int, 1);
 pub const __S16_TYPE = c_short;
 pub const __U16_TYPE = c_ushort;
@@ -3066,8 +3370,6 @@ pub const __SLONG32_TYPE = c_int;
 pub const __ULONG32_TYPE = c_uint;
 pub const __S64_TYPE = c_long;
 pub const __U64_TYPE = c_ulong;
-pub const __STD_TYPE = @compileError("unable to translate C expr: unexpected token 'typedef'");
-// /usr/include/x86_64-linux-gnu/bits/types.h:137:10
 pub const _BITS_TYPESIZES_H = @as(c_int, 1);
 pub const __SYSCALL_SLONG_TYPE = __SLONGWORD_TYPE;
 pub const __SYSCALL_ULONG_TYPE = __ULONGWORD_TYPE;
@@ -3101,8 +3403,7 @@ pub const __KEY_T_TYPE = __S32_TYPE;
 pub const __CLOCKID_T_TYPE = __S32_TYPE;
 pub const __TIMER_T_TYPE = ?*anyopaque;
 pub const __BLKSIZE_T_TYPE = __SYSCALL_SLONG_TYPE;
-pub const __FSID_T_TYPE = @compileError("unable to translate macro: undefined identifier `__val`");
-// /usr/include/x86_64-linux-gnu/bits/typesizes.h:73:9
+pub const __FSID_T_TYPE = @compileError("unable to translate macro: undefined identifier `__val`"); // /usr/include/x86_64-linux-gnu/bits/typesizes.h:73:9
 pub const __SSIZE_T_TYPE = __SWORD_TYPE;
 pub const __CPU_MASK_TYPE = __SYSCALL_ULONG_TYPE;
 pub const __OFF_T_MATCHES_OFF64_T = @as(c_int, 1);
@@ -3122,55 +3423,55 @@ pub const _BITS_STDINT_LEAST_H = @as(c_int, 1);
 pub const __intptr_t_defined = "";
 pub const INT8_MIN = -@as(c_int, 128);
 pub const INT16_MIN = -@as(c_int, 32767) - @as(c_int, 1);
-pub const INT32_MIN = -@import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal) - @as(c_int, 1);
-pub const INT64_MIN = -__INT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 9223372036854775807, .decimal)) - @as(c_int, 1);
+pub const INT32_MIN = -__helpers.promoteIntLiteral(c_int, 2147483647, .decimal) - @as(c_int, 1);
+pub const INT64_MIN = -__INT64_C(__helpers.promoteIntLiteral(c_int, 9223372036854775807, .decimal)) - @as(c_int, 1);
 pub const INT8_MAX = @as(c_int, 127);
 pub const INT16_MAX = @as(c_int, 32767);
-pub const INT32_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
-pub const INT64_MAX = __INT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 9223372036854775807, .decimal));
+pub const INT32_MAX = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const INT64_MAX = __INT64_C(__helpers.promoteIntLiteral(c_int, 9223372036854775807, .decimal));
 pub const UINT8_MAX = @as(c_int, 255);
-pub const UINT16_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_int, 65535, .decimal);
-pub const UINT32_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 4294967295, .decimal);
-pub const UINT64_MAX = __UINT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 18446744073709551615, .decimal));
+pub const UINT16_MAX = __helpers.promoteIntLiteral(c_int, 65535, .decimal);
+pub const UINT32_MAX = __helpers.promoteIntLiteral(c_uint, 4294967295, .decimal);
+pub const UINT64_MAX = __UINT64_C(__helpers.promoteIntLiteral(c_int, 18446744073709551615, .decimal));
 pub const INT_LEAST8_MIN = -@as(c_int, 128);
 pub const INT_LEAST16_MIN = -@as(c_int, 32767) - @as(c_int, 1);
-pub const INT_LEAST32_MIN = -@import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal) - @as(c_int, 1);
-pub const INT_LEAST64_MIN = -__INT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 9223372036854775807, .decimal)) - @as(c_int, 1);
+pub const INT_LEAST32_MIN = -__helpers.promoteIntLiteral(c_int, 2147483647, .decimal) - @as(c_int, 1);
+pub const INT_LEAST64_MIN = -__INT64_C(__helpers.promoteIntLiteral(c_int, 9223372036854775807, .decimal)) - @as(c_int, 1);
 pub const INT_LEAST8_MAX = @as(c_int, 127);
 pub const INT_LEAST16_MAX = @as(c_int, 32767);
-pub const INT_LEAST32_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
-pub const INT_LEAST64_MAX = __INT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 9223372036854775807, .decimal));
+pub const INT_LEAST32_MAX = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const INT_LEAST64_MAX = __INT64_C(__helpers.promoteIntLiteral(c_int, 9223372036854775807, .decimal));
 pub const UINT_LEAST8_MAX = @as(c_int, 255);
-pub const UINT_LEAST16_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_int, 65535, .decimal);
-pub const UINT_LEAST32_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 4294967295, .decimal);
-pub const UINT_LEAST64_MAX = __UINT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 18446744073709551615, .decimal));
+pub const UINT_LEAST16_MAX = __helpers.promoteIntLiteral(c_int, 65535, .decimal);
+pub const UINT_LEAST32_MAX = __helpers.promoteIntLiteral(c_uint, 4294967295, .decimal);
+pub const UINT_LEAST64_MAX = __UINT64_C(__helpers.promoteIntLiteral(c_int, 18446744073709551615, .decimal));
 pub const INT_FAST8_MIN = -@as(c_int, 128);
-pub const INT_FAST16_MIN = -@import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal) - @as(c_int, 1);
-pub const INT_FAST32_MIN = -@import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal) - @as(c_int, 1);
-pub const INT_FAST64_MIN = -__INT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 9223372036854775807, .decimal)) - @as(c_int, 1);
+pub const INT_FAST16_MIN = -__helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal) - @as(c_int, 1);
+pub const INT_FAST32_MIN = -__helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal) - @as(c_int, 1);
+pub const INT_FAST64_MIN = -__INT64_C(__helpers.promoteIntLiteral(c_int, 9223372036854775807, .decimal)) - @as(c_int, 1);
 pub const INT_FAST8_MAX = @as(c_int, 127);
-pub const INT_FAST16_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
-pub const INT_FAST32_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
-pub const INT_FAST64_MAX = __INT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 9223372036854775807, .decimal));
+pub const INT_FAST16_MAX = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const INT_FAST32_MAX = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const INT_FAST64_MAX = __INT64_C(__helpers.promoteIntLiteral(c_int, 9223372036854775807, .decimal));
 pub const UINT_FAST8_MAX = @as(c_int, 255);
-pub const UINT_FAST16_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
-pub const UINT_FAST32_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
-pub const UINT_FAST64_MAX = __UINT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 18446744073709551615, .decimal));
-pub const INTPTR_MIN = -@import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal) - @as(c_int, 1);
-pub const INTPTR_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
-pub const UINTPTR_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
-pub const INTMAX_MIN = -__INT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 9223372036854775807, .decimal)) - @as(c_int, 1);
-pub const INTMAX_MAX = __INT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 9223372036854775807, .decimal));
-pub const UINTMAX_MAX = __UINT64_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 18446744073709551615, .decimal));
-pub const PTRDIFF_MIN = -@import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal) - @as(c_int, 1);
-pub const PTRDIFF_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
-pub const SIG_ATOMIC_MIN = -@import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal) - @as(c_int, 1);
-pub const SIG_ATOMIC_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
-pub const SIZE_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const UINT_FAST16_MAX = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const UINT_FAST32_MAX = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const UINT_FAST64_MAX = __UINT64_C(__helpers.promoteIntLiteral(c_int, 18446744073709551615, .decimal));
+pub const INTPTR_MIN = -__helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal) - @as(c_int, 1);
+pub const INTPTR_MAX = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const UINTPTR_MAX = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
+pub const INTMAX_MIN = -__INT64_C(__helpers.promoteIntLiteral(c_int, 9223372036854775807, .decimal)) - @as(c_int, 1);
+pub const INTMAX_MAX = __INT64_C(__helpers.promoteIntLiteral(c_int, 9223372036854775807, .decimal));
+pub const UINTMAX_MAX = __UINT64_C(__helpers.promoteIntLiteral(c_int, 18446744073709551615, .decimal));
+pub const PTRDIFF_MIN = -__helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal) - @as(c_int, 1);
+pub const PTRDIFF_MAX = __helpers.promoteIntLiteral(c_long, 9223372036854775807, .decimal);
+pub const SIG_ATOMIC_MIN = -__helpers.promoteIntLiteral(c_int, 2147483647, .decimal) - @as(c_int, 1);
+pub const SIG_ATOMIC_MAX = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const SIZE_MAX = __helpers.promoteIntLiteral(c_ulong, 18446744073709551615, .decimal);
 pub const WCHAR_MIN = __WCHAR_MIN;
 pub const WCHAR_MAX = __WCHAR_MAX;
 pub const WINT_MIN = @as(c_uint, 0);
-pub const WINT_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 4294967295, .decimal);
+pub const WINT_MAX = __helpers.promoteIntLiteral(c_uint, 4294967295, .decimal);
 pub inline fn INT8_C(c: anytype) @TypeOf(c) {
     _ = &c;
     return c;
@@ -3183,7 +3484,7 @@ pub inline fn INT32_C(c: anytype) @TypeOf(c) {
     _ = &c;
     return c;
 }
-pub const INT64_C = @import("std").zig.c_translation.Macros.L_SUFFIX;
+pub const INT64_C = __helpers.L_SUFFIX;
 pub inline fn UINT8_C(c: anytype) @TypeOf(c) {
     _ = &c;
     return c;
@@ -3192,29 +3493,29 @@ pub inline fn UINT16_C(c: anytype) @TypeOf(c) {
     _ = &c;
     return c;
 }
-pub const UINT32_C = @import("std").zig.c_translation.Macros.U_SUFFIX;
-pub const UINT64_C = @import("std").zig.c_translation.Macros.UL_SUFFIX;
-pub const INTMAX_C = @import("std").zig.c_translation.Macros.L_SUFFIX;
-pub const UINTMAX_C = @import("std").zig.c_translation.Macros.UL_SUFFIX;
+pub const UINT32_C = __helpers.U_SUFFIX;
+pub const UINT64_C = __helpers.UL_SUFFIX;
+pub const INTMAX_C = __helpers.L_SUFFIX;
+pub const UINTMAX_C = __helpers.UL_SUFFIX;
 pub const __need_size_t = "";
 pub const __need_wchar_t = "";
 pub const __need_NULL = "";
-pub const _SIZE_T = "";
-pub const _WCHAR_T = "";
-pub const NULL = @import("std").zig.c_translation.cast(?*anyopaque, @as(c_int, 0));
+pub const __STDC_VERSION_STDDEF_H__ = @as(c_long, 202311);
+pub const NULL = __helpers.cast(?*anyopaque, @as(c_int, 0));
+pub const offsetof = @compileError("unable to translate macro: undefined identifier `__builtin_offsetof`"); // /home/arnaud_berthomier/zig/zig-x86_64-linux-0.16.0/lib/compiler/aro/include/stddef.h:18:9
 pub const _STDLIB_H = @as(c_int, 1);
 pub const WNOHANG = @as(c_int, 1);
 pub const WUNTRACED = @as(c_int, 2);
 pub const WSTOPPED = @as(c_int, 2);
 pub const WEXITED = @as(c_int, 4);
 pub const WCONTINUED = @as(c_int, 8);
-pub const WNOWAIT = @import("std").zig.c_translation.promoteIntLiteral(c_int, 0x01000000, .hex);
-pub const __WNOTHREAD = @import("std").zig.c_translation.promoteIntLiteral(c_int, 0x20000000, .hex);
-pub const __WALL = @import("std").zig.c_translation.promoteIntLiteral(c_int, 0x40000000, .hex);
-pub const __WCLONE = @import("std").zig.c_translation.promoteIntLiteral(c_int, 0x80000000, .hex);
-pub inline fn __WEXITSTATUS(status: anytype) @TypeOf((status & @import("std").zig.c_translation.promoteIntLiteral(c_int, 0xff00, .hex)) >> @as(c_int, 8)) {
+pub const WNOWAIT = __helpers.promoteIntLiteral(c_int, 0x01000000, .hex);
+pub const __WNOTHREAD = __helpers.promoteIntLiteral(c_int, 0x20000000, .hex);
+pub const __WALL = __helpers.promoteIntLiteral(c_int, 0x40000000, .hex);
+pub const __WCLONE = __helpers.promoteIntLiteral(c_int, 0x80000000, .hex);
+pub inline fn __WEXITSTATUS(status: anytype) @TypeOf((status & __helpers.promoteIntLiteral(c_int, 0xff00, .hex)) >> @as(c_int, 8)) {
     _ = &status;
-    return (status & @import("std").zig.c_translation.promoteIntLiteral(c_int, 0xff00, .hex)) >> @as(c_int, 8);
+    return (status & __helpers.promoteIntLiteral(c_int, 0xff00, .hex)) >> @as(c_int, 8);
 }
 pub inline fn __WTERMSIG(status: anytype) @TypeOf(status & @as(c_int, 0x7f)) {
     _ = &status;
@@ -3228,9 +3529,9 @@ pub inline fn __WIFEXITED(status: anytype) @TypeOf(__WTERMSIG(status) == @as(c_i
     _ = &status;
     return __WTERMSIG(status) == @as(c_int, 0);
 }
-pub inline fn __WIFSIGNALED(status: anytype) @TypeOf((@import("std").zig.c_translation.cast(i8, (status & @as(c_int, 0x7f)) + @as(c_int, 1)) >> @as(c_int, 1)) > @as(c_int, 0)) {
+pub inline fn __WIFSIGNALED(status: anytype) @TypeOf((__helpers.cast(i8, (status & @as(c_int, 0x7f)) + @as(c_int, 1)) >> @as(c_int, 1)) > @as(c_int, 0)) {
     _ = &status;
-    return (@import("std").zig.c_translation.cast(i8, (status & @as(c_int, 0x7f)) + @as(c_int, 1)) >> @as(c_int, 1)) > @as(c_int, 0);
+    return (__helpers.cast(i8, (status & @as(c_int, 0x7f)) + @as(c_int, 1)) >> @as(c_int, 1)) > @as(c_int, 0);
 }
 pub inline fn __WIFSTOPPED(status: anytype) @TypeOf((status & @as(c_int, 0xff)) == @as(c_int, 0x7f)) {
     _ = &status;
@@ -3253,7 +3554,7 @@ pub inline fn __W_STOPCODE(sig: anytype) @TypeOf((sig << @as(c_int, 8)) | @as(c_
     _ = &sig;
     return (sig << @as(c_int, 8)) | @as(c_int, 0x7f);
 }
-pub const __W_CONTINUED = @import("std").zig.c_translation.promoteIntLiteral(c_int, 0xffff, .hex);
+pub const __W_CONTINUED = __helpers.promoteIntLiteral(c_int, 0xffff, .hex);
 pub const __WCOREFLAG = @as(c_int, 0x80);
 pub inline fn WEXITSTATUS(status: anytype) @TypeOf(__WEXITSTATUS(status)) {
     _ = &status;
@@ -3288,11 +3589,8 @@ pub const __HAVE_FLOAT128 = @as(c_int, 1);
 pub const __HAVE_DISTINCT_FLOAT128 = @as(c_int, 1);
 pub const __HAVE_FLOAT64X = @as(c_int, 1);
 pub const __HAVE_FLOAT64X_LONG_DOUBLE = @as(c_int, 1);
-pub const __f128 = @compileError("unable to translate macro: undefined identifier `q`");
-// /usr/include/x86_64-linux-gnu/bits/floatn.h:70:12
-pub const __CFLOAT128 = __cfloat128;
-pub const __builtin_signbitf128 = @compileError("unable to translate macro: undefined identifier `__signbitf128`");
-// /usr/include/x86_64-linux-gnu/bits/floatn.h:124:12
+pub const __f128 = @compileError("unable to translate macro: undefined identifier `f128`"); // /usr/include/x86_64-linux-gnu/bits/floatn.h:72:12
+pub const __CFLOAT128 = @compileError("unable to translate: invalid numeric type"); // /usr/include/x86_64-linux-gnu/bits/floatn.h:86:12
 pub const _BITS_FLOATN_COMMON_H = "";
 pub const __HAVE_FLOAT16 = @as(c_int, 0);
 pub const __HAVE_FLOAT32 = @as(c_int, 1);
@@ -3306,64 +3604,18 @@ pub const __HAVE_DISTINCT_FLOAT32X = @as(c_int, 0);
 pub const __HAVE_DISTINCT_FLOAT64X = @as(c_int, 0);
 pub const __HAVE_DISTINCT_FLOAT128X = __HAVE_FLOAT128X;
 pub const __HAVE_FLOAT128_UNLIKE_LDBL = (__HAVE_DISTINCT_FLOAT128 != 0) and (__LDBL_MANT_DIG__ != @as(c_int, 113));
-pub const __HAVE_FLOATN_NOT_TYPEDEF = @as(c_int, 0);
-pub const __f32 = @import("std").zig.c_translation.Macros.F_SUFFIX;
-pub inline fn __f64(x: anytype) @TypeOf(x) {
-    _ = &x;
-    return x;
-}
-pub inline fn __f32x(x: anytype) @TypeOf(x) {
-    _ = &x;
-    return x;
-}
-pub const __f64x = @import("std").zig.c_translation.Macros.L_SUFFIX;
-pub const __CFLOAT32 = @compileError("unable to translate: TODO _Complex");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:149:12
-pub const __CFLOAT64 = @compileError("unable to translate: TODO _Complex");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:160:13
-pub const __CFLOAT32X = @compileError("unable to translate: TODO _Complex");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:169:12
-pub const __CFLOAT64X = @compileError("unable to translate: TODO _Complex");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:178:13
-pub inline fn __builtin_huge_valf32() @TypeOf(__builtin_huge_valf()) {
-    return __builtin_huge_valf();
-}
-pub inline fn __builtin_inff32() @TypeOf(__builtin_inff()) {
-    return __builtin_inff();
-}
-pub inline fn __builtin_nanf32(x: anytype) @TypeOf(__builtin_nanf(x)) {
-    _ = &x;
-    return __builtin_nanf(x);
-}
-pub const __builtin_nansf32 = @compileError("unable to translate macro: undefined identifier `__builtin_nansf`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:221:12
-pub const __builtin_huge_valf64 = @compileError("unable to translate macro: undefined identifier `__builtin_huge_val`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:255:13
-pub const __builtin_inff64 = @compileError("unable to translate macro: undefined identifier `__builtin_inf`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:256:13
-pub const __builtin_nanf64 = @compileError("unable to translate macro: undefined identifier `__builtin_nan`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:257:13
-pub const __builtin_nansf64 = @compileError("unable to translate macro: undefined identifier `__builtin_nans`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:258:13
-pub const __builtin_huge_valf32x = @compileError("unable to translate macro: undefined identifier `__builtin_huge_val`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:272:12
-pub const __builtin_inff32x = @compileError("unable to translate macro: undefined identifier `__builtin_inf`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:273:12
-pub const __builtin_nanf32x = @compileError("unable to translate macro: undefined identifier `__builtin_nan`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:274:12
-pub const __builtin_nansf32x = @compileError("unable to translate macro: undefined identifier `__builtin_nans`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:275:12
-pub const __builtin_huge_valf64x = @compileError("unable to translate macro: undefined identifier `__builtin_huge_vall`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:289:13
-pub const __builtin_inff64x = @compileError("unable to translate macro: undefined identifier `__builtin_infl`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:290:13
-pub const __builtin_nanf64x = @compileError("unable to translate macro: undefined identifier `__builtin_nanl`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:291:13
-pub const __builtin_nansf64x = @compileError("unable to translate macro: undefined identifier `__builtin_nansl`");
-// /usr/include/x86_64-linux-gnu/bits/floatn-common.h:292:13
+pub const __HAVE_FLOATN_NOT_TYPEDEF = @as(c_int, 1);
+pub const __f32 = @compileError("unable to translate macro: undefined identifier `f32`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:93:12
+pub const __f64 = @compileError("unable to translate macro: undefined identifier `f64`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:105:12
+pub const __f32x = @compileError("unable to translate macro: undefined identifier `f32x`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:113:12
+pub const __f64x = @compileError("unable to translate macro: undefined identifier `f64x`"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:125:12
+pub const __CFLOAT32 = @compileError("unable to translate: invalid numeric type"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:151:12
+pub const __CFLOAT64 = @compileError("unable to translate: invalid numeric type"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:163:12
+pub const __CFLOAT32X = @compileError("unable to translate: invalid numeric type"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:171:12
+pub const __CFLOAT64X = @compileError("unable to translate: invalid numeric type"); // /usr/include/x86_64-linux-gnu/bits/floatn-common.h:183:12
 pub const __ldiv_t_defined = @as(c_int, 1);
 pub const __lldiv_t_defined = @as(c_int, 1);
-pub const RAND_MAX = @import("std").zig.c_translation.promoteIntLiteral(c_int, 2147483647, .decimal);
+pub const RAND_MAX = __helpers.promoteIntLiteral(c_int, 2147483647, .decimal);
 pub const EXIT_FAILURE = @as(c_int, 1);
 pub const EXIT_SUCCESS = @as(c_int, 0);
 pub const MB_CUR_MAX = __ctype_get_mb_cur_max();
@@ -3409,11 +3661,11 @@ pub const BYTE_ORDER = __BYTE_ORDER;
 pub const _BITS_BYTESWAP_H = @as(c_int, 1);
 pub inline fn __bswap_constant_16(x: anytype) __uint16_t {
     _ = &x;
-    return @import("std").zig.c_translation.cast(__uint16_t, ((x >> @as(c_int, 8)) & @as(c_int, 0xff)) | ((x & @as(c_int, 0xff)) << @as(c_int, 8)));
+    return __helpers.cast(__uint16_t, ((x >> @as(c_int, 8)) & @as(c_int, 0xff)) | ((x & @as(c_int, 0xff)) << @as(c_int, 8)));
 }
-pub inline fn __bswap_constant_32(x: anytype) @TypeOf(((((x & @import("std").zig.c_translation.promoteIntLiteral(c_uint, 0xff000000, .hex)) >> @as(c_int, 24)) | ((x & @import("std").zig.c_translation.promoteIntLiteral(c_uint, 0x00ff0000, .hex)) >> @as(c_int, 8))) | ((x & @as(c_uint, 0x0000ff00)) << @as(c_int, 8))) | ((x & @as(c_uint, 0x000000ff)) << @as(c_int, 24))) {
+pub inline fn __bswap_constant_32(x: anytype) @TypeOf(((((x & __helpers.promoteIntLiteral(c_uint, 0xff000000, .hex)) >> @as(c_int, 24)) | ((x & __helpers.promoteIntLiteral(c_uint, 0x00ff0000, .hex)) >> @as(c_int, 8))) | ((x & @as(c_uint, 0x0000ff00)) << @as(c_int, 8))) | ((x & @as(c_uint, 0x000000ff)) << @as(c_int, 24))) {
     _ = &x;
-    return ((((x & @import("std").zig.c_translation.promoteIntLiteral(c_uint, 0xff000000, .hex)) >> @as(c_int, 24)) | ((x & @import("std").zig.c_translation.promoteIntLiteral(c_uint, 0x00ff0000, .hex)) >> @as(c_int, 8))) | ((x & @as(c_uint, 0x0000ff00)) << @as(c_int, 8))) | ((x & @as(c_uint, 0x000000ff)) << @as(c_int, 24));
+    return ((((x & __helpers.promoteIntLiteral(c_uint, 0xff000000, .hex)) >> @as(c_int, 24)) | ((x & __helpers.promoteIntLiteral(c_uint, 0x00ff0000, .hex)) >> @as(c_int, 8))) | ((x & @as(c_uint, 0x0000ff00)) << @as(c_int, 8))) | ((x & @as(c_uint, 0x000000ff)) << @as(c_int, 24));
 }
 pub inline fn __bswap_constant_64(x: anytype) @TypeOf(((((((((x & @as(c_ulonglong, 0xff00000000000000)) >> @as(c_int, 56)) | ((x & @as(c_ulonglong, 0x00ff000000000000)) >> @as(c_int, 40))) | ((x & @as(c_ulonglong, 0x0000ff0000000000)) >> @as(c_int, 24))) | ((x & @as(c_ulonglong, 0x000000ff00000000)) >> @as(c_int, 8))) | ((x & @as(c_ulonglong, 0x00000000ff000000)) << @as(c_int, 8))) | ((x & @as(c_ulonglong, 0x0000000000ff0000)) << @as(c_int, 24))) | ((x & @as(c_ulonglong, 0x000000000000ff00)) << @as(c_int, 40))) | ((x & @as(c_ulonglong, 0x00000000000000ff)) << @as(c_int, 56))) {
     _ = &x;
@@ -3469,12 +3721,9 @@ pub inline fn le64toh(x: anytype) @TypeOf(__uint64_identity(x)) {
     return __uint64_identity(x);
 }
 pub const _SYS_SELECT_H = @as(c_int, 1);
-pub const __FD_ZERO = @compileError("unable to translate macro: undefined identifier `__i`");
-// /usr/include/x86_64-linux-gnu/bits/select.h:25:9
-pub const __FD_SET = @compileError("unable to translate C expr: expected ')' instead got '|='");
-// /usr/include/x86_64-linux-gnu/bits/select.h:32:9
-pub const __FD_CLR = @compileError("unable to translate C expr: expected ')' instead got '&='");
-// /usr/include/x86_64-linux-gnu/bits/select.h:34:9
+pub const __FD_ZERO = @compileError("unable to translate macro: undefined identifier `__i`"); // /usr/include/x86_64-linux-gnu/bits/select.h:25:9
+pub const __FD_SET = @compileError("unable to translate C expr: expected ')' instead got '|='"); // /usr/include/x86_64-linux-gnu/bits/select.h:32:9
+pub const __FD_CLR = @compileError("unable to translate C expr: expected ')' instead got '&='"); // /usr/include/x86_64-linux-gnu/bits/select.h:34:9
 pub inline fn __FD_ISSET(d: anytype, s: anytype) @TypeOf((__FDS_BITS(s)[@as(usize, @intCast(__FD_ELT(d)))] & __FD_MASK(d)) != @as(c_int, 0)) {
     _ = &d;
     _ = &s;
@@ -3482,18 +3731,18 @@ pub inline fn __FD_ISSET(d: anytype, s: anytype) @TypeOf((__FDS_BITS(s)[@as(usiz
 }
 pub const __sigset_t_defined = @as(c_int, 1);
 pub const ____sigset_t_defined = "";
-pub const _SIGSET_NWORDS = @import("std").zig.c_translation.MacroArithmetic.div(@as(c_int, 1024), @as(c_int, 8) * @import("std").zig.c_translation.sizeof(c_ulong));
+pub const _SIGSET_NWORDS = __helpers.div(@as(c_int, 1024), @as(c_int, 8) * __helpers.sizeof(c_ulong));
 pub const __timeval_defined = @as(c_int, 1);
 pub const _STRUCT_TIMESPEC = @as(c_int, 1);
 pub const __suseconds_t_defined = "";
-pub const __NFDBITS = @as(c_int, 8) * @import("std").zig.c_translation.cast(c_int, @import("std").zig.c_translation.sizeof(__fd_mask));
-pub inline fn __FD_ELT(d: anytype) @TypeOf(@import("std").zig.c_translation.MacroArithmetic.div(d, __NFDBITS)) {
+pub const __NFDBITS = @as(c_int, 8) * __helpers.cast(c_int, __helpers.sizeof(__fd_mask));
+pub inline fn __FD_ELT(d: anytype) @TypeOf(__helpers.div(d, __NFDBITS)) {
     _ = &d;
-    return @import("std").zig.c_translation.MacroArithmetic.div(d, __NFDBITS);
+    return __helpers.div(d, __NFDBITS);
 }
 pub inline fn __FD_MASK(d: anytype) __fd_mask {
     _ = &d;
-    return @import("std").zig.c_translation.cast(__fd_mask, @as(c_ulong, 1) << @import("std").zig.c_translation.MacroArithmetic.rem(d, __NFDBITS));
+    return __helpers.cast(__fd_mask, @as(c_ulong, 1) << __helpers.rem(d, __NFDBITS));
 }
 pub inline fn __FDS_BITS(set: anytype) @TypeOf(set.*.__fds_bits) {
     _ = &set;
@@ -3541,11 +3790,9 @@ pub const __ONCE_ALIGNMENT = "";
 pub const _BITS_ATOMIC_WIDE_COUNTER_H = "";
 pub const _THREAD_MUTEX_INTERNAL_H = @as(c_int, 1);
 pub const __PTHREAD_MUTEX_HAVE_PREV = @as(c_int, 1);
-pub const __PTHREAD_MUTEX_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'");
-// /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:56:10
+pub const __PTHREAD_MUTEX_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:56:10
 pub const _RWLOCK_INTERNAL_H = "";
-pub const __PTHREAD_RWLOCK_ELISION_EXTRA = @compileError("unable to translate C expr: unexpected token '{'");
-// /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:40:11
+pub const __PTHREAD_RWLOCK_ELISION_EXTRA = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:40:11
 pub inline fn __PTHREAD_RWLOCK_INITIALIZER(__flags: anytype) @TypeOf(__flags) {
     _ = &__flags;
     return blk: {
@@ -3562,8 +3809,7 @@ pub inline fn __PTHREAD_RWLOCK_INITIALIZER(__flags: anytype) @TypeOf(__flags) {
         break :blk __flags;
     };
 }
-pub const __ONCE_FLAG_INIT = @compileError("unable to translate C expr: unexpected token '{'");
-// /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:114:9
+pub const __ONCE_FLAG_INIT = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:114:9
 pub const __have_pthread_attr_t = @as(c_int, 1);
 pub const _ALLOCA_H = @as(c_int, 1);
 pub const __COMPAR_FN_T = "";
@@ -3583,22 +3829,15 @@ pub const AERON_CLIENT_PRE_TOUCH_MAPPED_MEMORY_ENV_VAR = "AERON_CLIENT_PRE_TOUCH
 pub const AERON_CLIENT_NAME_ENV_VAR = "AERON_CLIENT_NAME";
 pub const AERON_AGENT_ON_START_FUNCTION_ENV_VAR = "AERON_AGENT_ON_START_FUNCTION";
 pub const AERON_COUNTER_CACHE_LINE_LENGTH = @as(c_uint, 64);
-pub const AERON_COUNTER_VALUE_LENGTH = @import("std").zig.c_translation.sizeof(aeron_counter_value_descriptor_t);
-pub const AERON_COUNTER_REGISTRATION_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `registration_id`");
-// aeron-1.48.6/aeron-client/src/main/c/aeronc.h:697:9
-pub const AERON_COUNTER_METADATA_LENGTH = @import("std").zig.c_translation.sizeof(aeron_counter_metadata_descriptor_t);
-pub const AERON_COUNTER_TYPE_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `type_id`");
-// aeron-1.48.6/aeron-client/src/main/c/aeronc.h:700:9
-pub const AERON_COUNTER_FREE_FOR_REUSE_DEADLINE_OFFSET = @compileError("unable to translate macro: undefined identifier `free_for_reuse_deadline_ms`");
-// aeron-1.48.6/aeron-client/src/main/c/aeronc.h:701:9
-pub const AERON_COUNTER_KEY_OFFSET = @compileError("unable to translate macro: undefined identifier `key`");
-// aeron-1.48.6/aeron-client/src/main/c/aeronc.h:702:9
-pub const AERON_COUNTER_LABEL_LENGTH_OFFSET = @compileError("unable to translate macro: undefined identifier `label`");
-// aeron-1.48.6/aeron-client/src/main/c/aeronc.h:703:9
-pub const AERON_COUNTER_MAX_LABEL_LENGTH = @compileError("unable to translate C expr: unexpected token '('");
-// aeron-1.48.6/aeron-client/src/main/c/aeronc.h:705:9
-pub const AERON_COUNTER_MAX_KEY_LENGTH = @compileError("unable to translate C expr: unexpected token '('");
-// aeron-1.48.6/aeron-client/src/main/c/aeronc.h:706:9
+pub const AERON_COUNTER_VALUE_LENGTH = __helpers.sizeof(aeron_counter_value_descriptor_t);
+pub const AERON_COUNTER_REGISTRATION_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `registration_id`"); // aeron-1.48.6/aeron-client/src/main/c/aeronc.h:697:9
+pub const AERON_COUNTER_METADATA_LENGTH = __helpers.sizeof(aeron_counter_metadata_descriptor_t);
+pub const AERON_COUNTER_TYPE_ID_OFFSET = @compileError("unable to translate macro: undefined identifier `type_id`"); // aeron-1.48.6/aeron-client/src/main/c/aeronc.h:700:9
+pub const AERON_COUNTER_FREE_FOR_REUSE_DEADLINE_OFFSET = @compileError("unable to translate macro: undefined identifier `free_for_reuse_deadline_ms`"); // aeron-1.48.6/aeron-client/src/main/c/aeronc.h:701:9
+pub const AERON_COUNTER_KEY_OFFSET = @compileError("unable to translate macro: undefined identifier `key`"); // aeron-1.48.6/aeron-client/src/main/c/aeronc.h:702:9
+pub const AERON_COUNTER_LABEL_LENGTH_OFFSET = @compileError("unable to translate macro: undefined identifier `label`"); // aeron-1.48.6/aeron-client/src/main/c/aeronc.h:703:9
+pub const AERON_COUNTER_MAX_LABEL_LENGTH = __helpers.sizeof(__helpers.cast([*c]aeron_counter_metadata_descriptor_t, NULL).*.label);
+pub const AERON_COUNTER_MAX_KEY_LENGTH = __helpers.sizeof(__helpers.cast([*c]aeron_counter_metadata_descriptor_t, NULL).*.key);
 pub const AERON_COUNTER_MAX_CLIENT_NAME_LENGTH = @as(c_int, 100);
 pub const AERON_COUNTER_RECORD_UNUSED = @as(c_int, 0);
 pub const AERON_COUNTER_RECORD_ALLOCATED = @as(c_int, 1);
@@ -3624,17 +3863,8 @@ pub const AERON_PUBLICATION_MAX_POSITION_EXCEEDED = -@as(c_long, 5);
 pub const AERON_PUBLICATION_ERROR = -@as(c_long, 6);
 pub const AERON_AGENT_H = "";
 pub const AERON_THREAD_H = "";
-pub const __need_ptrdiff_t = "";
-pub const __need_max_align_t = "";
-pub const __need_offsetof = "";
-pub const __STDDEF_H = "";
-pub const _PTRDIFF_T = "";
-pub const __CLANG_MAX_ALIGN_T_DEFINED = "";
-pub const offsetof = @compileError("unable to translate C expr: unexpected token 'an identifier'");
-// /home/leki/zig-x86_64-linux-0.15.1/lib/include/__stddef_offsetof.h:16:9
 pub const AERON_DRIVER_PLATFORM_H = "";
 pub const AERON_COMPILER_GCC = @as(c_int, 1);
-pub const AERON_COMPILER_LLVM = @as(c_int, 1);
 pub const AERON_CPU_X64 = @as(c_int, 1);
 pub const _PTHREAD_H = @as(c_int, 1);
 pub const _SCHED_H = @as(c_int, 1);
@@ -3645,35 +3875,29 @@ pub const SCHED_RR = @as(c_int, 2);
 pub const _BITS_TYPES_STRUCT_SCHED_PARAM = @as(c_int, 1);
 pub const _BITS_CPU_SET_H = @as(c_int, 1);
 pub const __CPU_SETSIZE = @as(c_int, 1024);
-pub const __NCPUBITS = @as(c_int, 8) * @import("std").zig.c_translation.sizeof(__cpu_mask);
-pub inline fn __CPUELT(cpu: anytype) @TypeOf(@import("std").zig.c_translation.MacroArithmetic.div(cpu, __NCPUBITS)) {
+pub const __NCPUBITS = @as(c_int, 8) * __helpers.sizeof(__cpu_mask);
+pub inline fn __CPUELT(cpu: anytype) @TypeOf(__helpers.div(cpu, __NCPUBITS)) {
     _ = &cpu;
-    return @import("std").zig.c_translation.MacroArithmetic.div(cpu, __NCPUBITS);
+    return __helpers.div(cpu, __NCPUBITS);
 }
-pub inline fn __CPUMASK(cpu: anytype) @TypeOf(@import("std").zig.c_translation.cast(__cpu_mask, @as(c_int, 1)) << @import("std").zig.c_translation.MacroArithmetic.rem(cpu, __NCPUBITS)) {
+pub inline fn __CPUMASK(cpu: anytype) @TypeOf(__helpers.cast(__cpu_mask, @as(c_int, 1)) << __helpers.rem(cpu, __NCPUBITS)) {
     _ = &cpu;
-    return @import("std").zig.c_translation.cast(__cpu_mask, @as(c_int, 1)) << @import("std").zig.c_translation.MacroArithmetic.rem(cpu, __NCPUBITS);
+    return __helpers.cast(__cpu_mask, @as(c_int, 1)) << __helpers.rem(cpu, __NCPUBITS);
 }
-pub const __CPU_ZERO_S = @compileError("unable to translate C expr: unexpected token 'do'");
-// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:46:10
-pub const __CPU_SET_S = @compileError("unable to translate macro: undefined identifier `__cpu`");
-// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:58:9
-pub const __CPU_CLR_S = @compileError("unable to translate macro: undefined identifier `__cpu`");
-// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:65:9
-pub const __CPU_ISSET_S = @compileError("unable to translate macro: undefined identifier `__cpu`");
-// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:72:9
+pub const __CPU_ZERO_S = @compileError("unable to translate C expr: unexpected token 'do'"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:46:10
+pub const __CPU_SET_S = @compileError("unable to translate macro: undefined identifier `__cpu`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:58:9
+pub const __CPU_CLR_S = @compileError("unable to translate macro: undefined identifier `__cpu`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:65:9
+pub const __CPU_ISSET_S = @compileError("unable to translate macro: undefined identifier `__cpu`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:72:9
 pub inline fn __CPU_COUNT_S(setsize: anytype, cpusetp: anytype) @TypeOf(__sched_cpucount(setsize, cpusetp)) {
     _ = &setsize;
     _ = &cpusetp;
     return __sched_cpucount(setsize, cpusetp);
 }
-pub const __CPU_EQUAL_S = @compileError("unable to translate macro: undefined identifier `__builtin_memcmp`");
-// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:84:10
-pub const __CPU_OP_S = @compileError("unable to translate macro: undefined identifier `__dest`");
-// /usr/include/x86_64-linux-gnu/bits/cpu-set.h:99:9
-pub inline fn __CPU_ALLOC_SIZE(count: anytype) @TypeOf(@import("std").zig.c_translation.MacroArithmetic.div((count + __NCPUBITS) - @as(c_int, 1), __NCPUBITS) * @import("std").zig.c_translation.sizeof(__cpu_mask)) {
+pub const __CPU_EQUAL_S = @compileError("unable to translate macro: undefined identifier `__builtin_memcmp`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:84:10
+pub const __CPU_OP_S = @compileError("unable to translate macro: undefined identifier `__dest`"); // /usr/include/x86_64-linux-gnu/bits/cpu-set.h:99:9
+pub inline fn __CPU_ALLOC_SIZE(count: anytype) @TypeOf(__helpers.div((count + __NCPUBITS) - @as(c_int, 1), __NCPUBITS) * __helpers.sizeof(__cpu_mask)) {
     _ = &count;
-    return @import("std").zig.c_translation.MacroArithmetic.div((count + __NCPUBITS) - @as(c_int, 1), __NCPUBITS) * @import("std").zig.c_translation.sizeof(__cpu_mask);
+    return __helpers.div((count + __NCPUBITS) - @as(c_int, 1), __NCPUBITS) * __helpers.sizeof(__cpu_mask);
 }
 pub inline fn __CPU_ALLOC(count: anytype) @TypeOf(__sched_cpualloc(count)) {
     _ = &count;
@@ -3683,11 +3907,11 @@ pub inline fn __CPU_FREE(cpuset: anytype) @TypeOf(__sched_cpufree(cpuset)) {
     _ = &cpuset;
     return __sched_cpufree(cpuset);
 }
-pub const __sched_priority = @compileError("unable to translate macro: undefined identifier `sched_priority`");
-// /usr/include/sched.h:48:9
+pub const sched_priority = @compileError("unable to translate macro: undefined identifier `sched_priority`"); // /usr/include/sched.h:47:9
+pub const __sched_priority = sched_priority;
 pub const _TIME_H = @as(c_int, 1);
 pub const _BITS_TIME_H = @as(c_int, 1);
-pub const CLOCKS_PER_SEC = @import("std").zig.c_translation.cast(__clock_t, @import("std").zig.c_translation.promoteIntLiteral(c_int, 1000000, .decimal));
+pub const CLOCKS_PER_SEC = __helpers.cast(__clock_t, __helpers.promoteIntLiteral(c_int, 1000000, .decimal));
 pub const CLOCK_REALTIME = @as(c_int, 0);
 pub const CLOCK_MONOTONIC = @as(c_int, 1);
 pub const CLOCK_PROCESS_CPUTIME_ID = @as(c_int, 2);
@@ -3705,31 +3929,26 @@ pub const __itimerspec_defined = @as(c_int, 1);
 pub const _BITS_TYPES_LOCALE_T_H = @as(c_int, 1);
 pub const _BITS_TYPES___LOCALE_T_H = @as(c_int, 1);
 pub const TIME_UTC = @as(c_int, 1);
-pub inline fn __isleap(year: anytype) @TypeOf((@import("std").zig.c_translation.MacroArithmetic.rem(year, @as(c_int, 4)) == @as(c_int, 0)) and ((@import("std").zig.c_translation.MacroArithmetic.rem(year, @as(c_int, 100)) != @as(c_int, 0)) or (@import("std").zig.c_translation.MacroArithmetic.rem(year, @as(c_int, 400)) == @as(c_int, 0)))) {
+pub inline fn __isleap(year: anytype) @TypeOf((__helpers.rem(year, @as(c_int, 4)) == @as(c_int, 0)) and ((__helpers.rem(year, @as(c_int, 100)) != @as(c_int, 0)) or (__helpers.rem(year, @as(c_int, 400)) == @as(c_int, 0)))) {
     _ = &year;
-    return (@import("std").zig.c_translation.MacroArithmetic.rem(year, @as(c_int, 4)) == @as(c_int, 0)) and ((@import("std").zig.c_translation.MacroArithmetic.rem(year, @as(c_int, 100)) != @as(c_int, 0)) or (@import("std").zig.c_translation.MacroArithmetic.rem(year, @as(c_int, 400)) == @as(c_int, 0)));
+    return (__helpers.rem(year, @as(c_int, 4)) == @as(c_int, 0)) and ((__helpers.rem(year, @as(c_int, 100)) != @as(c_int, 0)) or (__helpers.rem(year, @as(c_int, 400)) == @as(c_int, 0)));
 }
 pub const _BITS_SETJMP_H = @as(c_int, 1);
 pub const __jmp_buf_tag_defined = @as(c_int, 1);
 pub const PTHREAD_STACK_MIN = @as(c_int, 16384);
-pub const PTHREAD_MUTEX_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'");
-// /usr/include/pthread.h:90:9
-pub const PTHREAD_RWLOCK_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'");
-// /usr/include/pthread.h:114:10
-pub const PTHREAD_COND_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'");
-// /usr/include/pthread.h:155:9
-pub const PTHREAD_CANCELED = @import("std").zig.c_translation.cast(?*anyopaque, -@as(c_int, 1));
+pub const PTHREAD_MUTEX_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/pthread.h:90:9
+pub const PTHREAD_RWLOCK_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/pthread.h:114:10
+pub const PTHREAD_COND_INITIALIZER = @compileError("unable to translate C expr: unexpected token '{'"); // /usr/include/pthread.h:155:9
+pub const PTHREAD_CANCELED = __helpers.cast(?*anyopaque, -@as(c_int, 1));
 pub const PTHREAD_ONCE_INIT = @as(c_int, 0);
 pub const PTHREAD_BARRIER_SERIAL_THREAD = -@as(c_int, 1);
 pub const __cleanup_fct_attribute = "";
-pub const pthread_cleanup_push = @compileError("unable to translate macro: undefined identifier `__cancel_buf`");
-// /usr/include/pthread.h:681:10
-pub const pthread_cleanup_pop = @compileError("unable to translate macro: undefined identifier `__cancel_buf`");
-// /usr/include/pthread.h:702:10
-pub inline fn __sigsetjmp_cancel(env: anytype, savemask: anytype) @TypeOf(__sigsetjmp(@import("std").zig.c_translation.cast([*c]struct___jmp_buf_tag, @import("std").zig.c_translation.cast(?*anyopaque, env)), savemask)) {
+pub const pthread_cleanup_push = @compileError("unable to translate macro: undefined identifier `__cancel_buf`"); // /usr/include/pthread.h:681:10
+pub const pthread_cleanup_pop = @compileError("unable to translate macro: undefined identifier `__cancel_buf`"); // /usr/include/pthread.h:702:10
+pub inline fn __sigsetjmp_cancel(env: anytype, savemask: anytype) @TypeOf(__sigsetjmp(__helpers.cast([*c]struct___jmp_buf_tag, __helpers.cast(?*anyopaque, env)), savemask)) {
     _ = &env;
     _ = &savemask;
-    return __sigsetjmp(@import("std").zig.c_translation.cast([*c]struct___jmp_buf_tag, @import("std").zig.c_translation.cast(?*anyopaque, env)), savemask);
+    return __sigsetjmp(__helpers.cast([*c]struct___jmp_buf_tag, __helpers.cast(?*anyopaque, env)), savemask);
 }
 pub const AERON_INIT_ONCE = pthread_once_t;
 pub const AERON_INIT_ONCE_VALUE = PTHREAD_ONCE_INIT;
@@ -3751,16 +3970,11 @@ pub const aeron_cond_signal = pthread_cond_signal;
 pub const aeron_cond_wait = pthread_cond_wait;
 pub const AERON_ATOMIC_H = "";
 pub const AERON_ATOMIC64_GCC_X86_64_H = "";
-pub const AERON_GET_ACQUIRE = @compileError("unable to translate C expr: unexpected token 'do'");
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:23:9
-pub const AERON_SET_RELEASE = @compileError("unable to translate C expr: unexpected token 'do'");
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:31:9
-pub const AERON_GET_AND_ADD_INT64 = @compileError("unable to translate C expr: unexpected token 'do'");
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:39:9
-pub const AERON_GET_AND_ADD_INT32 = @compileError("unable to translate C expr: unexpected token 'do'");
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:49:9
-pub const AERON_DECL_ALIGNED = @compileError("unable to translate macro: undefined identifier `aligned`");
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:112:9
+pub const AERON_GET_ACQUIRE = @compileError("unable to translate C expr: unexpected token 'do'"); // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:23:9
+pub const AERON_SET_RELEASE = @compileError("unable to translate C expr: unexpected token 'do'"); // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:31:9
+pub const AERON_GET_AND_ADD_INT64 = @compileError("unable to translate C expr: unexpected token 'do'"); // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:39:9
+pub const AERON_GET_AND_ADD_INT32 = @compileError("unable to translate C expr: unexpected token 'do'"); // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:49:9
+pub const AERON_DECL_ALIGNED = @compileError("unable to translate macro: undefined identifier `aligned`"); // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_atomic64_gcc_x86_64.h:112:9
 pub const AERON_COMMON_H = "";
 pub const AERON_MAX_PATH = @as(c_int, 4096);
 pub const AERON_AGENT_STATE_UNUSED = @as(c_int, 0);
@@ -3776,6 +3990,13 @@ pub const AERON_IDLE_STRATEGY_BACKOFF_MAX_PARK_PERIOD_NS = (@as(c_int, 1) * @as(
 pub const AERON_FILEUTIL_H = "";
 pub const AERON_LOGBUFFER_DESCRIPTOR_H = "";
 pub const _STRING_H = @as(c_int, 1);
+pub const __GLIBC_USE_LIB_EXT2 = @as(c_int, 0);
+pub const __GLIBC_USE_IEC_60559_BFP_EXT = @as(c_int, 0);
+pub const __GLIBC_USE_IEC_60559_BFP_EXT_C23 = @as(c_int, 0);
+pub const __GLIBC_USE_IEC_60559_EXT = @as(c_int, 0);
+pub const __GLIBC_USE_IEC_60559_FUNCS_EXT = @as(c_int, 0);
+pub const __GLIBC_USE_IEC_60559_FUNCS_EXT_C23 = @as(c_int, 0);
+pub const __GLIBC_USE_IEC_60559_TYPES_EXT = @as(c_int, 0);
 pub const _STRINGS_H = @as(c_int, 1);
 pub const AERON_UDP_PROTOCOL_H = "";
 pub const AERON_RES_HEADER_ADDRESS_LENGTH_IP4 = @as(c_uint, 4);
@@ -3794,7 +4015,7 @@ pub const AERON_HDR_TYPE_ATS_SETUP = INT16_C(@as(c_int, 0x09));
 pub const AERON_HDR_TYPE_ATS_SM = INT16_C(@as(c_int, 0x0A));
 pub const AERON_HDR_TYPE_RSP_SETUP = INT16_C(@as(c_int, 0x0B));
 pub const AERON_HDR_TYPE_EXT = INT16_C(-@as(c_int, 1));
-pub const AERON_DATA_HEADER_LENGTH = @import("std").zig.c_translation.sizeof(aeron_data_header_t);
+pub const AERON_DATA_HEADER_LENGTH = __helpers.sizeof(aeron_data_header_t);
 pub const AERON_DATA_HEADER_BEGIN_FLAG = UINT8_C(@as(c_int, 0x80));
 pub const AERON_DATA_HEADER_END_FLAG = UINT8_C(@as(c_int, 0x40));
 pub const AERON_DATA_HEADER_EOS_FLAG = UINT8_C(@as(c_int, 0x20));
@@ -3810,7 +4031,7 @@ pub const AERON_RES_HEADER_TYPE_NAME_TO_IP4_MD = @as(c_int, 0x01);
 pub const AERON_RES_HEADER_TYPE_NAME_TO_IP6_MD = @as(c_int, 0x02);
 pub const AERON_RES_HEADER_SELF_FLAG = UINT8_C(@as(c_int, 0x80));
 pub const AERON_FRAME_MAX_MESSAGE_LENGTH = (@as(c_uint, 16) * @as(c_uint, 1024)) * @as(c_uint, 1024);
-pub const AERON_OPTION_HEADER_IGNORE_FLAG = UINT16_C(@import("std").zig.c_translation.promoteIntLiteral(c_int, 0x8000, .hex));
+pub const AERON_OPTION_HEADER_IGNORE_FLAG = UINT16_C(__helpers.promoteIntLiteral(c_int, 0x8000, .hex));
 pub const AERON_OPT_HDR_TYPE_ATS_SUITE = UINT16_C(@as(c_int, 0x0001));
 pub const AERON_OPT_HDR_TYPE_ATS_RSA_KEY = UINT16_C(@as(c_int, 0x0002));
 pub const AERON_OPT_HDR_TYPE_ATS_RSA_KEY_ID = UINT16_C(@as(c_int, 0x0003));
@@ -3820,42 +4041,38 @@ pub const AERON_OPT_HDR_TYPE_ATS_SECRET = UINT16_C(@as(c_int, 0x0006));
 pub const AERON_OPT_HDR_TYPE_ATS_GROUP_TAG = UINT16_C(@as(c_int, 0x0007));
 pub const AERON_OPT_HDR_ALIGNMENT = @as(c_uint, 4);
 pub const AERON_ERROR_MAX_TEXT_LENGTH = @as(c_int, 1023);
-pub const AERON_ERROR_MAX_FRAME_LENGTH = @import("std").zig.c_translation.sizeof(aeron_error_t) + AERON_ERROR_MAX_TEXT_LENGTH;
+pub const AERON_ERROR_MAX_FRAME_LENGTH = __helpers.sizeof(aeron_error_t) + AERON_ERROR_MAX_TEXT_LENGTH;
 pub const AERON_ERROR_HAS_GROUP_TAG_FLAG = @as(c_int, 0x08);
 pub const AERON_BITUTIL_H = "";
 pub const _ASSERT_H = @as(c_int, 1);
-pub const __ASSERT_VOID_CAST = @compileError("unable to translate C expr: unexpected token ''");
-// /usr/include/assert.h:40:10
+pub const __ASSERT_VOID_CAST = @compileError("unable to translate C expr: unexpected token ''"); // /usr/include/assert.h:40:10
 pub const _ASSERT_H_DECLS = "";
-pub const assert = @compileError("unable to translate macro: undefined identifier `__FILE__`");
-// /usr/include/assert.h:118:11
-pub const __ASSERT_FUNCTION = @compileError("unable to translate C expr: unexpected token '__extension__'");
-// /usr/include/assert.h:140:12
-pub const static_assert = @compileError("unable to translate C expr: unexpected token '_Static_assert'");
-// /usr/include/assert.h:158:10
+pub const assert = @compileError("unable to translate macro: undefined identifier `__FILE__`"); // /usr/include/assert.h:118:11
+pub const __ASSERT_FUNCTION = @compileError("unable to translate C expr: unexpected token '__extension__'"); // /usr/include/assert.h:140:12
+pub const static_assert = @compileError("unable to translate C expr: unexpected token '_Static_assert'"); // /usr/include/assert.h:158:10
 pub const AERON_CACHE_LINE_LENGTH = @as(c_uint, 64);
 pub inline fn AERON_ALIGN(value: anytype, alignment: anytype) @TypeOf((value + (alignment - @as(c_uint, 1))) & ~(alignment - @as(c_uint, 1))) {
     _ = &value;
     _ = &alignment;
     return (value + (alignment - @as(c_uint, 1))) & ~(alignment - @as(c_uint, 1));
 }
-pub inline fn AERON_PADDED_SIZEOF(_struct: anytype) @TypeOf(AERON_ALIGN(@import("std").zig.c_translation.sizeof(_struct), @import("std").zig.c_translation.sizeof(i32))) {
+pub inline fn AERON_PADDED_SIZEOF(_struct: anytype) @TypeOf(AERON_ALIGN(__helpers.sizeof(_struct), __helpers.sizeof(i32))) {
     _ = &_struct;
-    return AERON_ALIGN(@import("std").zig.c_translation.sizeof(_struct), @import("std").zig.c_translation.sizeof(i32));
+    return AERON_ALIGN(__helpers.sizeof(_struct), __helpers.sizeof(i32));
 }
 pub inline fn AERON_IS_POWER_OF_TWO(value: anytype) @TypeOf((value > @as(c_int, 0)) and ((value & (~value + @as(c_uint, 1))) == value)) {
     _ = &value;
     return (value > @as(c_int, 0)) and ((value & (~value + @as(c_uint, 1))) == value);
 }
-pub inline fn AERON_MIN(a: anytype, b: anytype) @TypeOf(if (a < b) a else b) {
+pub inline fn AERON_MIN(a: anytype, b: anytype) @TypeOf(if (__helpers.cast(bool, a < b)) a else b) {
     _ = &a;
     _ = &b;
-    return if (a < b) a else b;
+    return if (__helpers.cast(bool, a < b)) a else b;
 }
-pub inline fn AERON_C_COND_EXPECT(exp: anytype, c: anytype) @TypeOf(__builtin_expect(exp, c)) {
+pub inline fn AERON_C_COND_EXPECT(exp: anytype, c: anytype) @TypeOf(__builtin.expect(exp, c)) {
     _ = &exp;
     _ = &c;
-    return __builtin_expect(exp, c);
+    return __builtin.expect(exp, c);
 }
 pub const AERON_MATH_H = "";
 pub const AERON_LOGBUFFER_PARTITION_COUNT = @as(c_int, 3);
@@ -3865,11 +4082,10 @@ pub const AERON_PAGE_MIN_SIZE = @as(c_int, 4) * @as(c_uint, 1024);
 pub const AERON_PAGE_MAX_SIZE = (@as(c_int, 1024) * @as(c_int, 1024)) * @as(c_uint, 1024);
 pub const AERON_LOGBUFFER_PADDING_SIZE = @as(c_uint, 64);
 pub const AERON_LOGBUFFER_DEFAULT_FRAME_HEADER_MAX_LENGTH = AERON_CACHE_LINE_LENGTH * @as(c_int, 2);
-pub const AERON_MAX_UDP_PAYLOAD_LENGTH = @import("std").zig.c_translation.promoteIntLiteral(c_int, 65504, .decimal);
+pub const AERON_MAX_UDP_PAYLOAD_LENGTH = __helpers.promoteIntLiteral(c_int, 65504, .decimal);
 pub const AERON_LOGBUFFER_META_DATA_LENGTH = AERON_PAGE_MIN_SIZE;
 pub const AERON_LOGBUFFER_FRAME_ALIGNMENT = @as(c_int, 32);
-pub const AERON_LOGBUFFER_RAWTAIL_VOLATILE = @compileError("unable to translate macro: undefined identifier `active_term_count`");
-// aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:90:9
+pub const AERON_LOGBUFFER_RAWTAIL_VOLATILE = @compileError("unable to translate macro: undefined identifier `active_term_count`"); // aeron-1.48.6/aeron-client/src/main/c/concurrent/aeron_logbuffer_descriptor.h:90:9
 pub const _UNISTD_H = @as(c_int, 1);
 pub const _POSIX_VERSION = @as(c_long, 200809);
 pub const __POSIX2_THIS_VERSION = @as(c_long, 200809);
@@ -3986,10 +4202,8 @@ pub const F_ULOCK = @as(c_int, 0);
 pub const F_LOCK = @as(c_int, 1);
 pub const F_TLOCK = @as(c_int, 2);
 pub const F_TEST = @as(c_int, 3);
-pub const AERON_FILEUTIL_ERROR_ENOSPC = @compileError("unable to translate macro: undefined identifier `ENOSPC`");
-// aeron-1.48.6/aeron-client/src/main/c/util/aeron_fileutil.h:54:9
-pub const aeron_mkdir = @compileError("unable to translate macro: undefined identifier `mkdir`");
-// aeron-1.48.6/aeron-client/src/main/c/util/aeron_fileutil.h:56:9
+pub const AERON_FILEUTIL_ERROR_ENOSPC = @compileError("unable to translate macro: undefined identifier `ENOSPC`"); // aeron-1.48.6/aeron-client/src/main/c/util/aeron_fileutil.h:54:9
+pub const aeron_mkdir = @compileError("unable to translate macro: undefined identifier `mkdir`"); // aeron-1.48.6/aeron-client/src/main/c/util/aeron_fileutil.h:56:9
 pub const AERON_PUBLICATIONS_DIR = "publications";
 pub const AERON_IMAGES_DIR = "images";
 pub const AERON_MPSC_CONCURRENT_ARRAY_QUEUE_H = "";

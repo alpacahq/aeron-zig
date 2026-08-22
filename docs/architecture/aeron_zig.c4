@@ -1,0 +1,88 @@
+// docs/architecture/aeron_zig.c4 — alpacahq/aeron-zig
+// generated_by: claude-fable-5 / layered-docs 2026-08
+// source_commit: a9c0669a064bef2f914e75aa24ea6ade13d5527f   source_branch: allium/layered-docs-2026-08   generated_at: 2026-08-21T00:00:00Z
+// confidence: high   review_status: draft-needs-review
+model {
+  aeron_zig = system 'Aeron Zig' {
+    #generated
+    description '
+      Zig wrapper library for the Aeron client (real-logic/aeron), packaged as the
+      Zig module "aeron" for consumption by Zig applications. Evidence: README.md, build.zig.zon, build.zig
+    '
+    technology 'Zig 0.16 library'
+    link https://github.com/alpacahq/aeron-zig 'Repository'
+    metadata {
+      okf 'docs/okf/system.md'
+      allium 'none: no .allium specs in repository'
+      evidence 'README.md, build.zig, build.zig.zon, Makefile'
+    }
+
+    zig_api = container 'Zig wrapper API' {
+      #generated #entrypoint
+      description 'Idiomatic Zig API over the Aeron C client: Aeron (client) and Context, Publication, ExclusivePublication, BufferClaim, Subscription, Cnc/CountersReader; negative C return codes converted to error.AeronError. Evidence: src/aeron.zig'
+      technology 'Zig'
+      link https://github.com/alpacahq/aeron-zig 'Repository'
+      metadata {
+        okf 'docs/okf/system.md'
+        allium 'none: no .allium specs in repository'
+        evidence 'src/aeron.zig, build.zig'
+      }
+    }
+    c_bindings = container 'Generated C bindings' {
+      #generated #internal
+      description 'Bindings generated from the Aeron C client headers via zig translate-c (Makefile target src/aeronc.zig). Evidence: Makefile, src/aeronc.zig'
+      technology 'Zig (translate-c output)'
+      link https://github.com/alpacahq/aeron-zig 'Repository'
+      metadata {
+        okf 'docs/okf/system.md'
+        allium 'none: no .allium specs in repository'
+        evidence 'Makefile, src/aeronc.zig'
+      }
+    }
+    native_libs = container 'Prebuilt Aeron C client libraries' {
+      #generated #internal
+      description 'Checked-in libaeron builds for x86_64 Linux: static and shared, glibc and musl variants, selected by target ABI at link time. Evidence: lib/, build.zig, Makefile'
+      technology 'C (libaeron 1.48.6, .a/.so)'
+      link https://github.com/alpacahq/aeron-zig 'Repository'
+      metadata {
+        okf 'docs/okf/system.md'
+        allium 'none: no .allium specs in repository'
+        evidence 'lib/libaeron_static_libc.a, lib/libaeron_static_musl.a, lib/libaeron_libc.so, lib/libaeron_musl.so, Makefile, build.zig'
+      }
+    }
+
+    zig_api -[calls]-> c_bindings 'invokes aeron_* C functions through generated bindings (src/aeron.zig imports aeronc.zig)'
+    c_bindings -[calls]-> native_libs 'symbols resolved by linking libaeron_{static_,}{libc,musl} (build.zig)'
+  }
+
+  ext_aeron_media_driver = external 'Aeron Media Driver' {
+    #generated #external
+    description 'Aeron media driver the client reaches through an Aeron directory path and its CnC file. Evidence: src/aeron.zig (aeron_cnc_init, aeron_cnc_to_driver_heartbeat, aeron_context_set_dir)'
+  }
+  aeron_zig.zig_api -[calls]-> ext_aeron_media_driver 'opens the Aeron directory and reads CnC heartbeat, constants and counters (src/aeron.zig aeron_cnc_init, aeron_cnc_to_driver_heartbeat, aeron_cnc_constants, aeron_cnc_counters_reader)'
+
+  ext_real_logic_aeron = external 'real-logic/aeron (upstream)' {
+    #generated #external
+    description 'Upstream Aeron project wrapped by this library (Evidence: README.md); source tarball 1.48.6 fetched from GitHub for headers used by translate-c (Evidence: Makefile)'
+  }
+  aeron_zig.c_bindings -[consumes]-> ext_real_logic_aeron 'headers (aeron_context.h) translated at generate time (Makefile)'
+
+  ext_aeron_driver_c_image = external 'aeron-driver-c container image' {
+    #generated #external
+    description 'gcr.io/alpacahq/aeron-driver-c:1.48.6 (glibc and alpine variants); prebuilt libaeron artifacts are copied out of it at make time. Evidence: Makefile'
+  }
+  aeron_zig.native_libs -[consumes]-> ext_aeron_driver_c_image 'libaeron .a/.so copied from image via docker run (Makefile)'
+}
+
+views {
+  view aeron_zig_context {
+    title 'Aeron Zig — context'
+    include aeron_zig, ext_aeron_media_driver, ext_real_logic_aeron, ext_aeron_driver_c_image
+    autoLayout TopBottom
+  }
+  view aeron_zig_containers of aeron_zig {
+    title 'Aeron Zig — containers'
+    include *
+    autoLayout LeftRight
+  }
+}

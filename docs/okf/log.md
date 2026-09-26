@@ -1,0 +1,6 @@
+# Change log
+
+- 2026-09-24 — initial generation of OKF context + LikeC4 architecture from `docs/layered-2026-09` @ `a9c0669a064bef2f914e75aa24ea6ade13d5527f` (layered-docs 2026-08; model not recorded reliably). Draft, review required. No Allium specifications exist in this repository.
+- 2026-09-25 — re-verified against `a9c0669a064bef2f914e75aa24ea6ade13d5527f` (layered-docs 2026-08; model not recorded reliably): claims checked against `build.zig`, `src/aeron.zig`, `Makefile`; no content changes. Draft, review required.
+- 2026-09-25 — refined after review against `a9c0669a064bef2f914e75aa24ea6ade13d5527f` (claude-opus-5-5, layered-docs 2026-08): runtime media-driver relationship added; one container with components; CI moved to Operations prose; build-time sources relabelled; capabilities completed; ADR-0001 unevidenced rationale removed. Draft, review required.
+- 2026-09-26 — regenerated (mode fresh) from `docs/layered-2026-09` @ `a9c0669a064bef2f914e75aa24ea6ade13d5527f` (claude-opus-5, layered-docs 2026-09): provenance updated, container Allium metadata set to `none: no accepted spec`; claims re-checked against `build.zig`, `build.zig.zon`, `Makefile`, `src/aeron.zig`. Draft, review required.

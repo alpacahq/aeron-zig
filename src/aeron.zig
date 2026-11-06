@@ -134,8 +134,33 @@ pub const Aeron = struct {
     }
 
     pub fn addSubscription(self: Aeron, uri: [*:0]const u8, stream_id: i32) !Subscription {
+        return self.addSubscriptionWithCallbacks(uri, stream_id, null, null, null);
+    }
+
+    /// Adds a subscription that reports images becoming available or unavailable to `handlers`.
+    /// See `ImageHandlers` for the threading rules the callbacks must follow.
+    /// `handlers` must outlive the subscription. Closing completes asynchronously on the client
+    /// conductor, so keeping `handlers` alive until `Aeron.deinit` is the safe choice.
+    pub fn addSubscriptionWithImageHandlers(self: Aeron, uri: [*:0]const u8, stream_id: i32, handlers: *const ImageHandlers) !Subscription {
+        return self.addSubscriptionWithCallbacks(
+            uri,
+            stream_id,
+            if (handlers.on_available != null) imageTrampoline(.on_available) else null,
+            if (handlers.on_unavailable != null) imageTrampoline(.on_unavailable) else null,
+            @constCast(handlers),
+        );
+    }
+
+    fn addSubscriptionWithCallbacks(
+        self: Aeron,
+        uri: [*:0]const u8,
+        stream_id: i32,
+        on_available: aeronC.aeron_on_available_image_t,
+        on_unavailable: aeronC.aeron_on_unavailable_image_t,
+        clientd: ?*anyopaque,
+    ) !Subscription {
         var as: ?*aeronC.aeron_async_add_subscription_t = undefined;
-        try err(aeronC.aeron_async_add_subscription(&as, self.client, uri, stream_id, null, null, null, null));
+        try err(aeronC.aeron_async_add_subscription(&as, self.client, uri, stream_id, on_available, clientd, on_unavailable, clientd));
 
         var subscription: ?*aeronC.aeron_subscription_t = null;
         while (subscription == null) {
@@ -181,10 +206,79 @@ pub const Subscription = struct {
         return aeronC.aeron_subscription_poll(self.subscription, handler, clientd, limit);
     }
 
+    /// Returns true if the subscription has at least one connected image.
+    pub fn isConnected(self: Subscription) bool {
+        return aeronC.aeron_subscription_is_connected(self.subscription);
+    }
+
+    /// Returns the number of images (one per publisher session) the subscription currently has.
+    pub fn imageCount(self: Subscription) !usize {
+        const count = aeronC.aeron_subscription_image_count(self.subscription);
+        try err(count);
+        return @intCast(count);
+    }
+
+    /// Returns true if the image for `session_id` exists and is not closed.
+    /// Allocation-free, so it is safe to call from the polling thread.
+    pub fn isImageConnected(self: Subscription, session_id: i32) bool {
+        const image = aeronC.aeron_subscription_image_by_session_id(self.subscription, session_id) orelse return false;
+        // The lookup takes a reference on the image, which must be released or the image leaks.
+        defer _ = aeronC.aeron_subscription_image_release(self.subscription, image);
+        return !aeronC.aeron_image_is_closed(image);
+    }
+
     pub fn deinit(self: Subscription) !void {
         return err(aeronC.aeron_subscription_close(self.subscription, null, null));
     }
 };
+
+/// A single publisher session's stream on a subscription.
+/// When passed to an `ImageHandler`, it is only valid for the duration of that callback.
+pub const Image = struct {
+    image: *aeronC.aeron_image_t,
+
+    /// Returns the session ID of the publication this image belongs to.
+    pub fn sessionId(self: Image) !i32 {
+        var constants: aeronC.aeron_image_constants_t = undefined;
+        try err(aeronC.aeron_image_constants(self.image, &constants));
+        return constants.session_id;
+    }
+};
+
+/// Callback invoked when an image becomes available or unavailable on a subscription.
+pub const ImageHandler = *const fn (clientd: ?*anyopaque, subscription: Subscription, image: Image) void;
+
+/// Image callbacks for `Aeron.addSubscriptionWithImageHandlers`.
+///
+/// The callbacks run on the Aeron client conductor thread, not the polling thread. Hand state
+/// to the polling thread through atomics, and do not block or poll inside a callback. The
+/// `Image` is only valid for the duration of the callback.
+pub const ImageHandlers = struct {
+    /// Called when a new publisher session's image joins the subscription.
+    on_available: ?ImageHandler = null,
+    /// Called when a publisher session's image leaves the subscription.
+    on_unavailable: ?ImageHandler = null,
+    /// Passed unchanged to both callbacks.
+    clientd: ?*anyopaque = null,
+};
+
+/// Returns a C callback that receives an `ImageHandlers` as its clientd and forwards to the
+/// handler selected by `handler`.
+fn imageTrampoline(
+    comptime handler: std.meta.FieldEnum(ImageHandlers),
+) fn (?*anyopaque, ?*aeronC.aeron_subscription_t, ?*aeronC.aeron_image_t) callconv(.c) void {
+    return struct {
+        fn call(clientd: ?*anyopaque, subscription: ?*aeronC.aeron_subscription_t, image: ?*aeronC.aeron_image_t) callconv(.c) void {
+            const handlers: *const ImageHandlers = @ptrCast(@alignCast(clientd orelse return));
+            const callback = @field(handlers, @tagName(handler)) orelse return;
+            callback(
+                handlers.clientd,
+                .{ .subscription = subscription orelse return },
+                .{ .image = image orelse return },
+            );
+        }
+    }.call;
+}
 
 pub const Publication = extern struct {
     publication: *aeronC.aeron_publication_t,
@@ -221,3 +315,51 @@ pub const BufferClaim = struct {
         return err(aeronC.aeron_buffer_claim_abort(&self.claim));
     }
 };
+
+test "ImageHandlers defaults to no callbacks" {
+    const handlers: ImageHandlers = .{};
+    try std.testing.expectEqual(null, handlers.on_available);
+    try std.testing.expectEqual(null, handlers.on_unavailable);
+    try std.testing.expectEqual(null, handlers.clientd);
+}
+
+test "image trampolines match the C handler typedefs" {
+    comptime {
+        std.debug.assert(@TypeOf(&imageTrampoline(.on_available)) == @typeInfo(aeronC.aeron_on_available_image_t).optional.child);
+        std.debug.assert(@TypeOf(&imageTrampoline(.on_unavailable)) == @typeInfo(aeronC.aeron_on_unavailable_image_t).optional.child);
+    }
+}
+
+test "image trampolines forward to the matching handler" {
+    const Recorder = struct {
+        available: ?*aeronC.aeron_image_t = null,
+        unavailable: ?*aeronC.aeron_image_t = null,
+
+        fn onAvailable(clientd: ?*anyopaque, _: Subscription, image: Image) void {
+            const self: *@This() = @ptrCast(@alignCast(clientd.?));
+            self.available = image.image;
+        }
+
+        fn onUnavailable(clientd: ?*anyopaque, _: Subscription, image: Image) void {
+            const self: *@This() = @ptrCast(@alignCast(clientd.?));
+            self.unavailable = image.image;
+        }
+    };
+
+    var recorder: Recorder = .{};
+    const handlers: ImageHandlers = .{
+        .on_available = Recorder.onAvailable,
+        .on_unavailable = Recorder.onUnavailable,
+        .clientd = &recorder,
+    };
+    // The trampolines only forward these pointers, so placeholder addresses are enough.
+    const subscription: *aeronC.aeron_subscription_t = @ptrFromInt(0x1000);
+    const first: *aeronC.aeron_image_t = @ptrFromInt(0x2000);
+    const second: *aeronC.aeron_image_t = @ptrFromInt(0x3000);
+
+    imageTrampoline(.on_available)(@constCast(&handlers), subscription, first);
+    imageTrampoline(.on_unavailable)(@constCast(&handlers), subscription, second);
+
+    try std.testing.expectEqual(first, recorder.available.?);
+    try std.testing.expectEqual(second, recorder.unavailable.?);
+}
